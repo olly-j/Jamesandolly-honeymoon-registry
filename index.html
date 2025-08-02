@@ -10,52 +10,62 @@
 <body style="margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #ffffff; color: #1c1c1e; line-height: 1.6;">
 
   <!-- Progress Tracker -->
-  <section style="background-color: #f2f2f7; padding: 20px; border-bottom: 1px solid #eaeaea;">
+  <section style="background-color: #f2f2f7; padding: 20px; border-bottom: 1px solid #eaeaea; position: sticky; top: 0; z-index: 999;">
     <div style="max-width: 960px; margin: auto;">
       <h2 style="font-size: 1.2em; margin: 0 0 10px 0;">Cruise Fund Progress</h2>
       <div style="height: 14px; background-color: #d0d0d0; border-radius: 8px; overflow: hidden;">
         <div id="progress-bar" style="height: 14px; width: 0%; background-color: #0071e3; transition: width 0.5s;"></div>
       </div>
-      <p id="progress-text" style="font-size: 0.95em; color: #555; margin-top: 6px;">£0 of £2000 goal reached</p>
+      <p id="progress-text" style="font-size: 0.95em; color: #555; margin-top: 6px;">£0 of £20000 goal reached</p>
     </div>
   </section>
 
   <header style="background-color: #f9f9fb; padding: 60px 20px 40px 20px; text-align: center; border-bottom: 1px solid #eaeaea;">
     <h1 style="font-size: 2.6em; font-weight: 600; margin: 0;">James & Oliver’s Honeymoon Registry</h1>
     <p style="font-size: 1.2em; color: #6e6e73; max-width: 640px; margin: 20px auto 0 auto;">
-      We’re heading off on a Windstar Caribbean cruise to celebrate our marriage. If you'd like to be part of the journey, you can help fund some of our favorite moments below.
+      We're celebrating our marriage with a Windstar Caribbean cruise. If you'd like to help us set sail, we've listed a few meaningful ways you can contribute.
     </p>
   </header>
 
-  <main style="padding: 40px 20px; max-width: 1000px; margin: auto; display: flex; flex-wrap: wrap; gap: 40px; justify-content: center;">
+  <main style="padding: 40px 20px; max-width: 1100px; margin: auto; display: flex; flex-wrap: wrap; gap: 40px; justify-content: center;">
 
-    <!-- Registry Item Template -->
-    <section style="flex: 1 1 300px; max-width: 420px; opacity: 1;" id="item-night-aboard">
-      <img src="https://via.placeholder.com/420x250?text=Windstar+Ship" alt="Windstar Cruise Ship" style="width: 100%; border-radius: 12px;">
-      <h2 style="font-size: 1.5em; font-weight: 500; margin: 20px 0 10px 0;">One Night Aboard</h2>
-      <p style="color: #3a3a3c;">Contribute toward one luxurious night aboard our Windstar cruise. <strong>£150</strong></p>
-      <a href="https://paypal.me/yourname/150" target="_blank" id="link-night-aboard" style="display: inline-block; padding: 12px 28px; background-color: #0071e3; color: #ffffff; text-decoration: none; font-size: 1em; border-radius: 12px;">Contribute £150</a>
+    <!-- High-tier items: 10 x £1000 nights -->
+    <!-- Repeat these sections 10 times if desired -->
+    <section style="flex: 1 1 300px; max-width: 420px;" id="item-night1">
+      <img src="https://via.placeholder.com/420x250?text=Luxury+Cabin" alt="Luxury Cabin Night" style="width: 100%; border-radius: 12px;">
+      <h2 style="font-size: 1.5em; font-weight: 500; margin: 20px 0 10px 0;">One Night at Sea</h2>
+      <p style="color: #3a3a3c;">Sponsor a luxurious night aboard our Windstar voyage. <strong>£1000</strong></p>
+      <a href="https://paypal.me/yourname/1000" target="_blank" id="link-night1" style="display: inline-block; padding: 12px 28px; background-color: #0071e3; color: #ffffff; text-decoration: none; font-size: 1em; border-radius: 12px;">Contribute £1000</a>
     </section>
 
-    <section style="flex: 1 1 300px; max-width: 420px;" id="item-sunset-cocktails">
-      <img src="https://via.placeholder.com/420x250?text=Caribbean+Sunset" alt="Sunset Cocktails" style="width: 100%; border-radius: 12px;">
-      <h2 style="font-size: 1.5em; font-weight: 500; margin: 20px 0 10px 0;">Sunset Cocktails at Sea</h2>
-      <p style="color: #3a3a3c;">Help us toast to our new life together beneath a golden Caribbean sky. <strong>£30</strong></p>
-      <a href="https://paypal.me/yourname/30" target="_blank" id="link-sunset-cocktails" style="display: inline-block; padding: 12px 28px; background-color: #0071e3; color: #ffffff; text-decoration: none; font-size: 1em; border-radius: 12px;">Contribute £30</a>
+    <!-- Mid-tier luxury extras -->
+    <section style="flex: 1 1 300px; max-width: 420px;" id="item-spa">
+      <img src="https://via.placeholder.com/420x250?text=Spa+Treatments" alt="Spa Session" style="width: 100%; border-radius: 12px;">
+      <h2 style="font-size: 1.5em; font-weight: 500; margin: 20px 0 10px 0;">Couples Spa Session</h2>
+      <p style="color: #3a3a3c;">A rejuvenating couples massage onboard. <strong>£500</strong></p>
+      <a href="https://paypal.me/yourname/500" target="_blank" id="link-spa" style="display: inline-block; padding: 12px 28px; background-color: #0071e3; color: #ffffff; text-decoration: none; font-size: 1em; border-radius: 12px;">Contribute £500</a>
     </section>
 
-    <section style="flex: 1 1 300px; max-width: 420px;" id="item-snorkelling">
-      <img src="https://via.placeholder.com/420x250?text=Snorkelling+Adventure" alt="Snorkelling" style="width: 100%; border-radius: 12px;">
-      <h2 style="font-size: 1.5em; font-weight: 500; margin: 20px 0 10px 0;">Snorkelling in Tobago</h2>
-      <p style="color: #3a3a3c;">Support a morning exploring reefs and turquoise waters. <strong>£45</strong></p>
-      <a href="https://paypal.me/yourname/45" target="_blank" id="link-snorkelling" style="display: inline-block; padding: 12px 28px; background-color: #0071e3; color: #ffffff; text-decoration: none; font-size: 1em; border-radius: 12px;">Contribute £45</a>
+    <section style="flex: 1 1 300px; max-width: 420px;" id="item-excursion">
+      <img src="https://via.placeholder.com/420x250?text=Island+Excursion" alt="Island Excursion" style="width: 100%; border-radius: 12px;">
+      <h2 style="font-size: 1.5em; font-weight: 500; margin: 20px 0 10px 0;">Island Excursion</h2>
+      <p style="color: #3a3a3c;">A private guided adventure off-ship. <strong>£400</strong></p>
+      <a href="https://paypal.me/yourname/400" target="_blank" id="link-excursion" style="display: inline-block; padding: 12px 28px; background-color: #0071e3; color: #ffffff; text-decoration: none; font-size: 1em; border-radius: 12px;">Contribute £400</a>
     </section>
 
-    <section style="flex: 1 1 300px; max-width: 420px;" id="item-dinner-stars">
-      <img src="https://via.placeholder.com/420x250?text=Dinner+Under+Stars" alt="Dinner Under the Stars" style="width: 100%; border-radius: 12px;">
+    <section style="flex: 1 1 300px; max-width: 420px;" id="item-dinner">
+      <img src="https://via.placeholder.com/420x250?text=Gourmet+Dinner" alt="Gourmet Dinner" style="width: 100%; border-radius: 12px;">
       <h2 style="font-size: 1.5em; font-weight: 500; margin: 20px 0 10px 0;">Dinner Under the Stars</h2>
-      <p style="color: #3a3a3c;">A quiet meal on deck under a starlit sky. <strong>£40</strong></p>
-      <a href="https://paypal.me/yourname/40" target="_blank" id="link-dinner-stars" style="display: inline-block; padding: 12px 28px; background-color: #0071e3; color: #ffffff; text-decoration: none; font-size: 1em; border-radius: 12px;">Contribute £40</a>
+      <p style="color: #3a3a3c;">Help us enjoy a romantic meal on deck. <strong>£300</strong></p>
+      <a href="https://paypal.me/yourname/300" target="_blank" id="link-dinner" style="display: inline-block; padding: 12px 28px; background-color: #0071e3; color: #ffffff; text-decoration: none; font-size: 1em; border-radius: 12px;">Contribute £300</a>
+    </section>
+
+    <!-- Open-ended option -->
+    <section style="flex: 1 1 300px; max-width: 420px;" id="item-custom">
+      <img src="https://via.placeholder.com/420x250?text=Other+Gift" alt="Other Contribution" style="width: 100%; border-radius: 12px;">
+      <h2 style="font-size: 1.5em; font-weight: 500; margin: 20px 0 10px 0;">Surprise Us</h2>
+      <p style="color: #3a3a3c;">Choose your own amount—every contribution is deeply appreciated.</p>
+      <a href="https://paypal.me/yourname" target="_blank" id="link-custom" style="display: inline-block; padding: 12px 28px; background-color: #0071e3; color: #ffffff; text-decoration: none; font-size: 1em; border-radius: 12px;">Choose Amount</a>
     </section>
 
   </main>
@@ -67,17 +77,15 @@
 
   <!-- Progress & Sold-Out Script -->
   <script>
-    // Update total raised here (you can update this manually based on contributions)
-    const totalRaised = 425; // Example: £150 + £30 + £45 + £200
-    const goal = 2000;
+    const totalRaised = 3500; // Update manually as funds come in
+    const goal = 20000;
     const progressBar = document.getElementById('progress-bar');
     const progressText = document.getElementById('progress-text');
     const percentage = Math.min((totalRaised / goal) * 100, 100);
     progressBar.style.width = percentage + '%';
     progressText.textContent = `£${totalRaised} of £${goal} goal reached`;
 
-    // Optional: Mark sold-out items (you update these manually as needed)
-    const soldOutItems = ['snorkelling'];
+    const soldOutItems = []; // Add IDs like 'night1', 'spa', etc. to disable them
     soldOutItems.forEach(id => {
       const item = document.getElementById(`item-${id}`);
       const link = document.getElementById(`link-${id}`);
