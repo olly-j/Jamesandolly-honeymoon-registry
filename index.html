@@ -3,55 +3,94 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Honeymoon Registry for Our Windstar Caribbean Cruise">
-  <title>Emma & Theo's Honeymoon Registry</title>
+  <meta name="description" content="James & Oliver's Windstar Honeymoon Registry">
+  <title>James & Oliver's Honeymoon Registry</title>
   <link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 <body style="margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #ffffff; color: #1c1c1e; line-height: 1.6;">
 
+  <!-- Progress Tracker -->
+  <section style="background-color: #f2f2f7; padding: 20px; border-bottom: 1px solid #eaeaea;">
+    <div style="max-width: 960px; margin: auto;">
+      <h2 style="font-size: 1.2em; margin: 0 0 10px 0;">Cruise Fund Progress</h2>
+      <div style="height: 14px; background-color: #d0d0d0; border-radius: 8px; overflow: hidden;">
+        <div id="progress-bar" style="height: 14px; width: 0%; background-color: #0071e3; transition: width 0.5s;"></div>
+      </div>
+      <p id="progress-text" style="font-size: 0.95em; color: #555; margin-top: 6px;">£0 of £2000 goal reached</p>
+    </div>
+  </section>
+
   <header style="background-color: #f9f9fb; padding: 60px 20px 40px 20px; text-align: center; border-bottom: 1px solid #eaeaea;">
-    <h1 style="font-size: 2.6em; font-weight: 600; margin: 0;">Emma & Theo’s Honeymoon Registry</h1>
+    <h1 style="font-size: 2.6em; font-weight: 600; margin: 0;">James & Oliver’s Honeymoon Registry</h1>
     <p style="font-size: 1.2em; color: #6e6e73; max-width: 640px; margin: 20px auto 0 auto;">
-      We're celebrating our marriage with a Windstar Caribbean cruise. If you'd like to contribute to some of the memories we'll make at sea, we've listed a few below.
+      We’re heading off on a Windstar Caribbean cruise to celebrate our marriage. If you'd like to be part of the journey, you can help fund some of our favorite moments below.
     </p>
   </header>
 
   <main style="padding: 40px 20px; max-width: 1000px; margin: auto; display: flex; flex-wrap: wrap; gap: 40px; justify-content: center;">
 
-    <section style="flex: 1 1 300px; max-width: 420px;">
+    <!-- Registry Item Template -->
+    <section style="flex: 1 1 300px; max-width: 420px; opacity: 1;" id="item-night-aboard">
       <img src="https://via.placeholder.com/420x250?text=Windstar+Ship" alt="Windstar Cruise Ship" style="width: 100%; border-radius: 12px;">
       <h2 style="font-size: 1.5em; font-weight: 500; margin: 20px 0 10px 0;">One Night Aboard</h2>
       <p style="color: #3a3a3c;">Contribute toward one luxurious night aboard our Windstar cruise. <strong>£150</strong></p>
-      <a href="https://paypal.me/yourname/150" target="_blank" style="display: inline-block; padding: 12px 28px; background-color: #0071e3; color: #ffffff; text-decoration: none; font-size: 1em; border-radius: 12px;">Contribute £150</a>
+      <a href="https://paypal.me/yourname/150" target="_blank" id="link-night-aboard" style="display: inline-block; padding: 12px 28px; background-color: #0071e3; color: #ffffff; text-decoration: none; font-size: 1em; border-radius: 12px;">Contribute £150</a>
     </section>
 
-    <section style="flex: 1 1 300px; max-width: 420px;">
+    <section style="flex: 1 1 300px; max-width: 420px;" id="item-sunset-cocktails">
       <img src="https://via.placeholder.com/420x250?text=Caribbean+Sunset" alt="Sunset Cocktails" style="width: 100%; border-radius: 12px;">
       <h2 style="font-size: 1.5em; font-weight: 500; margin: 20px 0 10px 0;">Sunset Cocktails at Sea</h2>
       <p style="color: #3a3a3c;">Help us toast to our new life together beneath a golden Caribbean sky. <strong>£30</strong></p>
-      <a href="https://paypal.me/yourname/30" target="_blank" style="display: inline-block; padding: 12px 28px; background-color: #0071e3; color: #ffffff; text-decoration: none; font-size: 1em; border-radius: 12px;">Contribute £30</a>
+      <a href="https://paypal.me/yourname/30" target="_blank" id="link-sunset-cocktails" style="display: inline-block; padding: 12px 28px; background-color: #0071e3; color: #ffffff; text-decoration: none; font-size: 1em; border-radius: 12px;">Contribute £30</a>
     </section>
 
-    <section style="flex: 1 1 300px; max-width: 420px;">
+    <section style="flex: 1 1 300px; max-width: 420px;" id="item-snorkelling">
       <img src="https://via.placeholder.com/420x250?text=Snorkelling+Adventure" alt="Snorkelling" style="width: 100%; border-radius: 12px;">
       <h2 style="font-size: 1.5em; font-weight: 500; margin: 20px 0 10px 0;">Snorkelling in Tobago</h2>
       <p style="color: #3a3a3c;">Support a morning exploring reefs and turquoise waters. <strong>£45</strong></p>
-      <a href="https://paypal.me/yourname/45" target="_blank" style="display: inline-block; padding: 12px 28px; background-color: #0071e3; color: #ffffff; text-decoration: none; font-size: 1em; border-radius: 12px;">Contribute £45</a>
+      <a href="https://paypal.me/yourname/45" target="_blank" id="link-snorkelling" style="display: inline-block; padding: 12px 28px; background-color: #0071e3; color: #ffffff; text-decoration: none; font-size: 1em; border-radius: 12px;">Contribute £45</a>
     </section>
 
-    <section style="flex: 1 1 300px; max-width: 420px;">
+    <section style="flex: 1 1 300px; max-width: 420px;" id="item-dinner-stars">
       <img src="https://via.placeholder.com/420x250?text=Dinner+Under+Stars" alt="Dinner Under the Stars" style="width: 100%; border-radius: 12px;">
       <h2 style="font-size: 1.5em; font-weight: 500; margin: 20px 0 10px 0;">Dinner Under the Stars</h2>
       <p style="color: #3a3a3c;">A quiet meal on deck under a starlit sky. <strong>£40</strong></p>
-      <a href="https://paypal.me/yourname/40" target="_blank" style="display: inline-block; padding: 12px 28px; background-color: #0071e3; color: #ffffff; text-decoration: none; font-size: 1em; border-radius: 12px;">Contribute £40</a>
+      <a href="https://paypal.me/yourname/40" target="_blank" id="link-dinner-stars" style="display: inline-block; padding: 12px 28px; background-color: #0071e3; color: #ffffff; text-decoration: none; font-size: 1em; border-radius: 12px;">Contribute £40</a>
     </section>
 
   </main>
 
   <footer style="text-align: center; padding: 50px 20px; background-color: #f9f9fb; font-size: 0.95em; color: #86868b; border-top: 1px solid #eaeaea;">
     <p style="margin: 0 0 5px 0;">Thank you for being part of our celebration.</p>
-    <p style="margin: 0;">With love, Emma & Theo</p>
+    <p style="margin: 0;">With love, James & Oliver</p>
   </footer>
+
+  <!-- Progress & Sold-Out Script -->
+  <script>
+    // Update total raised here (you can update this manually based on contributions)
+    const totalRaised = 425; // Example: £150 + £30 + £45 + £200
+    const goal = 2000;
+    const progressBar = document.getElementById('progress-bar');
+    const progressText = document.getElementById('progress-text');
+    const percentage = Math.min((totalRaised / goal) * 100, 100);
+    progressBar.style.width = percentage + '%';
+    progressText.textContent = `£${totalRaised} of £${goal} goal reached`;
+
+    // Optional: Mark sold-out items (you update these manually as needed)
+    const soldOutItems = ['snorkelling'];
+    soldOutItems.forEach(id => {
+      const item = document.getElementById(`item-${id}`);
+      const link = document.getElementById(`link-${id}`);
+      if (item && link) {
+        link.remove();
+        const sold = document.createElement('span');
+        sold.textContent = 'Sold Out';
+        sold.style = 'display: inline-block; margin-top: 10px; padding: 10px 20px; background: #ccc; color: #333; border-radius: 12px; font-weight: 500;';
+        item.appendChild(sold);
+        item.style.opacity = '0.6';
+      }
+    });
+  </script>
 
 </body>
 </html>
