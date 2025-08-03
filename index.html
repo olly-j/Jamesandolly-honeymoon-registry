@@ -102,27 +102,28 @@ nav button:hover {
   max-width: 600px;
   margin: 40px auto;
   padding: 40px 30px;
-  background: var(--bg-alt);
+  background: 
+    url('images/background/paper.png') center/cover no-repeat,
+        linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)),
+    var(--bg-alt);
   border: 1px solid #e0e0e0;
   border-radius: 12px;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    0 4px 15px rgba(0, 0, 0, 0.05);
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 2px 10px rgba(0, 0, 0, 0.04);
   font-family: 'Inter', sans-serif;
   position: relative;
 }
 
-/* Optional emboss flourish at top */
-.info-card::before {
+/* Move the line under the title instead of above the card */
+.info-card h3::after {
   content: '';
-  position: absolute;
-  top: 16px;
-  left: 50%;
-  transform: translateX(-50%);
+  display: block;
   width: 60px;
   height: 4px;
   background: var(--clr-green);
   border-radius: 2px;
+  margin: 16px auto 0;
 }
 
 /* Heading styling */
@@ -131,7 +132,7 @@ nav button:hover {
   font-size: 1.8em;
   color: var(--clr-text);
   text-align: center;
-  margin-bottom: 24px;
+  margin: 5px 0 24px;
 }
 
 /* List reset & spacing */
