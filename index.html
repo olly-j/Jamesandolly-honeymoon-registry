@@ -242,8 +242,9 @@ html {
     opacity: 1;
   }
 }
-.site-nav {
-  backdrop-filter: blur(8px);
+.site-nav a.active {
+  color: var(--clr-text);
+  border-bottom: 2px solid var(--clr-deep-green);
 }
 
 
@@ -260,10 +261,7 @@ html {
       <button id="code-submit" style="width:100%;background:var(--clr-accent);color:#fff;padding:12px;border:none;border-radius:8px;font-size:1em;">Enter</button>
     </div>
   </div>
-
-  <!-- Main Content -->
- <div id="main-content" style="display:none;">
-  <nav class="site-nav">
+    <nav class="site-nav">
     <!-- Anchor links for on-page scroll -->
     <a href="#invite">Invite</a>
     <a href="#timeline">Timeline</a>
@@ -274,6 +272,10 @@ html {
     <a href="photos.html">Photos</a>
       <a href="gifts.html">Gifts</a>
   </nav>
+
+  <!-- Main Content -->
+ <div id="main-content" style="display:none;">
+
 </div>
 
     <!-- Invite Section -->
@@ -794,6 +796,28 @@ if (isiOS() && !isInStandaloneMode() && !localStorage.getItem('hideA2HS')) {
     }, 3000); // show 3 seconds after load
   });
 }
+// 🟢 Highlight active nav link on scroll
+document.addEventListener('DOMContentLoaded', () => {
+  const navLinks = document.querySelectorAll('.site-nav a[href^="#"]');
+  const sections = Array.from(navLinks)
+    .map(link => document.querySelector(link.getAttribute('href')))
+    .filter(Boolean);
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      const id = entry.target.id;
+      const navLink = document.querySelector(`.site-nav a[href="#${id}"]`);
+      if (entry.isIntersecting && navLink) {
+        navLinks.forEach(link => link.classList.remove('active'));
+        navLink.classList.add('active');
+      }
+    });
+  }, {
+    threshold: 0.6
+  });
+
+  sections.forEach(section => observer.observe(section));
+});
 
 </script>
 
@@ -817,7 +841,7 @@ if (isiOS() && !isInStandaloneMode() && !localStorage.getItem('hideA2HS')) {
     </p>
     <p style="margin:0 0 16px; color:#555; font-size:0.95em;">
       Tap <span style="background:#F1F1F1; border-radius:4px; padding:2px 6px;">Share</span> 
-      <img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/IOS_Share_icon.png" alt="Share icon" style="height:1em; vertical-align:middle;"> and choose
+      <img src="images/square.and.arrow.up.png" alt="Share icon" style="height:1em; vertical-align:middle;"> and choose
       <strong>"Add to Home Screen"</strong>.
     </p>
     <p style="font-style:italic; font-size:0.9em; color:#888;">
