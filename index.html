@@ -31,13 +31,97 @@
     .hero-address a, .details-list a { color:var(--clr-green); text-decoration:none; }
     /* Timeline layout */
     .timeline-item { display:flex; align-items:flex-start; margin:20px 0; }
-    .icon-container { display:flex; flex-direction:column; align-items:center; margin-right:15px; }
+    .icon-container { display:flex; flex-direction:column; align-items:center; margin-right:15px; width:80px; }
     .icon-container .icon { width:80px; height:80px; }
     .details { flex:1; }
-    .time-title { font-weight:600; color:var(--clr-text); margin-bottom:5px; }
-    .timeline-arrow { text-align:left; margin:10px 0 0; }
-    .timeline-arrow img { width:24px; height:24px; }
+    .time-label { font-family:'Playfair Display',serif; font-size:1.2em; color:var(--clr-text); margin-bottom:4px; line-height:1.2; }
+    .time-title { font-family:'Playfair Display',serif; font-size:1.4em; font-weight:600; color:var(--clr-text); margin-bottom:5px; }
+    .timeline-arrow { margin-top:8px; }
+    .timeline-arrow img { width:80px; height:auto; display:block; margin:0 auto; }
     @keyframes fadeInUp { from { opacity:0; transform:translateY(20px);} to { opacity:1; transform:translateY(0);} }
+    /* link hover state everywhere */
+a:hover,
+.hero-address a:hover,
+.details-list a:hover,
+.btn-download:hover,
+nav button:hover {
+  color: var(--clr-accent);
+  transition: color 0.2s ease;
+}
+    /* hide all the sections, timeline items and header by default */
+    .details-list ul li::before {
+  /* suppress the injected bullet on nested items */
+  content: none;
+}
+#invite header,
+.section,
+.section-alt,
+.timeline {
+  opacity: 0;
+}
+
+/* Letter-pressed info card */
+.info-card {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 40px 30px;
+  background: var(--bg-alt);
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 4px 15px rgba(0, 0, 0, 0.05);
+  font-family: 'Inter', sans-serif;
+  position: relative;
+}
+
+/* Optional emboss flourish at top */
+.info-card::before {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: var(--clr-green);
+  border-radius: 2px;
+}
+
+/* Heading styling */
+.info-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.8em;
+  color: var(--clr-text);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* List reset & spacing */
+.info-card .details-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+.info-card .details-list > li {
+  margin-bottom: 16px;
+}
+
+/* Nested lists align with text */
+.info-card .details-list ul {
+  list-style: disc;
+  margin: 8px 0 0 20px;
+  padding: 0;
+}
+.info-card .details-list ul li {
+  margin-bottom: 8px;
+}
+
+/* Link hover (in card only) */
+.info-card a:hover {
+  color: var(--clr-accent);
+}
+
   </style>
 </head>
 <body>
@@ -61,7 +145,6 @@
 
     <!-- Invite Section -->
     <section id="invite" class="section-alt">
-      <!-- Hero -->
       <header style="height:60vh;background:url('images/hero-bg.jpg') center/cover no-repeat;display:flex;align-items:center;justify-content:center;">
         <div style="text-align:center;background:rgba(249,247,243,0.8);padding:20px;border-radius:8px;animation:fadeInUp 1s forwards;">
           <h1 style="margin:0;font-family:'Playfair Display',serif;font-size:3em;color:var(--clr-green);">James & Oliver</h1>
@@ -69,7 +152,6 @@
         </div>
       </header>
 
-      <!-- Invitation Details -->
       <div class="section" style="text-align:center;animation:fadeInUp 1s forwards 0.5s;">
         <p style="margin:0;font-family:'Playfair Display',serif;font-size:1.4em;">James & Oliver warmly invite you</p>
         <p style="margin:20px 0;line-height:1.6;">
@@ -82,27 +164,25 @@
         </p>
       </div>
 
-      <!-- Calendar Download -->
       <div class="section-alt" style="text-align:center;animation:fadeInUp 1s forwards 0.7s;">
-        <a href="images/invitation.ics" download class="btn-download" style="animation:fadeInUp 1s forwards 0.8s;">
-          <img src="images/download-icon.png" alt="Calendar Icon">Add to Your Calendar (.ics)
+        <a href="images/JamesAndOllyWeddingInnvite.ics" download class="btn-download" style="animation:fadeInUp 1s forwards 0.8s;">
+          <img src="images/download-icon.png" alt="Calendar Icon">Add to Your Calendar
         </a>
       </div>
 
-      <!-- Timeline Section -->
-      <div class="timeline section" style="background:var(--bg-timeline);animation:fadeInUp 1s forwards 1s;">
+      <!-- Tiled Background Timeline -->
+      <div class="timeline section" style="background-color:var(--bg-timeline); background-image:url('images/timeline-background.png'); background-repeat:repeat; background-size:auto; animation:fadeInUp 1s ease forwards 1s;">
         <h2 style="font-family:'Playfair Display',serif;color:var(--clr-text);text-align:center;">The Shape of the Evening</h2>
         <div style="max-width:600px;margin:auto;">
           <!-- Entry 1 -->
           <div class="timeline-item">
             <div class="icon-container">
               <img src="images/icon-aperitivo.png" class="icon" alt="Aperitivo">
-              <div class="timeline-arrow">
-                <img src="images/arrow-down.png" alt="Down Arrow">
-              </div>
+              <div class="timeline-arrow"><img src="images/arrow-down.png" alt="Down Arrow"></div>
             </div>
             <div class="details">
-              <div class="time-title">6:30 PM — Arrival & Aperitivo</div>
+              <div class="time-label">6:30 PM</div>
+              <div class="time-title">Arrival & Aperitivo</div>
               <p>The evening begins. Champagne is poured. Please arrive on time to join us from the start.</p>
             </div>
           </div>
@@ -110,12 +190,11 @@
           <div class="timeline-item">
             <div class="icon-container">
               <img src="images/icon-dinner.png" class="icon" alt="Dinner">
-              <div class="timeline-arrow">
-                <img src="images/arrow-down.png" alt="Down Arrow">
-              </div>
+              <div class="timeline-arrow"><img src="images/arrow-down.png" alt="Down Arrow"></div>
             </div>
             <div class="details">
-              <div class="time-title">7:00 PM — Dinner is Served</div>
+              <div class="time-label">7:00 PM</div>
+              <div class="time-title">Dinner is Served</div>
               <p>Feasting begins — this is not a canapés and mingling kind of night.</p>
             </div>
           </div>
@@ -123,12 +202,11 @@
           <div class="timeline-item">
             <div class="icon-container">
               <img src="images/icon-toasts.png" class="icon" alt="Toasts">
-              <div class="timeline-arrow">
-                <img src="images/arrow-down.png" alt="Down Arrow">
-              </div>
+              <div class="timeline-arrow"><img src="images/arrow-down.png" alt="Down Arrow"></div>
             </div>
             <div class="details">
-              <div class="time-title">8:30 PM — Toasts & Stories</div>
+              <div class="time-label">8:30 PM</div>
+              <div class="time-title">Toasts & Stories</div>
               <p>A few heartfelt words from people we love.</p>
             </div>
           </div>
@@ -136,12 +214,11 @@
           <div class="timeline-item">
             <div class="icon-container">
               <img src="images/icon-dessert.png" class="icon" alt="Dessert">
-              <div class="timeline-arrow">
-                <img src="images/arrow-down.png" alt="Down Arrow">
-              </div>
+              <div class="timeline-arrow"><img src="images/arrow-down.png" alt="Down Arrow"></div>
             </div>
             <div class="details">
-              <div class="time-title">9:30 PM — Dessert & Biscotti Tower</div>
+              <div class="time-label">9:30 PM</div>
+              <div class="time-title">Dessert & Biscotti Tower</div>
               <p>Sweet moments, coffee, and a slice of something a little different.</p>
             </div>
           </div>
@@ -149,12 +226,10 @@
           <div class="timeline-item">
             <div class="icon-container">
               <img src="images/icon-music.png" class="icon" alt="Music">
-              <div class="timeline-arrow">
-                <img src="images/arrow-down.png" alt="Down Arrow">
-              </div>
             </div>
             <div class="details">
-              <div class="time-title">10:00 PM Onward — Music, Drinks, Firelight</div>
+              <div class="time-label">10:00 PM Onward</div>
+              <div class="time-title">Music, Drinks, Firelight</div>
               <p>Stay a while. Let the night unfold.</p>
             </div>
           </div>
@@ -169,15 +244,91 @@
       </div>
 
       <!-- What You Need to Know -->
-      <div class="section" style="max-width:600px;margin:40px auto;animation:fadeInUp 1s forwards 1.4s;">
-        <h3 style="font-family:'Playfair Display',serif;color:var(--clr-text);">What You Need to Know</h3>
-        <ul class="details-list">
-          <li><strong>Arrival:</strong> 6:30 PM sharp</li>
-          <li><strong>Closest Tube:</strong> <a href="https://maps.app.goo.gl/Zggn3QHdpq2Qa5L39" target="_blank">Farringdon (5-min walk)</a></li>
-          <li><strong>Transport:</strong> Taxis limited late — pre-book if needed</li>
-          <li><strong>Contact:</strong> Questions or last-minute changes? Just drop James a note at <a href="mailto:james@example.com">james@example.com</a></li>
-        </ul>
-      </div>
+ <div class="section" style="max-width:600px;margin:40px auto;animation:fadeInUp 1s forwards 1.4s;">
+  <h3 style="font-family:'Playfair Display',serif;color:var(--clr-text);">What You Need to Know</h3>
+  <ul class="details-list">
+    <li><strong>Arrival:</strong> 6:30 PM sharp</li>
+
+    <li><strong>Closest Tube Stations:</strong>
+      <ul>
+        <li>
+          <a href="https://maps.app.goo.gl/SoAfSC8z6QdkuPBx5" target="_blank">
+            Farringdon Station (5-min walk)
+          </a>
+        </li>
+        <li>
+          <a href="https://maps.app.goo.gl/3xkQBGkU94wVuQVL7" target="_blank">
+            Farringdon Elizabeth Line (5-min walk)
+          </a>
+        </li>
+        <li>
+          <a href="https://maps.app.goo.gl/o3pYfyhfUkENzb3K6" target="_blank">
+            Liverpool Street Station (20-min walk)
+          </a>
+        </li>
+      </ul>
+    </li>
+
+<li><strong>Transport:</strong>
+  <ul>
+    <li>
+      Luca is a 5-minute walk from 
+      <a href="https://maps.app.goo.gl/SoAfSC8z6QdkuPBx5" target="_blank">
+        Farringdon Station
+      </a> 
+      <br>(Elizabeth Line, Thameslink, Circle, Hammersmith & City, Metropolitan)—all run late on Fridays.
+    </li>
+    <li>
+      For real-time routes, use 
+      <a href="https://citymapper.com" target="_blank">
+        Citymapper
+      </a>.
+    </li>
+    <li>
+      Taxis are less common after dark, but 
+      <a href="https://www.uber.com" target="_blank">
+        Uber
+      </a> and 
+      <a href="https://bolt.eu" target="_blank">
+        Bolt
+      </a> operate reliably.
+    </li>
+    <li>
+      The 
+      <a href="https://tfl.gov.uk/campaign/tube-improvements/what-we-are-doing/night-tube" target="_blank">
+        Night Tube
+      </a> 
+      and Elizabeth Line make getting home smooth.
+    </li>
+  </ul>
+</li>
+    <li><strong>Nearby Hotels:</strong>
+      <ul>
+        <li>
+          <a href="https://www.yotel.com/en/hotels/yotel-london-city" target="_blank">
+            YOTEL London City
+          </a><br>1.0 mi (20 min walk)<br>sleek tech-driven pod rooms with skyline views
+        </li>
+        <li>
+          <a href="https://www.ihg.com/hotelindigo/hotels/us/en/london/luxcl/hoteldetail" target="_blank">
+            Hotel Indigo London Clerkenwell by IHG
+          </a><br>0.3 mi (6 min walk)<br>boutique design reflecting local art and heritage
+        </li>
+        <li>
+          <a href="https://www.premierinn.com/gb/en/hotels/england/greater-london/london/london-farringdon.html" target="_blank">
+            Premier Inn London Farringdon (Smithfield)
+          </a><br>0.2 mi (4 min walk)<br>reliable budget-friendly comfort
+        </li>
+      </ul>
+    </li>
+
+    <li>
+      <strong>Contact:</strong>
+      Questions or last-minute changes? Drop James a note at
+      <a href="mailto:jamesandolly@googlemail.com">jamesandolly@googlemail.com</a>
+    </li>
+  </ul>
+</div>
 
       <!-- RSVP -->
       <div class="section-alt" style="text-align:center;animation:fadeInUp 1s forwards 1.6s;">
@@ -279,7 +430,7 @@
 
     <!-- Footer -->
     <footer style="text-align:center;padding:40px;background:var(--clr-text);color:var(--bg-default);font-size:0.95em;">
-      We’re so glad you’ll be with us. If you have any questions, email us at <a href="mailto:james@example.com" style="color:var(--bg-default);text-decoration:underline;">james@example.com</a> or call <a href="tel:+447000000000" style="color:var(--bg-default);text-decoration:underline;">+44 7000 000000</a>.<br>
+      We’re so glad you’ll be with us. If you have any questions, email us at <a href="mailto:jamesandolly@googlemail.com" style="color:var(--bg-default);text-decoration:underline;">jamesandolly@googlemail.com</a> or call <a href="tel:0800-you-know-our-number" style="color:var(--bg-default);text-decoration:underline;">+44 7000 000000</a>.<br><br>
       This night is about great food, glowing glasses, and being present.<br>
       Love,<br>
       James &amp; Oliver
@@ -369,6 +520,29 @@
     document.querySelectorAll('#invite header, .section, .section-alt, .timeline').forEach((el,i) => {
       el.style.animation = `fadeInUp 0.8s ease forwards ${0.5 + i*0.2}s`;
     });
+
+const codeInput = document.getElementById('code-input');
+const codeSubmit = document.getElementById('code-submit');
+
+// existing click handler
+codeSubmit.onclick = () => {
+  if (codeInput.value === 'jamesandolly') {
+    gate.style.display = 'none';
+    main.style.display = 'block';
+    showTab('invite');
+  } else {
+    alert('Incorrect code.');
+  }
+};
+
+// new: submit on Enter key
+codeInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();           // prevent form/navigation
+    codeSubmit.click();           // trigger the same logic
+  }
+});
+    
   </script>
 </body>
 </html>

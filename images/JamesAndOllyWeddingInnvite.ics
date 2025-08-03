@@ -1,0 +1,20 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//James & Oliver Wedding Celebration//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:jo-celebration-20251219T183000Z@wedding.invite
+DTSTAMP:20250803T120000Z
+DTSTART:20251219T183000Z
+DTEND:20251219T233000Z
+SUMMARY:James & Oliver’s Wedding Celebration
+DESCRIPTION:An intimate evening celebration of James & Oliver’s marriage.\n\nFriday, 19 December 2025\n6:30 PM until late\n\nLuca Restaurant\n88 St John Street\nClerkenwell, London EC1M 4EH\n\nEvening Schedule:\n6:30 PM – Arrival & Aperitivo\n7:00 PM – Dinner\n8:30 PM – Toasts & Stories\n9:30 PM – Dessert & Biscotti Tower\n10:00 PM onward – Drinks, Firelight & Music
+LOCATION:Luca Restaurant, 88 St John Street, Clerkenwell, London EC1M 4EH
+URL:
+ORGANIZER;CN="James & Oliver":MAILTO:jamesandolly@googlemail.com
+STATUS:CONFIRMED
+SEQUENCE:0
+TRANSP:OPAQUE
+END:VEVENT
+END:VCALENDAR
