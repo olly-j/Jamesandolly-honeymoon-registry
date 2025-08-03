@@ -1,0 +1,15 @@
+{
+  "name": "James & Oliver Wedding",
+  "short_name": "J&O",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F9F7F3",
+  "theme_color": "#9DA79D",
+  "icons": [
+    {
+      "src": "images/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

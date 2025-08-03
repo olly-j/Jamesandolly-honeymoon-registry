@@ -4,8 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Exclusive Invitation & Honeymoon Registry for James & Oliver">
+  <meta name="theme-color" content="#F9F7F3"> 
   <title>James & Oliver's Celebration</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <link rel="icon" href="images/favicon.png" type="image/png">
+  <link rel="manifest" href="manifest.json">
   <style>
     :root {
       --bg-default: #F9F7F3;
@@ -14,6 +17,7 @@
       --clr-accent: #C9486A;
       --clr-green: #9DA79D;
       --bg-timeline: #E6E1D9;
+      --clr-deep-green: #778053;
     }
     * { box-sizing: border-box; }
     body { margin:0; padding:0; font-family:'Inter',sans-serif; background:var(--bg-default); color:var(--clr-text); overflow-x:hidden; }
@@ -66,8 +70,8 @@
     .icon-container { display:flex; flex-direction:column; align-items:center; margin-right:15px; width:80px; }
     .icon-container .icon { width:80px; height:80px; }
     .details { flex:1; }
-    .time-label { font-family:'Playfair Display',serif; font-size:1.2em; color:var(--clr-text); margin-bottom:4px; line-height:1.2; }
-    .time-title { font-family:'Playfair Display',serif; font-size:1.4em; font-weight:600; color:var(--clr-text); margin-bottom:5px; }
+    .time-label { font-family:'Playfair Display',serif; font-size:1.2em; color: var(--clr-deep-green);; margin-bottom:4px; line-height:1.2; }
+    .time-title { font-family:'Playfair Display',serif; font-size:1.4em; font-weight:600; color: var(--clr-deep-green);; margin-bottom:5px; }
     .timeline-arrow { margin-top:8px; }
     .timeline-arrow img { width:80px; height:auto; display:block; margin:0 auto; }
     @keyframes fadeInUp { from { opacity:0; transform:translateY(20px);} to { opacity:1; transform:translateY(0);} }
@@ -238,23 +242,24 @@ html {
     <div style="background:#fff;border-radius:12px;padding:40px;max-width:360px;text-align:center;">
       <h2 style="margin:0 0 20px;font-family:'Playfair Display',serif;font-size:1.6em;color:var(--clr-accent);">Welcome to Our Celebration</h2>
       <p style="margin:0 0 30px;color:#555;">Please enter the access code to continue.</p>
-      <input id="code-input" type="text" placeholder="Access Code" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:1em;margin-bottom:20px;">
+      <input id="code-input" type="text" placeholder="Access Code" autocapitalize="off" autocorrect="off" spellcheck="false" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;font-size:1em;margin-bottom:20px;">
       <button id="code-submit" style="width:100%;background:var(--clr-accent);color:#fff;padding:12px;border:none;border-radius:8px;font-size:1em;">Enter</button>
     </div>
   </div>
 
   <!-- Main Content -->
-  <div id="main-content" style="display:none;">
-   <nav class="site-nav">
-  <!-- Tab buttons (keep your JS-driven tabs) -->
-  <button onclick="showTab('home')">Home</button>
-  <!-- Anchor links for on-page scroll -->
-  <a href="#invite">Invite</a>
-  <a href="#timeline">Timeline</a>
-  <a href="#dress-code">Dress Code</a>
-  <a href="#info">Info</a>
-  <a href="#rsvp">RSVP</a>
-</nav>
+ <div id="main-content" style="display:none;">
+  <nav class="site-nav">
+    <!-- Anchor links for on-page scroll -->
+    <a href="#invite">Invite</a>
+    <a href="#timeline">Timeline</a>
+    <a href="#dress-code">Dress Code</a>
+    <a href="#info">Info</a>
+    <a href="#rsvp">RSVP</a>
+    <!-- New external page -->
+    <a href="photos.html">Photos</a>
+  </nav>
+</div>
 
     <!-- Invite Section -->
     <section id="home" class="section-alt">
@@ -275,6 +280,9 @@ html {
           An intimate dinner and celebration with our favourite people.<br>
           We’re so glad to celebrate together in this beautiful space.
         </p>
+        <div style="text-align:center;margin:20px 0;">
+  <img src="images/dividers/mono-divide.png" alt="Monogram Divider" style="max-width:100%;max-height:80px;">
+</div>
       </div>
 
       <div class="section-alt" style="text-align:center;animation:fadeInUp 1s forwards 0.7s;">
@@ -285,7 +293,10 @@ html {
 
       <!-- Tiled Background Timeline -->
       <div class="timeline section" id="timeline" style="background-color:var(--bg-timeline); background-image:url('images/timeline-background.png'); background-repeat:repeat; background-size:auto; animation:fadeInUp 1s ease forwards 1s;">
-        <h2 style="font-family:'Playfair Display',serif;color:var(--clr-text);text-align:center;">The Shape of the Evening</h2>
+        <div style="text-align:center;margin:0px 0;">
+  <img src="images/dividers/london.png" alt="London Divider" style="max-width:100%;height:auto;">
+</div>
+        <h2 style="font-family:'Playfair Display',serif;color:var(--clr-deep-green);text-align:center;">The Shape of the Evening</h2>
         <div style="max-width:600px;margin:auto;">
           <!-- Entry 1 -->
           <div class="timeline-item">
@@ -414,9 +425,15 @@ html {
     </li>
   </ul>
 </div>
-
+<div style="text-align:center;margin:0px 0;">
+  <img src="images/dividers/wave.png" alt="Gold Wave Divider" style="max-width:60%;">
+</div>
 <!-- RSVP Section via Formspree -->
 <div class="rsvp-card" id="rsvp" style="animation:fadeInUp 1s ease forwards 1.6s;">
+  <div style="text-align:center; margin-bottom: -10px;">
+  <img src="images/flourishes/glass-cheers.png" alt="Cheers Icon"
+       style="max-width:100px; opacity:1;">
+</div>
   <h2>Kindly Reply</h2>
   <p class="rsvp-intro">
     This invitation is for you personally — we’re keeping things small and intentional.<br>
@@ -567,6 +584,10 @@ html {
 
       <!-- Gift Intro -->
       <div class="section" style="text-align:center;animation:fadeInUp 1s forwards 1.8s;">
+        <div style="text-align:center; margin-bottom: 0px;">
+  <img src="images/flourishes/lightGreen-coupe.png" alt="Coupe Glasses"
+       style="max-height:80px; opacity:1;">
+</div>
         <h2 style="font-family:'Playfair Display',serif;color:var(--clr-text);">Your Presence Is Enough</h2>
         <p style="color:#555;line-height:1.6;">But if you’d like to mark the moment, we’re saving for our honeymoon and would be deeply grateful for your help on our journey.</p>
         <p style="margin-top:20px;"><a href="#" style="text-decoration:none;color:var(--clr-text);font-weight:600;">Open Gifts & Honeymoon Fund</a></p>
@@ -638,6 +659,10 @@ html {
     <footer style="text-align:center;padding:40px;background:var(--clr-text);color:var(--bg-default);font-size:0.95em;">
       We’re so glad you’ll be with us. If you have any questions,<br> email us at <a href="mailto:jamesandolly@googlemail.com" style="color:var(--bg-default);text-decoration:underline;">jamesandolly@googlemail.com</a> or call <a href="https://www.youtube.com/shorts/Ay8lynMZ4mE?themeRefresh=1" target="_blank" style="color:var(--bg-default);text-decoration:underline;">0800-you-know-our-number</a>.<br><br>
       This night is about great food, glowing glasses, and being present.<br>
+      <div style="margin:0px 0;">
+  <img src="images/flourishes/lightGreen-coupe.png" alt="Toasting Glasses"
+       style="max-height:50px; opacity:1;">
+</div>
       Love,<br>
       James &amp; Oliver
     </footer>
@@ -652,113 +677,106 @@ html {
     </div>
   </div>
 
-  <script>
-    // Gate Logic
-    const gate = document.getElementById('gate-overlay');
-    const main = document.getElementById('main-content');
-    document.getElementById('code-submit').onclick = () => {
-      if (document.getElementById('code-input').value === 'jamesandolly') {
-        gate.style.display = 'none';
-        main.style.display = 'block';
-        showTab('invite');
-      } else {
-        alert('Incorrect code.');
-      }
-    };
-
-    // Tab Control
-    function showTab(id) {
-      ['invite','gifts','gallery'].forEach(tab => {
-        document.getElementById(tab).style.display = tab === id ? 'block' : 'none';
-        document.getElementById('tab-'+tab).classList.toggle('active', tab === id);
-      });
-    }
-
-    
-
-    // Gift Progress
-    const total = 3500, goal = 20000;
-    const pct = Math.min((total/goal)*100, 100);
-    document.getElementById('gift-progress-bar').style.width = pct+'%';
-    document.getElementById('gift-progress-text').textContent = `£${total} of £${goal} goal reached`;
-
-    // Contribute Buttons
-    document.querySelectorAll('.btn-gift').forEach(btn => {
-      btn.onclick = () => {
-        const card = btn.closest('.card');
-        const amount = card.getAttribute('data-amount');
-        window.open(amount
-          ? `https://paypal.me/yourname/${amount}`
-          : 'https://paypal.me/yourname', '_blank');
-        document.getElementById('thankyou-modal').style.display = 'flex';
-      };
-    });
-
-    document.getElementById('thankyou-close').onclick = () => {
-      document.getElementById('thankyou-modal').style.display = 'none';
-    };
-
- 
-
-
-    // Initial Reveal Animations
-    document.querySelectorAll('#invite header, .section, .section-alt, .timeline').forEach((el,i) => {
-      el.style.animation = `fadeInUp 0.8s ease forwards ${0.5 + i*0.2}s`;
-    });
-
-const codeInput = document.getElementById('code-input');
-const codeSubmit = document.getElementById('code-submit');
-
-// existing click handler
-codeSubmit.onclick = () => {
-  if (codeInput.value === 'jamesandolly') {
-    gate.style.display = 'none';
-    main.style.display = 'block';
-    showTab('invite');
-  } else {
-    alert('Incorrect code.');
-  }
-};
-
-// new: submit on Enter key
-codeInput.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') {
-    e.preventDefault();           // prevent form/navigation
-    codeSubmit.click();           // trigger the same logic
-  }
-});
-
-// when the gate shows, focus the input
-document.getElementById('code-input').focus();
-
-
+ <script>
 document.addEventListener('DOMContentLoaded', () => {
-  const form     = document.getElementById('rsvp-form');
-  const thankMsg = document.getElementById('rsvp-confirmation');
+  const codeSubmit = document.getElementById('code-submit');
+  const codeInput  = document.getElementById('code-input');
+  const gate       = document.getElementById('gate-overlay');
+  const main       = document.getElementById('main-content');
+  const rsvpForm   = document.getElementById('rsvp-form');
+  const thankMsg   = document.getElementById('rsvp-confirmation');
 
-  if (!form || !thankMsg) return;
+  // 🔐 Access Gate Logic
+function grantAccess() {
+  localStorage.setItem('accessGranted', 'true');
+  gate.style.display = 'none';
+  main.style.display = 'block';
+  window.scrollTo({
+    top: document.getElementById('invite').offsetTop - 60,
+    behavior: 'smooth'
+  });
+}
 
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    fetch(form.action, {
-      method:  form.method,
-      body:    new FormData(form),
-      headers: { 'Accept': 'application/json' }
-    })
-    .then(r => {
-      if (!r.ok) return r.json().then(err => Promise.reject(err));
-      // hide only the form itself
-      form.style.display = 'none';
-      // reveal your thank-you message
-      thankMsg.style.display = 'block';
-    })
-    .catch(err => {
-      console.error(err);
-      alert('Oops! There was a problem submitting your RSVP.');
+  if (localStorage.getItem('accessGranted') === 'true') {
+    grantAccess();
+  }
+
+  codeSubmit.addEventListener('click', () => {
+    if (codeInput.value === 'jamesandolly') {
+      grantAccess();
+    } else {
+      alert('Incorrect code.');
+    }
+  });
+
+  codeInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      codeSubmit.click();
+    }
+  });
+
+  codeInput.focus();
+
+  // 📦 Gift Progress
+  const total = 3500, goal = 20000;
+  const pct = Math.min((total / goal) * 100, 100);
+  document.getElementById('gift-progress-bar').style.width = pct + '%';
+  document.getElementById('gift-progress-text').textContent = `£${total} of £${goal} goal reached`;
+
+  // 🎁 Gift Contribution Logic
+  document.querySelectorAll('.btn-gift').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.card');
+      const amount = card.getAttribute('data-amount');
+      window.open(amount ? `https://paypal.me/yourname/${amount}` : 'https://paypal.me/yourname', '_blank');
+      document.getElementById('thankyou-modal').style.display = 'flex';
     });
+  });
+
+  document.getElementById('thankyou-close').addEventListener('click', () => {
+    document.getElementById('thankyou-modal').style.display = 'none';
+  });
+
+  // ✉️ RSVP Form
+  if (rsvpForm && thankMsg) {
+    rsvpForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      fetch(rsvpForm.action, {
+        method: rsvpForm.method,
+        body: new FormData(rsvpForm),
+        headers: { 'Accept': 'application/json' }
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Submission failed');
+        rsvpForm.style.display = 'none';
+        thankMsg.style.display = 'block';
+      })
+      .catch(() => alert('Oops! There was a problem submitting your RSVP.'));
+    });
+  }
+
+  // ✨ Animations
+  document.querySelectorAll('#invite header, .section, .section-alt, .timeline').forEach((el, i) => {
+    el.style.animation = `fadeInUp 0.8s ease forwards ${0.5 + i * 0.2}s`;
   });
 });
 
-  </script>
+// 📱 iOS Home Screen Prompt
+function isiOS() {
+  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+}
+function isInStandaloneMode() {
+  return ('standalone' in window.navigator) && window.navigator.standalone;
+}
+if (isiOS() && !isInStandaloneMode()) {
+  setTimeout(() => {
+    alert('Tip: Tap Share → "Add to Home Screen" for quicker access next time.');
+  }, 1500);
+}
+</script>
+
+
+
 </body>
 </html>

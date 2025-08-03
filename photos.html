@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>James & Oliver – Gallery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  <link rel="icon" href="/images/favicon.png" type="image/png">
+  <style>
+    :root {
+      --bg: #F9F7F3;
+      --text: #3D4739;
+      --accent: #C9486A;
+      --green: #9DA79D;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      background: white;
+      border-bottom: 1px solid #ddd;
+      z-index: 100;
+    }
+    nav a {
+      font-family: 'Playfair Display', serif;
+      text-decoration: none;
+      color: #555;
+      font-size: 1.1em;
+    }
+    nav a:hover { color: var(--accent); }
+    h1, h2, h3 {
+      font-family: 'Playfair Display', serif;
+      text-align: center;
+    }
+    .upload-section, .gallery-section {
+      max-width: 1000px;
+      margin: auto;
+      padding: 40px 20px;
+    }
+    .upload-box {
+      text-align: center;
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .upload-box p {
+      margin: 10px 0 20px;
+      color: #555;
+    }
+    #gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    #gallery-grid img {
+      width: 100%;
+      border-radius: 8px;
+      transition: transform 0.3s;
+    }
+    #gallery-grid img:hover {
+      transform: scale(1.03);
+    }
+    footer {
+      text-align: center;
+      padding: 40px;
+      background: var(--text);
+      color: var(--bg);
+      font-size: 0.95em;
+    }
+  </style>
+  <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
+  <script>
+    uploadcare.start({ publicKey: 'demopublickey', integration: 'JamesOliverGallery' });
+  </script>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Invitation</a>
+    <a href="#upload">Upload</a>
+    <a href="#gallery">Gallery</a>
+  </nav>
+
+  <section id="upload" class="upload-section">
+    <div class="upload-box">
+      <h2>Share Your Favourite Moments</h2>
+      <p>Upload your photos from the evening – we'd love to see your memories.</p>
+      <input type="hidden" role="uploadcare-uploader"
+        data-public-key="demopublickey"
+        data-images-only
+        data-multiple
+        data-clearable
+        data-tabs="file camera url"
+        data-crop="disabled">
+    </div>
+  </section>
+
+  <section id="gallery" class="gallery-section">
+    <h2>Gallery</h2>
+    <p style="text-align:center;color:#555;">A growing collection of shared moments and highlights.</p>
+    <div id="gallery-grid">
+      <!-- Add <img src="..."> elements manually or script them here -->
+      <img src="images/sample1.jpg" alt="Guest 1">
+      <img src="images/sample2.jpg" alt="Guest 2">
+      <img src="images/sample3.jpg" alt="Couple">
+    </div>
+  </section>
+
+  <footer>
+    Want to add more? Upload as many as you like, or email us at <a href="mailto:jamesandolly@googlemail.com" style="color:#fff;text-decoration:underline;">jamesandolly@googlemail.com</a>.
+  </footer>
+
+</body>
+</html>
