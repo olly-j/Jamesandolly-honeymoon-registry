@@ -57,6 +57,7 @@
 
     <!-- Invite Section -->
     <section id="invite" class="section-alt">
+      <!-- Hero -->
       <header style="height:60vh;background:url('images/hero-bg.jpg') center/cover no-repeat;display:flex;align-items:center;justify-content:center;">
         <div style="text-align:center;background:rgba(249,247,243,0.8);padding:20px;border-radius:8px;animation:fadeInUp 1s forwards;">
           <h1 style="margin:0;font-family:'Playfair Display',serif;font-size:3em;color:var(--clr-green);">James & Oliver</h1>
@@ -64,6 +65,7 @@
         </div>
       </header>
 
+      <!-- Invitation Details -->
       <div class="section" style="text-align:center;animation:fadeInUp 1s forwards 0.5s;">
         <p style="margin:0;font-family:'Playfair Display',serif;font-size:1.4em;">James & Oliver warmly invite you</p>
         <p style="margin:20px 0;line-height:1.6;">
@@ -76,12 +78,14 @@
         </p>
       </div>
 
+      <!-- Download ICS -->
       <div class="section-alt" style="text-align:center;animation:fadeInUp 1s forwards 0.7s;">
         <a href="images/invitation.ics" download class="btn-download" style="animation:fadeInUp 1s forwards 0.8s;">
           <img src="images/download-icon.png" alt="Download Calendar">Download Invite to Calendar
         </a>
       </div>
 
+      <!-- Timeline -->
       <div class="timeline section" style="animation:fadeInUp 1s forwards 1s;">
         <h2 style="font-family:'Playfair Display',serif;color:var(--clr-text);text-align:center;">The Shape of the Evening</h2>
         <div style="max-width:600px;margin:auto;">
@@ -133,13 +137,15 @@
         </div>
       </div>
 
-      <div class="section-alt" style="text-align:center;animation:fadeInUp 1s forwards 1.3s;">
+      <!-- Dress Code -->
+      <div class="section-alt" style="text-align:center;animation:fadeInUp 1s forwards 1.2s;">
         <h2 style="font-family:'Playfair Display',serif;color:var(--clr-text);">Refined Celebration Wear</h2>
         <p style="color:#555;line-height:1.6;">Velvet blazers, polished boots, satin dresses, or your favourite tailoring — style it up, your way.<br>Be bold, be comfortable, be yourself.</p>
         <img src="images/dress-code-sketch.png" alt="Dress Code Sketch" style="max-width:35%;margin-top:20px;border-radius:8px;">
       </div>
 
-      <div class="section" style="max-width:600px;margin:40px auto;animation:fadeInUp 1s forwards 1.5s;">
+      <!-- What You Need to Know -->
+      <div class="section" style="max-width:600px;margin:40px auto;animation:fadeInUp 1s forwards 1.4s;">
         <h3 style="font-family:'Playfair Display',serif;color:var(--clr-text);">What You Need to Know</h3>
         <ul class="details-list">
           <li><strong>Arrival:</strong> 6:30 PM sharp</li>
@@ -149,18 +155,30 @@
         </ul>
       </div>
 
-      <div class="section-alt" style="text-align:center;animation:fadeInUp 1s forwards 1.7s;">
+      <!-- RSVP -->
+      <div class="section-alt" style="text-align:center;animation:fadeInUp 1s forwards 1.6s;">
         <h2 style="font-family:'Playfair Display',serif;color:var(--clr-text);">Kindly Reply</h2>
         <p style="color:#555;">RSVP by: 14 November 2025</p>
         <form action="#" style="max-width:400px;margin:auto;text-align:left;">
-          <label style="display:block;margin:10px 0 5px;color:#555;">Name(s):<br><input type="text" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:4px;"></label>
-          <label style="display:block;margin:10px 0 5px;color:#555;">Will attend:<br><label><input type="checkbox"> Yes</label><label style="margin-left:10px;"><input type="checkbox"> No</label></label>
-          <label style="display:block;margin:10px 0 5px;color:#555;">Dietary Needs:<br><input type="text" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:4px;"></label>
+          <label style="display:block;margin:10px 0 5px;color:#555;">
+            Name(s):<br>
+            <input type="text" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:4px;">
+          </label>
+          <label style="display:block;margin:10px 0 5px;color:#555;">
+            Will attend:<br>
+            <label><input type="checkbox"> Yes</label>
+            <label style="margin-left:10px;"><input type="checkbox"> No</label>
+          </label>
+          <label style="display:block;margin:10px 0 5px;color:#555;">
+            Dietary Needs:<br>
+            <input type="text" style="width:100%;padding:8px;border:1px solid #ddd;border-radius:4px;">
+          </label>
           <button type="submit">Submit RSVP</button>
         </form>
       </div>
 
-      <div class="section" style="text-align:center;animation:fadeInUp 1s forwards 1.9s;">
+      <!-- Gift Intro -->
+      <div class="section" style="text-align:center;animation:fadeInUp 1s forwards 1.8s;">
         <h2 style="font-family:'Playfair Display',serif;color:var(--clr-text);">Your Presence Is Enough</h2>
         <p style="color:#555;line-height:1.6;">But if you’d like to mark the moment, we’re saving for our honeymoon and would be deeply grateful for your help on our journey.</p>
         <p style="margin-top:20px;"><a href="#" style="text-decoration:none;color:var(--clr-text);font-weight:600;">Open Gifts & Honeymoon Fund</a></p>
@@ -171,11 +189,13 @@
     <section id="gifts" class="section-alt" style="display:none;animation:fadeInUp 1s forwards;">
       <div style="max-width:960px;margin:20px auto;padding:20px;background:#fff;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
         <h2 style="font-family:'Playfair Display',serif;color:var(--clr-text);">Cruise Fund Progress</h2>
-        <div style="height:20px;background:#e0e0e0;border-radius:10px;overflow:hidden;"><div id="gift-progress-bar" style="height:20px;width:0%;background:var(--clr-accent);transition:width 0.5s;"></div></div>
+        <div style="height:20px;background:#e0e0e0;border-radius:10px;overflow:hidden;">
+          <div id="gift-progress-bar" style="height:20px;width:0%;background:var(--clr-accent);transition:width 0.5s;"></div>
+        </div>
         <p id="gift-progress-text" style="margin:10px 0 0;color:#555;">£0 of £20000 goal reached</p>
       </div>
       <div style="max-width:1100px;margin:auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:40px;padding:20px;">
-        <!-- Gift items unchanged -->
+        <!-- Gift items here unchanged -->
       </div>
     </section>
 
@@ -183,14 +203,15 @@
     <section id="gallery" class="section" style="display:none;">
       <h2 style="font-family:'Playfair Display',serif;color:var(--clr-text);text-align:center;">Gallery</h2>
       <p style="text-align:center;color:#555;">Share your favourite moments—upload photos here. Professional highlights will appear below.</p>
-      <!-- Placeholder for uploads and pro photos -->
       <div style="max-width:800px;margin:20px auto;text-align:center;border:2px dashed #ccc;padding:40px;color:#aaa;">
         Image gallery placeholder
       </div>
     </section>
 
     <!-- Footer -->
-    <footer style="text-align:center;padding:40px;background:var(--clr-text);color:var(--bg-default);font-size:0.95em;">Thank you for celebrating with us — James & Oliver</footer>
+    <footer style="text-align:center;padding:40px;background:var(--clr-text);color:var(--bg-default);font-size:0.95em;">
+      Thank you for celebrating with us — James & Oliver
+    </footer>
   </div>
 
   <!-- Thank You Modal -->
@@ -204,32 +225,52 @@
 
   <script>
     // Gate Logic
-    const gate=document.getElementById('gate-overlay');
-    const main=document.getElementById('main-content');
-    document.getElementById('code-submit').onclick=()=>{
-      if(document.getElementById('code-input').value==='jamesandolly'){
-        gate.style.display='none'; main.style.display='block'; showTab('invite');
-      } else alert('Incorrect code.');
+    const gate = document.getElementById('gate-overlay');
+    const main = document.getElementById('main-content');
+    document.getElementById('code-submit').onclick = () => {
+      if (document.getElementById('code-input').value === 'jamesandolly') {
+        gate.style.display = 'none';
+        main.style.display = 'block';
+        showTab('invite');
+      } else {
+        alert('Incorrect code.');
+      }
     };
+
     // Tab Control
-    function showTab(id){
-      ['invite','gifts','gallery'].forEach(tab=>{document.getElementById(tab).style.display=tab===id?'block':'none'; document.getElementById('tab-'+tab).classList.toggle('active', tab===id);});
+    function showTab(id) {
+      ['invite','gifts','gallery'].forEach(tab => {
+        document.getElementById(tab).style.display = tab === id ? 'block' : 'none';
+        document.getElementById('tab-'+tab).classList.toggle('active', tab === id);
+      });
     }
+
     // Gift Progress
-    const total=3500, goal=20000;
-    const pct=Math.min((total/goal)*100,100);
-    document.getElementById('gift-progress-bar').style.width=pct+'%';
-    document.getElementById('gift-progress-text').textContent=`£${total} of £${goal} goal reached`;
+    const total = 3500, goal = 20000;
+    const pct = Math.min((total/goal)*100, 100);
+    document.getElementById('gift-progress-bar').style.width = pct+'%';
+    document.getElementById('gift-progress-text').textContent = `£${total} of £${goal} goal reached`;
+
     // Contribute Buttons
-    document.querySelectorAll('.btn-gift').forEach(btn=> btn.onclick=()=>{
-      const card=btn.closest('.card');
-      const amount=card.getAttribute('data-amount');
-      window.open(amount?`https://paypal.me/yourname/${amount}`:'https://paypal.me/yourname','_blank');
-      document.getElementById('thankyou-modal').style.display='flex';
+    document.querySelectorAll('.btn-gift').forEach(btn => {
+      btn.onclick = () => {
+        const card = btn.closest('.card');
+        const amount = card.getAttribute('data-amount');
+        window.open(amount
+          ? `https://paypal.me/yourname/${amount}`
+          : 'https://paypal.me/yourname', '_blank');
+        document.getElementById('thankyou-modal').style.display = 'flex';
+      };
     });
-    document.getElementById('thankyou-close').onclick=()=> document.getElementById('thankyou-modal').style.display='none';
-    // Reveal animations
-    document.querySelectorAll('#invite header,.section,.section-alt,.timeline').forEach((el,i)=> el.style.animation=`fadeInUp 0.8s ease forwards ${0.5+i*0.2}s`);
+
+    document.getElementById('thankyou-close').onclick = () => {
+      document.getElementById('thankyou-modal').style.display = 'none';
+    };
+
+    // Initial Reveal Animations
+    document.querySelectorAll('#invite header, .section, .section-alt, .timeline').forEach((el,i) => {
+      el.style.animation = `fadeInUp 0.8s ease forwards ${0.5 + i*0.2}s`;
+    });
   </script>
 </body>
 </html>
