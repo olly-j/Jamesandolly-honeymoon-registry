@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>James & Oliver – Gallery</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
-  <link rel="icon" href="/images/favicon.png" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="images/favicon.png" type="image/png" />
   <style>
     :root {
       --bg: #F9F7F3;
@@ -37,7 +37,9 @@
       color: #555;
       font-size: 1.1em;
     }
-    nav a:hover { color: var(--accent); }
+    nav a:hover {
+      color: var(--accent);
+    }
     h1, h2, h3 {
       font-family: 'Playfair Display', serif;
       text-align: center;
@@ -67,7 +69,7 @@
     #gallery-grid img {
       width: 100%;
       border-radius: 8px;
-      transition: transform 0.3s;
+      transition: transform 0.3s ease;
     }
     #gallery-grid img:hover {
       transform: scale(1.03);
@@ -79,16 +81,65 @@
       color: var(--bg);
       font-size: 0.95em;
     }
+    footer a {
+      color: #fff;
+      text-decoration: underline;
+    }
   </style>
+ <!-- Uploadcare widget -->
   <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
   <script>
-    uploadcare.start({ publicKey: 'demopublickey', integration: 'JamesOliverGallery' });
+    UPLOADCARE_PUBLIC_KEY = '9151e98685b3bcebf25e';
+    UPLOADCARE_LOCALE     = 'en';
+
+    // ← REPLACE this with your Apps Script "exec" URL (without query params):
+    const SHEET_API = 'https://script.google.com/macros/s/AKfycbwyUOwZRTT4hHMpyMzAyZtE6no8dsebK0TnmsAc8dK9m9vvqcg_kVs_VcPZM6k5QO_Geg/exec';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const widget  = uploadcare.Widget('#uploader');
+      const gallery = document.getElementById('gallery-grid');
+
+      // 1) Fetch existing images from your sheet
+      fetch(SHEET_API)
+        .then(r => r.json())
+        .then(rows => {
+          rows.reverse().forEach(({url}) => {
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = 'Shared memory';
+            gallery.appendChild(img);
+          });
+        })
+        .catch(err => console.error('Error loading gallery:', err));
+
+      // 2) When someone uploads:
+      widget.onUploadComplete = info => {
+        const imageUrl = info.cdnUrl + '-/preview/-/quality/lightest/';
+
+        // a) show it immediately
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.alt = 'Guest Upload';
+        gallery.prepend(img);
+
+        // b) send it to your Apps Script
+        fetch(SHEET_API, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: imageUrl })
+        })
+        .then(r => r.text())
+        .then(console.log)
+        .catch(console.error);
+      };
+    });
   </script>
 </head>
 <body>
+
   <nav>
     <a href="index.html">Invitation</a>
-      <a href="gifts.html">Gifts</a>
+    <a href="gifts.html">Gifts</a>
     <a href="#upload">Upload</a>
     <a href="#gallery">Gallery</a>
   </nav>
@@ -96,14 +147,16 @@
   <section id="upload" class="upload-section">
     <div class="upload-box">
       <h2>Share Your Favourite Moments</h2>
-      <p>Upload your photos from the evening – we'd love to see your memories.</p>
-      <input type="hidden" role="uploadcare-uploader"
-        data-public-key="demopublickey"
-        data-images-only
-        data-multiple
+      <p>Upload your photos from the evening — we’d love to see your memories.</p>
+      <input 
+        id="uploader" 
+        type="hidden" 
+        role="uploadcare-uploader"
         data-clearable
+        data-multiple
+        data-images-only
         data-tabs="file camera url"
-        data-crop="disabled">
+      />
     </div>
   </section>
 
@@ -111,15 +164,16 @@
     <h2>Gallery</h2>
     <p style="text-align:center;color:#555;">A growing collection of shared moments and highlights.</p>
     <div id="gallery-grid">
-      <!-- Add <img src="..."> elements manually or script them here -->
-      <img src="images/sample1.jpg" alt="Guest 1">
-      <img src="images/sample2.jpg" alt="Guest 2">
-      <img src="images/sample3.jpg" alt="Couple">
+      <!-- Uploaded images will appear here -->
+      <img src="images/sample1.jpg" alt="Guest 1" />
+      <img src="images/sample2.jpg" alt="Guest 2" />
+      <img src="images/sample3.jpg" alt="Couple" />
     </div>
   </section>
 
   <footer>
-    Want to add more? Upload as many as you like, or email us at <a href="mailto:jamesandolly@googlemail.com" style="color:#fff;text-decoration:underline;">jamesandolly@googlemail.com</a>.
+    Want to add more? Upload as many as you like, or email us at 
+    <a href="mailto:jamesandolly@googlemail.com">jamesandolly@googlemail.com</a>.
   </footer>
 
 </body>
