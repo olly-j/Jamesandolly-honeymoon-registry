@@ -234,6 +234,9 @@ html {
 
 
 
+
+
+
   </style>
 </head>
 <body>
@@ -774,9 +777,52 @@ if (isiOS() && !isInStandaloneMode()) {
     alert('Tip: Tap Share → "Add to Home Screen" for quicker access next time.');
   }, 1500);
 }
+
+function isiOS() {
+  return /iPhone|iPad|iPod/i.test(navigator.userAgent) && !window.MSStream;
+}
+function isInStandaloneMode() {
+  return ('standalone' in navigator) && navigator.standalone;
+}
+
+function dismissA2HS() {
+  localStorage.setItem('hideA2HS', 'true');
+  document.getElementById('a2hs-prompt').style.display = 'none';
+}
+
+if (isiOS() && !isInStandaloneMode() && !localStorage.getItem('hideA2HS')) {
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('a2hs-prompt').style.display = 'block';
+    }, 3000); // show 3 seconds after load
+  });
+}
+
 </script>
 
-
+<div id="a2hs-prompt"
+     style="display:none; position:fixed; bottom:0; left:0; right:0;
+            background:#fff; border-top:2px solid #778053; padding:20px;
+            box-shadow:0 -4px 12px rgba(0,0,0,0.15); z-index:1002;
+            font-family:'Inter',sans-serif;
+            animation: slideUp 0.5s ease forwards;">; border-top:2px solid #778053; padding:20px; box-shadow:0 -4px 12px rgba(0,0,0,0.15); z-index:1002; font-family:'Inter',sans-serif;">
+  <div style="max-width:600px; margin:auto; text-align:center;">
+    <p style="margin:0 0 12px; font-size:1.05em; color:#3D4739;">
+      💫 Save this celebration to your home screen for easy access anytime.
+    </p>
+    <p style="margin:0 0 16px; color:#555; font-size:0.95em;">
+      Tap <span style="background:#F1F1F1; border-radius:4px; padding:2px 6px;">Share</span> 
+      <img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/IOS_Share_icon.png" alt="Share icon" style="height:1em; vertical-align:middle;"> and choose
+      <strong>"Add to Home Screen"</strong>.
+    </p>
+    <p style="font-style:italic; font-size:0.9em; color:#888;">
+      So you’re just one tap away from the big night 🌿
+    </p>
+    <button onclick="dismissA2HS()" style="margin-top:10px; background:#778053; color:#fff; border:none; border-radius:6px; padding:10px 16px; font-size:0.9em; cursor:pointer;">
+      Got it, thanks!
+    </button>
+  </div>
+</div>
 
 </body>
 </html>
