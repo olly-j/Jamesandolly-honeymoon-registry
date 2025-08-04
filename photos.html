@@ -9,6 +9,13 @@
     rel="stylesheet"
   />
   <link rel="icon" href="images/favicon.png" type="image/png" />
+
+  <!-- GLightbox CSS -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css"
+  />
+
   <style>
     :root {
       --bg: #F9F7F3;
@@ -90,8 +97,11 @@
     }
     footer a { color: #fff; text-decoration: underline; }
   </style>
+
   <!-- Cloudinary Upload Widget -->
   <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
+  <!-- GLightbox JS -->
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 </head>
 <body>
 
@@ -135,16 +145,31 @@
     document.addEventListener('DOMContentLoaded', () => {
       const gallery = document.getElementById('gallery-grid');
 
+      // Initialize GLightbox
+      const lightbox = GLightbox({
+        selector: '.glightbox',
+        touchNavigation: true,
+        loop: true,
+        zoomable: true
+      });
+
       // 1) Load existing images by tag
       fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
         .then(res => res.json())
         .then(data => {
           data.resources.forEach(resource => {
+            const url = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/v${resource.version}/${resource.public_id}.${resource.format}`;
+            const link = document.createElement('a');
+            link.href = url;
+            link.className = 'glightbox';
+            link.setAttribute('data-gallery', 'gallery');
             const img = document.createElement('img');
-            img.src = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/v${resource.version}/${resource.public_id}.${resource.format}`;
+            img.src = url;
             img.alt = 'Shared memory';
-            gallery.appendChild(img);
+            link.appendChild(img);
+            gallery.appendChild(link);
           });
+          lightbox.reload();
         })
         .catch(err => console.error('Gallery load error:', err));
 
@@ -154,16 +179,22 @@
         uploadPreset: UPLOAD_PRESET,
         tags:         [ TAG_NAME ],
         sources:      ['local','url','camera'],
-        multiple:     true,           // ← allow batch uploads
-        showAdvancedOptions: true,    // brightness/crop/etc UI
-        cropping:     false           // true = require crop step
+        multiple:     true,        // allow batch uploads
+        showAdvancedOptions: true, // brightness/crop/etc UI
+        cropping:     false        // true = require crop step
       }, (err, result) => {
         if (!err && result && result.event === 'success') {
-          // prepend immediately so user sees it
+          const url = result.info.secure_url;
+          const link = document.createElement('a');
+          link.href = url;
+          link.className = 'glightbox';
+          link.setAttribute('data-gallery', 'gallery');
           const img = document.createElement('img');
-          img.src = result.info.secure_url;
+          img.src = url;
           img.alt = 'Guest Upload';
-          gallery.prepend(img);
+          link.appendChild(img);
+          gallery.prepend(link);
+          lightbox.reload();
         }
       });
 
@@ -171,6 +202,47 @@
       document.getElementById('upload-btn')
               .addEventListener('click', () => widget.open(), false);
     });
+
+// keep track of what we've already shown
+const seen = new Set();
+
+// after your initial fetch+render loop, mark them seen:
+fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
+  .then(r => r.json())
+  .then(data => {
+    data.resources.forEach(resource => seen.add(resource.asset_id));
+  });
+
+// define a little poller
+function pollNewImages() {
+  fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
+    .then(r => r.json())
+    .then(data => {
+      let added = false;
+      data.resources.forEach(resource => {
+        if (!seen.has(resource.asset_id)) {
+          seen.add(resource.asset_id);
+          const url = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/v${resource.version}/${resource.public_id}.${resource.format}`;
+          const link = document.createElement('a');
+          link.href = url;
+          link.className = 'glightbox';
+          link.setAttribute('data-gallery', 'gallery');
+          const img = document.createElement('img');
+          img.src = url;
+          img.alt = 'Shared memory';
+          link.appendChild(img);
+          gallery.prepend(link);
+          added = true;
+        }
+      });
+      if (added) lightbox.reload();
+    })
+    .catch(console.error);
+}
+
+// kick off polling every 30 seconds
+setInterval(pollNewImages, 30_000);
+
   </script>
 </body>
 </html>
