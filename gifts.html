@@ -2,180 +2,134 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>James & Oliver – Gallery</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Celebrate From Afar – James & Oliver</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
-  <link rel="icon" href="images/favicon.png" type="image/png" />
+  <link rel="icon" href="images/favicon.png" />
+  <meta name="theme-color" content="#F9F7F3" />
   <style>
-    :root {
-      --bg: #F9F7F3;
-      --text: #3D4739;
-      --accent: #C9486A;
-      --green: #9DA79D;
-    }
-    * { box-sizing: border-box; }
     body {
       margin: 0;
+      padding: 0;
+      background: #f9f7f3;
       font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      color: #3D4739;
+      line-height: 1.6;
     }
+
     nav {
       display: flex;
       justify-content: center;
       gap: 30px;
       padding: 20px;
-      position: sticky;
-      top: 0;
-      background: white;
-      border-bottom: 1px solid #ddd;
-      z-index: 100;
+      background: #fff;
+      border-bottom: 1px solid #e0e0e0;
     }
+
     nav a {
       font-family: 'Playfair Display', serif;
-      text-decoration: none;
       color: #555;
-      font-size: 1.1em;
+      text-decoration: none;
+      padding: 6px 8px;
     }
+
     nav a:hover {
-      color: var(--accent);
+      color: #C9486A;
     }
-    h1, h2, h3 {
-      font-family: 'Playfair Display', serif;
+
+    header {
       text-align: center;
-    }
-    .upload-section, .gallery-section {
-      max-width: 1000px;
-      margin: auto;
       padding: 40px 20px;
     }
-    .upload-box {
-      text-align: center;
-      background: white;
-      padding: 30px;
+
+    header img {
+      max-height: 100px;
+      margin-bottom: 20px;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2em;
+      margin: 0;
+      color: #778053;
+    }
+
+    .section {
+      max-width: 700px;
+      margin: 0 auto;
+      background: #fff;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      padding: 40px 30px;
+      margin-bottom: 60px;
     }
-    .upload-box p {
-      margin: 10px 0 20px;
-      color: #555;
+
+    .gift-button {
+      background-color: #d6c2a4;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      border: none;
+      padding: 14px 26px;
+      font-size: 1rem;
+      cursor: pointer;
+      border-radius: 6px;
     }
-    #gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 16px;
-      margin-top: 20px;
-    }
-    #gallery-grid img {
-      width: 100%;
-      border-radius: 8px;
-      transition: transform 0.3s ease;
-    }
-    #gallery-grid img:hover {
-      transform: scale(1.03);
-    }
+
     footer {
       text-align: center;
       padding: 40px;
-      background: var(--text);
-      color: var(--bg);
-      font-size: 0.95em;
+      font-size: 0.9em;
+      color: #aaa;
     }
-    footer a {
-      color: #fff;
-      text-decoration: underline;
+
+    .divider {
+      text-align: center;
+      margin: 40px 0 20px;
+    }
+
+    .divider img {
+      max-height: 60px;
     }
   </style>
-
-  <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
-  <script>
-    // your Uploadcare key
-    UPLOADCARE_PUBLIC_KEY = '9151e98685b3bcebf25e';
-    UPLOADCARE_LOCALE = 'en';
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const widget = uploadcare.Widget('#uploader');
-      const gallery = document.getElementById('gallery-grid');
-
-      // Helper to write new URL to your Sheet via Apps Script
-      widget.onUploadComplete = info => {
-        const imageUrl = info.cdnUrl + '-/preview/-/quality/lightest/';
-
-        // 1) Show immediately in gallery
-        const img = document.createElement('img');
-        img.src = imageUrl;
-        img.alt = 'Guest Upload';
-        gallery.prepend(img);
-
-        // 2) Send to your Apps Script doPost
-        fetch('https://script.google.com/macros/s/AKfycbxsEt62o9O0Omz3qAVAiWszcksI1D9ILlrhktStIQ-cbfSd81W8RbrXB21VFDvVZpGdwQ/exec', {
-          method: 'POST',
-          body: JSON.stringify({ url: imageUrl }),
-          headers: { 'Content-Type': 'application/json' }
-        })
-        .then(r => r.text())
-        .then(resText => console.log('Sheet write:', resText))
-        .catch(err => console.error('Sheet write error:', err));
-      };
-
-      // === NEW: Fetch existing URLs from your Apps Script doGet ===
-      fetch('https://script.google.com/macros/s/AKfycbxsEt62o9O0Omz3qAVAiWszcksI1D9ILlrhktStIQ-cbfSd81W8RbrXB21VFDvVZpGdwQ/exec')
-        .then(r => r.json())
-        .then(images => {
-          // you might return [{timestamp, url},…] from doGet
-          images.reverse().forEach(entry => {
-            if (entry.url) {
-              const img = document.createElement('img');
-              img.src = entry.url;
-              img.alt = 'Shared moment';
-              gallery.appendChild(img);
-            }
-          });
-        })
-        .catch(err => console.error('Gallery load error:', err));
-    });
-  </script>
 </head>
 <body>
 
   <nav>
-    <a href="index.html">Invitation</a>
+    <a href="index.html">Home</a>
+    <a href="photos.html">Photos</a>
     <a href="gifts.html">Gifts</a>
-    <a href="#upload">Upload</a>
-    <a href="#gallery">Gallery</a>
   </nav>
 
-  <section id="upload" class="upload-section">
-    <div class="upload-box">
-      <h2>Share Your Favourite Moments</h2>
-      <p>Upload your photos from the evening — we’d love to see your memories.</p>
-      <input 
-        id="uploader" 
-        type="hidden" 
-        role="uploadcare-uploader"
-        data-clearable
-        data-multiple
-        data-images-only
-        data-tabs="file camera url"
-      />
-    </div>
-  </section>
+  <header>
+    <img src="images/monograms/JO_Circle.png" alt="Monogram" />
+    <h1>A Thought, If You’re Wondering</h1>
+  </header>
 
-  <section id="gallery" class="gallery-section">
-    <h2>Gallery</h2>
-    <p style="text-align:center;color:#555;">A growing collection of shared moments and highlights.</p>
-    <div id="gallery-grid">
-      <!-- Preloaded samples (optional) -->
-      <img src="images/sample1.jpg" alt="Guest 1" />
-      <img src="images/sample2.jpg" alt="Guest 2" />
-      <img src="images/sample3.jpg" alt="Couple" />
+  <div class="section">
+  <p>We feel incredibly lucky to be celebrating with the people we love most.</p>
+  <p>If you were thinking of giving a little something — thank you.</p>
+  <p>We’re not doing a traditional registry, but we’ve set up a fund to help us build memories on our honeymoon.</p>
+  <p>There’s no expectation at all, but if you’d like to contribute, you can do so below.</p>
+
+    <div class="divider">
+      <img src="images/dividers/wave.png" alt="Wave Divider" />
     </div>
-  </section>
+<div style="text-align: center; margin-top: 30px;">
+  <form action="https://www.paypal.com/donate" method="post" target="_blank" style="display: inline-block;">
+    <input type="hidden" name="hosted_button_id" value="K6FMQWUHHCQ6E" />
+    <input type="hidden" name="currency_code" value="GBP" />
+    <input type="submit" value="Give a Honeymoon Gift" class="gift-button" />
+  </form>
+</div>
+    <br>
+    <p style="margin-top: 20px; font-style: italic; color: #888;">
+      After donating, you’ll return to this page. 
+      <br>We’ll be in touch with a personal thank-you soon 💛
+    </p>
+  </div>
 
   <footer>
-    Want to add more? Upload as many as you like, or email us at 
-    <a href="mailto:jamesandolly@googlemail.com">jamesandolly@googlemail.com</a>.
+    With love, James & Oliver
   </footer>
-
 </body>
 </html>

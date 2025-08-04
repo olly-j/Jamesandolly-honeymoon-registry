@@ -37,9 +37,7 @@
       color: #555;
       font-size: 1.1em;
     }
-    nav a:hover {
-      color: var(--accent);
-    }
+    nav a:hover { color: var(--accent); }
     h1, h2, h3 {
       font-family: 'Playfair Display', serif;
       text-align: center;
@@ -59,6 +57,15 @@
     .upload-box p {
       margin: 10px 0 20px;
       color: #555;
+    }
+    #upload-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1em;
+      border-radius: 8px;
+      cursor: pointer;
     }
     #gallery-grid {
       display: grid;
@@ -86,54 +93,6 @@
       text-decoration: underline;
     }
   </style>
- <!-- Uploadcare widget -->
-  <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
-  <script>
-    UPLOADCARE_PUBLIC_KEY = '9151e98685b3bcebf25e';
-    UPLOADCARE_LOCALE     = 'en';
-
-    // ← REPLACE this with your Apps Script "exec" URL (without query params):
-    const SHEET_API = 'https://script.google.com/macros/s/AKfycbwyUOwZRTT4hHMpyMzAyZtE6no8dsebK0TnmsAc8dK9m9vvqcg_kVs_VcPZM6k5QO_Geg/exec';
-
-    document.addEventListener('DOMContentLoaded', () => {
-      const widget  = uploadcare.Widget('#uploader');
-      const gallery = document.getElementById('gallery-grid');
-
-      // 1) Fetch existing images from your sheet
-      fetch(SHEET_API)
-        .then(r => r.json())
-        .then(rows => {
-          rows.reverse().forEach(({url}) => {
-            const img = document.createElement('img');
-            img.src = url;
-            img.alt = 'Shared memory';
-            gallery.appendChild(img);
-          });
-        })
-        .catch(err => console.error('Error loading gallery:', err));
-
-      // 2) When someone uploads:
-      widget.onUploadComplete = info => {
-        const imageUrl = info.cdnUrl + '-/preview/-/quality/lightest/';
-
-        // a) show it immediately
-        const img = document.createElement('img');
-        img.src = imageUrl;
-        img.alt = 'Guest Upload';
-        gallery.prepend(img);
-
-        // b) send it to your Apps Script
-        fetch(SHEET_API, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url: imageUrl })
-        })
-        .then(r => r.text())
-        .then(console.log)
-        .catch(console.error);
-      };
-    });
-  </script>
 </head>
 <body>
 
@@ -148,26 +107,17 @@
     <div class="upload-box">
       <h2>Share Your Favourite Moments</h2>
       <p>Upload your photos from the evening — we’d love to see your memories.</p>
-      <input 
-        id="uploader" 
-        type="hidden" 
-        role="uploadcare-uploader"
-        data-clearable
-        data-multiple
-        data-images-only
-        data-tabs="file camera url"
-      />
+      <button id="upload-btn">Upload Your Photo</button>
     </div>
   </section>
 
   <section id="gallery" class="gallery-section">
     <h2>Gallery</h2>
-    <p style="text-align:center;color:#555;">A growing collection of shared moments and highlights.</p>
+    <p style="text-align:center;color:#555;">
+      A growing collection of shared moments and highlights.
+    </p>
     <div id="gallery-grid">
-      <!-- Uploaded images will appear here -->
-      <img src="images/sample1.jpg" alt="Guest 1" />
-      <img src="images/sample2.jpg" alt="Guest 2" />
-      <img src="images/sample3.jpg" alt="Couple" />
+      <!-- cloudinary images will auto-populate here -->
     </div>
   </section>
 
@@ -176,5 +126,62 @@
     <a href="mailto:jamesandolly@googlemail.com">jamesandolly@googlemail.com</a>.
   </footer>
 
+   <!-- 1) include the widget library -->
+<script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
+<script>
+  // ← your real values here:
+  const CLOUD_NAME    = 'dh8f8hnhe';
+  const UPLOAD_PRESET = 'guest_upload';
+  const TAG_NAME      = 'gallery';
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const gallery = document.getElementById('gallery-grid');
+
+    // 2) load existing images tagged “gallery”
+    fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
+      .then(r => {
+        if (!r.ok) throw new Error(`list.json returned ${r.status}`);
+        return r.json();
+      })
+      .then(data => {
+        data.resources.forEach(res => {
+          const img = document.createElement('img');
+          img.src = res.secure_url;
+          img.alt = 'Shared memory';
+          gallery.appendChild(img);
+        });
+      })
+      .catch(err => {
+        console.error('Gallery load error:', err);
+        // if you see a 401 here, go enable “unsigned listing” in your Cloudinary Security settings
+      });
+
+    // 3) configure & create the upload widget **using your constants**!
+    const widget = cloudinary.createUploadWidget({
+      cloudName:    CLOUD_NAME,
+      uploadPreset: UPLOAD_PRESET,
+      tags:         [ TAG_NAME ],
+      folder:       TAG_NAME,
+      sources:      ['local','url','camera'],
+      multiple:     false
+    }, (error, result) => {
+      console.log('widget callback:', error, result);
+      if (error) {
+        alert('Upload widget error—check console');
+        return;
+      }
+      if (result.event === 'success') {
+        const img = document.createElement('img');
+        img.src = result.info.secure_url;
+        img.alt = 'Guest Upload';
+        gallery.prepend(img);
+      }
+    });
+
+    // 4) wire your button to open it
+    document.getElementById('upload-btn')
+            .addEventListener('click', () => widget.open());
+  });
+</script>
 </body>
 </html>
