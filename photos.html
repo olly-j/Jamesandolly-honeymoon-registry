@@ -23,17 +23,28 @@
       --accent: #C9486A;
       --green: #9DA79D;
     }
+    body.dark-mode {
+      --bg: #1e1e1e;
+      --text: #f0f0f0;
+      --accent: #ff7f50;
+      --green: #6b8e23;
+    }
     * { box-sizing: border-box; }
     body {
       margin: 0;
       font-family: 'Inter', sans-serif;
       background: var(--bg);
       color: var(--text);
+      transition: background 0.3s, color 0.3s;
+    }
+    .skeleton {
+      background: #ddd;
     }
     nav {
       display: flex;
       justify-content: center;
-      gap: 30px;
+      align-items: center;
+      gap: 20px;
       padding: 20px;
       position: sticky;
       top: 0;
@@ -41,13 +52,22 @@
       border-bottom: 1px solid #ddd;
       z-index: 100;
     }
+    nav.dark-mode { background: #2a2a2a; }
     nav a {
       font-family: 'Playfair Display', serif;
       text-decoration: none;
       color: #555;
       font-size: 1.1em;
     }
+    body.dark-mode nav a { color: #ccc; }
     nav a:hover { color: var(--accent); }
+    #theme-toggle {
+      margin-left: auto;
+      background: none;
+      border: none;
+      font-size: 1.3em;
+      cursor: pointer;
+    }
     h1,h2,h3 {
       font-family: 'Playfair Display', serif;
       text-align: center;
@@ -64,7 +84,9 @@
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
+    body.dark-mode .upload-box { background: #2a2a2a; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
     .upload-box p { margin: 10px 0 20px; color: #555; }
+    body.dark-mode .upload-box p { color: #aaa; }
     #upload-btn {
       background: var(--accent);
       color: white;
@@ -84,6 +106,7 @@
       width: 100%;
       border-radius: 8px;
       transition: transform 0.3s ease;
+      display: block;
     }
     #gallery-grid img:hover {
       transform: scale(1.03);
@@ -95,6 +118,7 @@
       color: var(--bg);
       font-size: 0.95em;
     }
+    body.dark-mode footer { background: var(--text); color: var(--bg); }
     footer a { color: #fff; text-decoration: underline; }
   </style>
 
@@ -110,6 +134,7 @@
     <a href="#upload">Upload</a>
     <a href="#gallery">Gallery</a>
     <a href="gifts.html">Gifts</a>
+    <button id="theme-toggle">🌙</button>
   </nav>
 
   <section id="upload" class="upload-section">
@@ -142,10 +167,20 @@
   const TAG_NAME      = 'gallery';
   // ──────────────────────────────────────────────────────
 
+  // Dark-mode toggle
+  const toggle = document.getElementById('theme-toggle');
+  const applyTheme = (dark) => {
+    document.body.classList.toggle('dark-mode', dark);
+    localStorage.setItem('darkMode', dark);
+    toggle.textContent = dark ? '☀️' : '🌙';
+  };
+  toggle.addEventListener('click', () => applyTheme(!document.body.classList.contains('dark-mode')));
+  applyTheme(localStorage.getItem('darkMode') === 'true');
+
   document.addEventListener('DOMContentLoaded', () => {
     const gallery = document.getElementById('gallery-grid');
 
-    // Initialize GLightbox (make sure you've included its CSS + JS elsewhere)
+    // Fullscreen slideshow
     const lightbox = GLightbox({
       selector: '.glightbox',
       touchNavigation: true,
@@ -153,92 +188,82 @@
       zoomable: true
     });
 
-    // Keep track of assets we've already shown
+    // Track seen assets
     const seen = new Set();
 
-    // 1) Load & render the initial batch
+    // Helper to create & insert img+link
+    function renderImage(res, prepend=false) {
+      const url = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/v${res.version}/${res.public_id}.${res.format}`;
+      const link = document.createElement('a');
+      link.href       = url;
+      link.className  = 'glightbox';
+      link.setAttribute('data-gallery','gallery');
+      const img       = document.createElement('img');
+      img.src         = url;
+      img.alt         = 'Shared memory';
+      img.loading     = 'lazy';
+      img.classList.add('skeleton');
+      img.onload      = () => img.classList.remove('skeleton');
+      link.appendChild(img);
+      prepend ? gallery.prepend(link) : gallery.appendChild(link);
+    }
+
+    // 1) Initial load
     fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
-      .then(res => res.json())
-      .then(data => {
-        // newest first
+      .then(r=>r.json())
+      .then(data=>{
         data.resources
-          .sort((a,b) => b.version - a.version)
-          .forEach(resource => {
-            seen.add(resource.asset_id);
-            const url = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/v${resource.version}/${resource.public_id}.${resource.format}`;
-            const link = document.createElement('a');
-            link.href = url;
-            link.className = 'glightbox';
-            link.setAttribute('data-gallery', 'gallery');
-            const img = document.createElement('img');
-            img.src = url;
-            img.alt = 'Shared memory';
-            link.appendChild(img);
-            gallery.appendChild(link);
+          .sort((a,b)=>b.version - a.version)
+          .forEach(res=> {
+            seen.add(res.asset_id);
+            renderImage(res);
           });
         lightbox.reload();
       })
-      .catch(err => console.error('Gallery load error:', err));
+      .catch(e=>console.error(e));
 
     // 2) Poll for new images every 30s
-    setInterval(() => {
+    setInterval(()=>{
       fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
-        .then(res => res.json())
-        .then(data => {
-          let added = false;
+        .then(r=>r.json())
+        .then(data=>{
+          let added=false;
           data.resources
-            .sort((a,b) => b.version - a.version)
-            .forEach(resource => {
-              if (!seen.has(resource.asset_id)) {
-                seen.add(resource.asset_id);
-                const url = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/v${resource.version}/${resource.public_id}.${resource.format}`;
-                const link = document.createElement('a');
-                link.href = url;
-                link.className = 'glightbox';
-                link.setAttribute('data-gallery', 'gallery');
-                const img = document.createElement('img');
-                img.src = url;
-                img.alt = 'New upload';
-                link.appendChild(img);
-                gallery.prepend(link);
-                added = true;
+            .sort((a,b)=>b.version - a.version)
+            .forEach(res=>{
+              if(!seen.has(res.asset_id)) {
+                seen.add(res.asset_id);
+                renderImage(res,true);
+                added=true;
               }
             });
-          if (added) lightbox.reload();
+          if(added) lightbox.reload();
         })
         .catch(console.error);
-    }, 30000);
+    },30000);
 
-    // 3) Create the Cloudinary upload widget
+    // 3) Create Moderated Upload Widget
     const widget = cloudinary.createUploadWidget({
       cloudName:    CLOUD_NAME,
       uploadPreset: UPLOAD_PRESET,
       tags:         [ TAG_NAME ],
       sources:      ['local','url','camera'],
       multiple:     true,
+      //moderation:   'manual',           // 🚨 manual moderation
       showAdvancedOptions: true,
       cropping:     false
     }, (err, result) => {
       if (!err && result && result.event === 'success') {
         const info = result.info;
         seen.add(info.asset_id);
-        const url = info.secure_url;
-        const link = document.createElement('a');
-        link.href = url;
-        link.className = 'glightbox';
-        link.setAttribute('data-gallery', 'gallery');
-        const img = document.createElement('img');
-        img.src = url;
-        img.alt = 'Guest Upload';
-        link.appendChild(img);
-        gallery.prepend(link);
+        renderImage(info, true);
         lightbox.reload();
       }
     });
 
-    // 4) Wire up your “Upload Your Photo” button
+    // 4) Hook up upload button
     document.getElementById('upload-btn')
-            .addEventListener('click', () => widget.open(), false);
+            .addEventListener('click', ()=> widget.open(), false);
   });
 </script>
 </body>
