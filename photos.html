@@ -37,13 +37,10 @@
       color: var(--text);
       transition: background 0.3s, color 0.3s;
     }
-    .skeleton {
-      background: #ddd;
-    }
     nav {
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       gap: 20px;
       padding: 20px;
       position: sticky;
@@ -54,6 +51,7 @@
     }
     body.dark-mode nav {
       background: #2a2a2a;
+      border-color: #444;
     }
     nav a {
       font-family: 'Playfair Display', serif;
@@ -64,7 +62,9 @@
     body.dark-mode nav a {
       color: #ccc;
     }
-    nav a:hover { color: var(--accent); }
+    nav a:hover {
+      color: var(--accent);
+    }
     #theme-toggle {
       margin-left: auto;
       background: none;
@@ -72,7 +72,7 @@
       font-size: 1.3em;
       cursor: pointer;
     }
-    h1, h2, h3 {
+    h1,h2,h3 {
       font-family: 'Playfair Display', serif;
       text-align: center;
     }
@@ -87,6 +87,7 @@
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: background 0.3s, box-shadow 0.3s;
     }
     body.dark-mode .upload-box {
       background: #2a2a2a;
@@ -108,6 +109,19 @@
       border-radius: 8px;
       cursor: pointer;
     }
+    #gallery-controls {
+      text-align: center;
+      margin: 20px 0;
+    }
+    #slideshow-toggle {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      font-size: 0.95em;
+      border-radius: 6px;
+      cursor: pointer;
+    }
     #gallery-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -126,12 +140,42 @@
     #gallery-grid img:hover {
       transform: scale(1.03);
     }
+    .skeleton {
+      filter: blur(5px);
+      background: #ddd;
+    }
+    .download-btn {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      border: none;
+      padding: 4px 6px;
+      font-size: 0.9em;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.7);
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 4px;
+      opacity: 0;
+      transition: opacity 0.5s;
+      pointer-events: none;
+    }
     footer {
       text-align: center;
       padding: 40px;
       background: var(--text);
       color: var(--bg);
       font-size: 0.95em;
+      transition: background 0.3s, color 0.3s;
     }
     body.dark-mode footer {
       background: var(--text);
@@ -142,6 +186,11 @@
       text-decoration: underline;
     }
   </style>
+
+  <!-- Cloudinary Upload Widget -->
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
+  <!-- GLightbox JS -->
+  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
 </head>
 <body>
 
@@ -166,8 +215,11 @@
     <p style="text-align:center;color:#555;">
       A growing collection of shared moments and highlights.
     </p>
+    <div id="gallery-controls">
+      <button id="slideshow-toggle">▶️ Start Slideshow</button>
+    </div>
     <div id="gallery-grid">
-      <!-- Cloudinary images will auto-populate here -->
+      <!-- Cloudinary images + download buttons will auto-populate here -->
     </div>
   </section>
 
@@ -176,115 +228,141 @@
     <a href="mailto:jamesandolly@googlemail.com">jamesandolly@googlemail.com</a>.
   </footer>
 
-  <!-- 1) Cloudinary Upload Widget -->
-  <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
-  <!-- 2) GLightbox JS -->
-  <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+  <!-- toast container -->
+  <div id="toast" class="toast"></div>
 
-  <!-- 3) Your main script -->
   <script>
+    // ─── Your Cloudinary settings ─────────────────────────
     const CLOUD_NAME    = 'dh8f8hnhe';
     const UPLOAD_PRESET = 'guest_upload';
     const TAG_NAME      = 'gallery';
-
-    // Helper: create the photo + download overlay
-    function makePhotoElement(url) {
-      // lightbox link
-      const link = document.createElement('a');
-      link.href = url;
-      link.className = 'glightbox';
-      link.setAttribute('data-gallery','gallery');
-
-      const img = document.createElement('img');
-      img.src     = url;
-      img.alt     = 'Shared memory';
-      img.loading = 'lazy';
-      img.classList.add('skeleton');
-      img.onload  = () => img.classList.remove('skeleton');
-      link.appendChild(img);
-
-      // download overlay
-      const dl = document.createElement('a');
-      dl.href           = url;
-      dl.setAttribute('download','');
-      dl.textContent    = '↓';
-      dl.title          = 'Download original';
-      Object.assign(dl.style, {
-        position:       'absolute',
-        bottom:         '6px',
-        right:          '6px',
-        background:     'rgba(0,0,0,0.6)',
-        color:          '#fff',
-        padding:        '2px 6px',
-        fontSize:       '0.9em',
-        borderRadius:   '4px',
-        textDecoration: 'none'
-      });
-
-      const container = document.createElement('div');
-      container.appendChild(link);
-      container.appendChild(dl);
-      return container;
-    }
+    // ──────────────────────────────────────────────────────
 
     document.addEventListener('DOMContentLoaded', () => {
-      const gallery = document.getElementById('gallery-grid');
-
-      // 1) Dark-mode toggle
+      // Theme toggle
       const toggle = document.getElementById('theme-toggle');
-      const apply  = dark => {
+      const applyTheme = dark => {
         document.body.classList.toggle('dark-mode', dark);
         localStorage.setItem('darkMode', dark);
         toggle.textContent = dark ? '☀️' : '🌙';
       };
-      toggle.addEventListener('click', () =>
-        apply(!document.body.classList.contains('dark-mode'))
-      );
-      apply(localStorage.getItem('darkMode') === 'true');
+      toggle.addEventListener('click', () => applyTheme(!document.body.classList.contains('dark-mode')));
+      applyTheme(localStorage.getItem('darkMode') === 'true');
 
-      // 2) Init GLightbox slideshow
+      // Lightbox
       const lightbox = GLightbox({
-        selector:        '.glightbox',
+        selector: '.glightbox',
         touchNavigation: true,
-        loop:            true,
-        zoomable:        true
+        loop: true,
+        zoomable: true
       });
 
-      // 3) Track seen images
-      const seen = new Set();
-
-      // 4) Render a batch (new or initial)
-      function renderBatch(resources, prepend = false) {
-        resources
-          .sort((a,b) => b.version - a.version)
-          .forEach(res => {
-            if (!seen.has(res.asset_id)) {
-              seen.add(res.asset_id);
-              const url =
-                `https://res.cloudinary.com/${CLOUD_NAME}` +
-                `/image/upload/f_auto,q_auto/v${res.version}/${res.public_id}.${res.format}`;
-              const el = makePhotoElement(url);
-              prepend ? gallery.prepend(el) : gallery.appendChild(el);
-            }
-          });
-        lightbox.reload();
+      // Utility: toast
+      const toast = document.getElementById('toast');
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.style.opacity = 1;
+        setTimeout(() => toast.style.opacity = 0, 2000);
       }
 
-      // 5) Initial gallery load
+      const gallery = document.getElementById('gallery-grid');
+      const seen = new Set();
+      let slideshowInterval = null;
+      const slideBtn = document.getElementById('slideshow-toggle');
+
+      // Slideshow toggle
+      slideBtn.addEventListener('click', () => {
+        if (slideshowInterval) {
+          clearInterval(slideshowInterval);
+          slideshowInterval = null;
+          slideBtn.textContent = '▶️ Start Slideshow';
+        } else {
+          slideshowInterval = setInterval(() => lightbox.next(), 5000);
+          slideBtn.textContent = '⏸️ Pause Slideshow';
+        }
+      });
+
+      // Render a single photo + download button
+      function renderImage(res, prepend = false) {
+        const url = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/v${res.version}/${res.public_id}.${res.format}`;
+        const container = document.createElement('div');
+        // Lightbox link
+        const link = document.createElement('a');
+        link.href = url;
+        link.className = 'glightbox';
+        link.setAttribute('data-gallery','gallery');
+        // Img with lazy + skeleton
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = 'Shared memory';
+        img.loading = 'lazy';
+        img.classList.add('skeleton');
+        img.onload = () => img.classList.remove('skeleton');
+        link.appendChild(img);
+        container.appendChild(link);
+        // Download button
+        const dl = document.createElement('button');
+        dl.className = 'download-btn';
+        dl.textContent = '⤓';
+        dl.title = 'Download original';
+        dl.addEventListener('click', async e => {
+          e.stopPropagation();
+          try {
+            const resp = await fetch(url);
+            const blob = await resp.blob();
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `${res.public_id}.${res.format}`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            showToast('Download started');
+          } catch(err) {
+            console.error(err);
+            showToast('Download failed');
+          }
+        });
+        container.appendChild(dl);
+
+        if (prepend) gallery.prepend(container);
+        else gallery.appendChild(container);
+      }
+
+      // 1) Initial load
       fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
         .then(r => r.json())
-        .then(data => renderBatch(data.resources))
+        .then(data => {
+          data.resources
+            .sort((a,b) => b.version - a.version)
+            .forEach(res => {
+              seen.add(res.asset_id);
+              renderImage(res);
+            });
+          lightbox.reload();
+        })
         .catch(console.error);
 
-      // 6) Poll every 30s for new uploads
+      // 2) Poll for new every 30s
       setInterval(() => {
         fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
           .then(r => r.json())
-          .then(data => renderBatch(data.resources, true))
+          .then(data => {
+            let added = false;
+            data.resources
+              .sort((a,b) => b.version - a.version)
+              .forEach(res => {
+                if (!seen.has(res.asset_id)) {
+                  seen.add(res.asset_id);
+                  renderImage(res, true);
+                  added = true;
+                }
+              });
+            if (added) lightbox.reload();
+          })
           .catch(console.error);
       }, 30000);
 
-      // 7) Cloudinary widget with manual moderation
+      // 3) Upload widget with manual moderation
       const widget = cloudinary.createUploadWidget({
         cloudName:    CLOUD_NAME,
         uploadPreset: UPLOAD_PRESET,
@@ -293,16 +371,20 @@
         multiple:     true,
         moderation:   'manual',
         showAdvancedOptions: true,
-        cropping:     false
+        cropping:     false,
+        clientAllowedFormats: ['png','jpg','jpeg','gif','webp','heic','mp4','mov','webm','ogg']
       }, (err, result) => {
         if (!err && result && result.event === 'success') {
-          renderBatch([ result.info ], true);
+          const info = result.info;
+          seen.add(info.asset_id);
+          renderImage(info, true);
+          lightbox.reload();
         }
       });
 
-      // 8) Hook up upload button
+      // 4) Wire up upload button
       document.getElementById('upload-btn')
-        .addEventListener('click', () => widget.open(), false);
+              .addEventListener('click', () => widget.open(), false);
     });
   </script>
 </body>
