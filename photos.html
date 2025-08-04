@@ -93,14 +93,16 @@
       text-decoration: underline;
     }
   </style>
+  <!-- Cloudinary Upload Widget -->
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 </head>
 <body>
 
   <nav>
     <a href="index.html">Invitation</a>
-    <a href="gifts.html">Gifts</a>
     <a href="#upload">Upload</a>
     <a href="#gallery">Gallery</a>
+    <a href="gifts.html">Gifts</a>
   </nav>
 
   <section id="upload" class="upload-section">
@@ -126,62 +128,51 @@
     <a href="mailto:jamesandolly@googlemail.com">jamesandolly@googlemail.com</a>.
   </footer>
 
-   <!-- 1) include the widget library -->
-<script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
-<script>
-  // ← your real values here:
-  const CLOUD_NAME    = 'dh8f8hnhe';
-  const UPLOAD_PRESET = 'guest_upload';
-  const TAG_NAME      = 'gallery';
+  <script>
+    // ─── Your Cloudinary settings ─────────────────────────
+    const CLOUD_NAME    = 'dh8f8hnhe';
+    const UPLOAD_PRESET = 'guest_upload';
+    const TAG_NAME      = 'gallery';
+    // ──────────────────────────────────────────────────────
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const gallery = document.getElementById('gallery-grid');
+    document.addEventListener('DOMContentLoaded', () => {
+      const gallery = document.getElementById('gallery-grid');
 
-    // 2) load existing images tagged “gallery”
-    fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
-      .then(r => {
-        if (!r.ok) throw new Error(`list.json returned ${r.status}`);
-        return r.json();
-      })
-      .then(data => {
-        data.resources.forEach(res => {
+      // 1) Load existing images by tag
+      fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
+        .then(res => res.json())
+        .then(data => {
+          data.resources.forEach(resource => {
+            const img = document.createElement('img');
+            img.src = resource.secure_url;
+            img.alt = 'Shared memory';
+            gallery.appendChild(img);
+          });
+        })
+        .catch(err => console.error('Gallery load error:', err));
+
+      // 2) Configure & create the upload widget
+      const widget = cloudinary.createUploadWidget({
+        cloudName:    CLOUD_NAME,
+        uploadPreset: UPLOAD_PRESET,
+        tags:         [ TAG_NAME ],
+        sources:      ['local','url','camera'],
+        multiple:     true,           // allow batch uploads
+        showAdvancedOptions: true,    // optional
+        cropping:     false           // optional
+      }, (err, result) => {
+        if (!err && result && result.event === 'success') {
           const img = document.createElement('img');
-          img.src = res.secure_url;
-          img.alt = 'Shared memory';
-          gallery.appendChild(img);
-        });
-      })
-      .catch(err => {
-        console.error('Gallery load error:', err);
-        // if you see a 401 here, go enable “unsigned listing” in your Cloudinary Security settings
+          img.src = result.info.secure_url;
+          img.alt = 'Guest Upload';
+          gallery.prepend(img);
+        }
       });
 
-    // 3) configure & create the upload widget **using your constants**!
-    const widget = cloudinary.createUploadWidget({
-      cloudName:    CLOUD_NAME,
-      uploadPreset: UPLOAD_PRESET,
-      tags:         [ TAG_NAME ],
-      folder:       TAG_NAME,
-      sources:      ['local','url','camera'],
-      multiple:     false
-    }, (error, result) => {
-      console.log('widget callback:', error, result);
-      if (error) {
-        alert('Upload widget error—check console');
-        return;
-      }
-      if (result.event === 'success') {
-        const img = document.createElement('img');
-        img.src = result.info.secure_url;
-        img.alt = 'Guest Upload';
-        gallery.prepend(img);
-      }
+      // 3) Wire up your button
+      document.getElementById('upload-btn')
+              .addEventListener('click', () => widget.open(), false);
     });
-
-    // 4) wire your button to open it
-    document.getElementById('upload-btn')
-            .addEventListener('click', () => widget.open());
-  });
-</script>
+  </script>
 </body>
 </html>
