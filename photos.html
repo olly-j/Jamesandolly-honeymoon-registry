@@ -199,6 +199,10 @@
   <!-- LightGallery JS + Autoplay plugin -->
   <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/autoplay/lg-autoplay.umd.min.js"></script>
+  <!-- Grab autoplay plugin right away -->
+  <script>
+    const lgAutoplay = window.lgAutoplay;
+  </script>
   <!-- Cloudinary Upload Widget -->
   <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 </head>
@@ -254,11 +258,13 @@
       // ---- gallery init ----
       const galleryEl = document.getElementById('gallery-grid');
       const lg = lightGallery(galleryEl, {
-        selector: 'div > a',           // picks any <a> inside grid divs
-        plugins: [lgAutoplay],         // adds Play/Pause in toolbar
-        autoplay: false,               // start paused
-        autoplayControls: true,
-        speed: 500
+        selector:         'div > a',     // picks any <a> inside each wrapper
+        plugins:          [ lgAutoplay ], // hook up the autoplay plugin
+        controls:         true,           // show next/prev arrows
+        autoplay:         false,          // start paused
+        autoplayControls: true,           // show Play/Pause buttons
+        speed:            500,            // animation speed (ms)
+        pause:            5000            // delay between slides when playing
       });
 
       // ---- helper UI ----
@@ -269,6 +275,7 @@
         toast.style.opacity = 1;
         setTimeout(() => toast.style.opacity = 0, 2000);
       }
+
       function renderImage(res, prepend = false) {
         const url = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/v${res.version}/${res.public_id}.${res.format}`;
         const wrapper = document.createElement('div');
@@ -291,28 +298,22 @@
         dl.className = 'download-btn';
         dl.textContent = '⤓';
         dl.title = 'Download original';
-        dl.addEventListener('click', async e => {
+        dl.addEventListener('click', e => {
           e.stopPropagation();
-          try {
-            const resp = await fetch(url);
-            const blob = await resp.blob();
-            const a = document.createElement('a');
-            a.href     = URL.createObjectURL(blob);
-            a.download = `${res.public_id}.${res.format}`;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            showToast('Download started');
-          } catch {
-            showToast('Download failed');
-          }
+          const a = document.createElement('a');
+          a.href     = url;
+          a.download = `${res.public_id}.${res.format}`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          showToast('Download started');
         });
         wrapper.appendChild(dl);
 
         if (prepend) galleryEl.prepend(wrapper);
         else         galleryEl.appendChild(wrapper);
 
-        lg.refresh(); // re-scan for new <a> items
+        lg.refresh(); // always re-scan new items after injection
       }
 
       // ---- initial load ----
@@ -325,6 +326,8 @@
               seen.add(res.asset_id);
               renderImage(res);
             });
+          // **one-time** refresh so controls + autoplay buttons appear
+          lg.refresh();
         })
         .catch(console.error);
 
