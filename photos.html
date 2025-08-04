@@ -135,29 +135,36 @@
     <a href="mailto:jamesandolly@googlemail.com">jamesandolly@googlemail.com</a>.
   </footer>
 
-  <script>
-    // ─── Your Cloudinary settings ─────────────────────────
-    const CLOUD_NAME    = 'dh8f8hnhe';
-    const UPLOAD_PRESET = 'guest_upload';
-    const TAG_NAME      = 'gallery';
-    // ──────────────────────────────────────────────────────
+<script>
+  // ─── Your Cloudinary settings ─────────────────────────
+  const CLOUD_NAME    = 'dh8f8hnhe';
+  const UPLOAD_PRESET = 'guest_upload';
+  const TAG_NAME      = 'gallery';
+  // ──────────────────────────────────────────────────────
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const gallery = document.getElementById('gallery-grid');
+  document.addEventListener('DOMContentLoaded', () => {
+    const gallery = document.getElementById('gallery-grid');
 
-      // Initialize GLightbox
-      const lightbox = GLightbox({
-        selector: '.glightbox',
-        touchNavigation: true,
-        loop: true,
-        zoomable: true
-      });
+    // Initialize GLightbox (make sure you've included its CSS + JS elsewhere)
+    const lightbox = GLightbox({
+      selector: '.glightbox',
+      touchNavigation: true,
+      loop: true,
+      zoomable: true
+    });
 
-      // 1) Load existing images by tag
-      fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
-        .then(res => res.json())
-        .then(data => {
-          data.resources.forEach(resource => {
+    // Keep track of assets we've already shown
+    const seen = new Set();
+
+    // 1) Load & render the initial batch
+    fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
+      .then(res => res.json())
+      .then(data => {
+        // newest first
+        data.resources
+          .sort((a,b) => b.version - a.version)
+          .forEach(resource => {
+            seen.add(resource.asset_id);
             const url = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/v${resource.version}/${resource.public_id}.${resource.format}`;
             const link = document.createElement('a');
             link.href = url;
@@ -169,80 +176,70 @@
             link.appendChild(img);
             gallery.appendChild(link);
           });
-          lightbox.reload();
+        lightbox.reload();
+      })
+      .catch(err => console.error('Gallery load error:', err));
+
+    // 2) Poll for new images every 30s
+    setInterval(() => {
+      fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
+        .then(res => res.json())
+        .then(data => {
+          let added = false;
+          data.resources
+            .sort((a,b) => b.version - a.version)
+            .forEach(resource => {
+              if (!seen.has(resource.asset_id)) {
+                seen.add(resource.asset_id);
+                const url = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/v${resource.version}/${resource.public_id}.${resource.format}`;
+                const link = document.createElement('a');
+                link.href = url;
+                link.className = 'glightbox';
+                link.setAttribute('data-gallery', 'gallery');
+                const img = document.createElement('img');
+                img.src = url;
+                img.alt = 'New upload';
+                link.appendChild(img);
+                gallery.prepend(link);
+                added = true;
+              }
+            });
+          if (added) lightbox.reload();
         })
-        .catch(err => console.error('Gallery load error:', err));
+        .catch(console.error);
+    }, 30000);
 
-      // 2) Configure & create the upload widget
-      const widget = cloudinary.createUploadWidget({
-        cloudName:    CLOUD_NAME,
-        uploadPreset: UPLOAD_PRESET,
-        tags:         [ TAG_NAME ],
-        sources:      ['local','url','camera'],
-        multiple:     true,        // allow batch uploads
-        showAdvancedOptions: true, // brightness/crop/etc UI
-        cropping:     false        // true = require crop step
-      }, (err, result) => {
-        if (!err && result && result.event === 'success') {
-          const url = result.info.secure_url;
-          const link = document.createElement('a');
-          link.href = url;
-          link.className = 'glightbox';
-          link.setAttribute('data-gallery', 'gallery');
-          const img = document.createElement('img');
-          img.src = url;
-          img.alt = 'Guest Upload';
-          link.appendChild(img);
-          gallery.prepend(link);
-          lightbox.reload();
-        }
-      });
-
-      // 3) Wire up your button
-      document.getElementById('upload-btn')
-              .addEventListener('click', () => widget.open(), false);
+    // 3) Create the Cloudinary upload widget
+    const widget = cloudinary.createUploadWidget({
+      cloudName:    CLOUD_NAME,
+      uploadPreset: UPLOAD_PRESET,
+      tags:         [ TAG_NAME ],
+      sources:      ['local','url','camera'],
+      multiple:     true,
+      showAdvancedOptions: true,
+      cropping:     false
+    }, (err, result) => {
+      if (!err && result && result.event === 'success') {
+        const info = result.info;
+        seen.add(info.asset_id);
+        const url = info.secure_url;
+        const link = document.createElement('a');
+        link.href = url;
+        link.className = 'glightbox';
+        link.setAttribute('data-gallery', 'gallery');
+        const img = document.createElement('img');
+        img.src = url;
+        img.alt = 'Guest Upload';
+        link.appendChild(img);
+        gallery.prepend(link);
+        lightbox.reload();
+      }
     });
 
-// keep track of what we've already shown
-const seen = new Set();
-
-// after your initial fetch+render loop, mark them seen:
-fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
-  .then(r => r.json())
-  .then(data => {
-    data.resources.forEach(resource => seen.add(resource.asset_id));
+    // 4) Wire up your “Upload Your Photo” button
+    document.getElementById('upload-btn')
+            .addEventListener('click', () => widget.open(), false);
   });
-
-// define a little poller
-function pollNewImages() {
-  fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
-    .then(r => r.json())
-    .then(data => {
-      let added = false;
-      data.resources.forEach(resource => {
-        if (!seen.has(resource.asset_id)) {
-          seen.add(resource.asset_id);
-          const url = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/v${resource.version}/${resource.public_id}.${resource.format}`;
-          const link = document.createElement('a');
-          link.href = url;
-          link.className = 'glightbox';
-          link.setAttribute('data-gallery', 'gallery');
-          const img = document.createElement('img');
-          img.src = url;
-          img.alt = 'Shared memory';
-          link.appendChild(img);
-          gallery.prepend(link);
-          added = true;
-        }
-      });
-      if (added) lightbox.reload();
-    })
-    .catch(console.error);
-}
-
-// kick off polling every 30 seconds
-setInterval(pollNewImages, 30_000);
-
-  </script>
+</script>
 </body>
 </html>
