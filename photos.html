@@ -141,7 +141,7 @@
         .then(data => {
           data.resources.forEach(resource => {
             const img = document.createElement('img');
-            img.src = resource.secure_url;
+            img.src = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/v${resource.version}/${resource.public_id}.${resource.format}`;
             img.alt = 'Shared memory';
             gallery.appendChild(img);
           });
