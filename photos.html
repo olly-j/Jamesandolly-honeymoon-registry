@@ -196,10 +196,11 @@
     }
   </style>
 
-  <!-- LightGallery JS + Autoplay plugin -->
+  <!-- core LightGallery JS -->
   <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.umd.min.js"></script>
+  <!-- autoplay plugin -->
   <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/autoplay/lg-autoplay.umd.min.js"></script>
-  <!-- Grab autoplay plugin right away -->
+  <!-- expose the autoplay constructor -->
   <script>
     const lgAutoplay = window.lgAutoplay;
   </script>
@@ -226,7 +227,9 @@
 
   <section id="gallery" class="gallery-section">
     <h2>Gallery</h2>
-    <p style="text-align:center;color:#555;">A growing collection of shared moments and highlights.</p>
+    <p style="text-align:center;color:#555;">
+      A growing collection of shared moments and highlights.
+    </p>
     <div id="gallery-grid">
       <!-- Cloudinary images + download overlays go here -->
     </div>
@@ -258,13 +261,13 @@
       // ---- gallery init ----
       const galleryEl = document.getElementById('gallery-grid');
       const lg = lightGallery(galleryEl, {
-        selector:         'div > a',     // picks any <a> inside each wrapper
-        plugins:          [ lgAutoplay ], // hook up the autoplay plugin
-        controls:         true,           // show next/prev arrows
-        autoplay:         false,          // start paused
-        autoplayControls: true,           // show Play/Pause buttons
-        speed:            500,            // animation speed (ms)
-        pause:            5000            // delay between slides when playing
+        selector:         'div > a',
+        plugins:          [ lgAutoplay ],   // ← wire in autoplay
+        controls:         true,             // ← prev/next arrows
+        autoplay:         false,            // ← start paused
+        autoplayControls: true,             // ← show ▶️/⏸️ buttons
+        speed:            500,              // ← slide animation duration
+        pause:            5000             // ← 5s between slides when playing
       });
 
       // ---- helper UI ----
@@ -326,7 +329,7 @@
               seen.add(res.asset_id);
               renderImage(res);
             });
-          // **one-time** refresh so controls + autoplay buttons appear
+          // one-time refresh so controls & autoplay buttons appear
           lg.refresh();
         })
         .catch(console.error);
