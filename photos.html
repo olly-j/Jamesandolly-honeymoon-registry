@@ -4,7 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>James & Oliver – Gallery</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap"
+    rel="stylesheet"
+  />
   <link rel="icon" href="images/favicon.png" type="image/png" />
   <style>
     :root {
@@ -38,7 +41,7 @@
       font-size: 1.1em;
     }
     nav a:hover { color: var(--accent); }
-    h1, h2, h3 {
+    h1,h2,h3 {
       font-family: 'Playfair Display', serif;
       text-align: center;
     }
@@ -54,10 +57,7 @@
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
-    .upload-box p {
-      margin: 10px 0 20px;
-      color: #555;
-    }
+    .upload-box p { margin: 10px 0 20px; color: #555; }
     #upload-btn {
       background: var(--accent);
       color: white;
@@ -88,10 +88,7 @@
       color: var(--bg);
       font-size: 0.95em;
     }
-    footer a {
-      color: #fff;
-      text-decoration: underline;
-    }
+    footer a { color: #fff; text-decoration: underline; }
   </style>
   <!-- Cloudinary Upload Widget -->
   <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
@@ -119,7 +116,7 @@
       A growing collection of shared moments and highlights.
     </p>
     <div id="gallery-grid">
-      <!-- cloudinary images will auto-populate here -->
+      <!-- Cloudinary images will auto-populate here -->
     </div>
   </section>
 
@@ -133,10 +130,7 @@
     const CLOUD_NAME    = 'dh8f8hnhe';
     const UPLOAD_PRESET = 'guest_upload';
     const TAG_NAME      = 'gallery';
-
-    // Allowed formats for photos & videos
-    const IMAGE_FORMATS = ['jpg','jpeg','png','gif','webp','bmp','tif','tiff','svg','heic','heif'];
-    const VIDEO_FORMATS = ['mp4','mov','m4v','mkv','avi','flv','wmv','webm','ogv','mpeg','3gp','3g2'];
+    // ──────────────────────────────────────────────────────
 
     document.addEventListener('DOMContentLoaded', () => {
       const gallery = document.getElementById('gallery-grid');
@@ -156,16 +150,16 @@
 
       // 2) Configure & create the upload widget
       const widget = cloudinary.createUploadWidget({
-        cloudName:            CLOUD_NAME,
-        uploadPreset:         UPLOAD_PRESET,
-        clientAllowedFormats: IMAGE_FORMATS.concat(VIDEO_FORMATS),
-        tags:                 [ TAG_NAME ],
-        sources:              ['local','url','camera'],
-        multiple:             true,  // allow batch uploads
-        showAdvancedOptions:  true,  // show brightness/crop/etc
-        cropping:             false  // disable forced cropping
+        cloudName:    CLOUD_NAME,
+        uploadPreset: UPLOAD_PRESET,
+        tags:         [ TAG_NAME ],
+        sources:      ['local','url','camera'],
+        multiple:     true,           // ← allow batch uploads
+        showAdvancedOptions: true,    // brightness/crop/etc UI
+        cropping:     false           // true = require crop step
       }, (err, result) => {
         if (!err && result && result.event === 'success') {
+          // prepend immediately so user sees it
           const img = document.createElement('img');
           img.src = result.info.secure_url;
           img.alt = 'Guest Upload';
@@ -173,11 +167,10 @@
         }
       });
 
-      // 3) Open widget on button click
+      // 3) Wire up your button
       document.getElementById('upload-btn')
               .addEventListener('click', () => widget.open(), false);
     });
   </script>
-
 </body>
 </html>
