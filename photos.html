@@ -133,7 +133,10 @@
     const CLOUD_NAME    = 'dh8f8hnhe';
     const UPLOAD_PRESET = 'guest_upload';
     const TAG_NAME      = 'gallery';
-    // ──────────────────────────────────────────────────────
+
+    // Allowed formats for photos & videos
+    const IMAGE_FORMATS = ['jpg','jpeg','png','gif','webp','bmp','tif','tiff','svg','heic','heif'];
+    const VIDEO_FORMATS = ['mp4','mov','m4v','mkv','avi','flv','wmv','webm','ogv','mpeg','3gp','3g2'];
 
     document.addEventListener('DOMContentLoaded', () => {
       const gallery = document.getElementById('gallery-grid');
@@ -153,13 +156,14 @@
 
       // 2) Configure & create the upload widget
       const widget = cloudinary.createUploadWidget({
-        cloudName:    CLOUD_NAME,
-        uploadPreset: UPLOAD_PRESET,
-        tags:         [ TAG_NAME ],
-        sources:      ['local','url','camera'],
-        multiple:     true,           // allow batch uploads
-        showAdvancedOptions: true,    // optional
-        cropping:     false           // optional
+        cloudName:            CLOUD_NAME,
+        uploadPreset:         UPLOAD_PRESET,
+        clientAllowedFormats: IMAGE_FORMATS.concat(VIDEO_FORMATS),
+        tags:                 [ TAG_NAME ],
+        sources:              ['local','url','camera'],
+        multiple:             true,  // allow batch uploads
+        showAdvancedOptions:  true,  // show brightness/crop/etc
+        cropping:             false  // disable forced cropping
       }, (err, result) => {
         if (!err && result && result.event === 'success') {
           const img = document.createElement('img');
@@ -169,10 +173,11 @@
         }
       });
 
-      // 3) Wire up your button
+      // 3) Open widget on button click
       document.getElementById('upload-btn')
               .addEventListener('click', () => widget.open(), false);
     });
   </script>
+
 </body>
 </html>
