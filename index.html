@@ -18,7 +18,35 @@
       --clr-green: #9DA79D;
       --bg-timeline: #E6E1D9;
       --clr-deep-green: #778053;
+        --clr-link: var(--clr-deep-green);
     }
+
+    /* DARK MODE OVERRIDES */
+body.dark-mode {
+  --bg-default: #1e1e1e;
+  --bg-alt:    #2a2a2a;
+  --clr-text:  #f0f0f0;
+  --clr-accent:#ff7f50;
+  --clr-green: #6b8e23;
+}
+body.dark-mode {
+  background: var(--bg-default);
+  color: var(--clr-text);
+}
+body.dark-mode nav {
+  background: var(--bg-alt);
+  border-color: #444;
+}
+body.dark-mode .info-card,
+body.dark-mode .section-alt,
+body.dark-mode .rsvp-card {
+  background: var(--bg-alt);
+}
+
+
+
+
+/* add any other element overrides as needed */
     * { box-sizing: border-box; }
     body { margin:0; padding:0; font-family:'Inter',sans-serif; background:var(--bg-default); color:var(--clr-text); overflow-x:hidden; }
     nav { display:flex; justify-content:center; gap:30px; padding:20px; position:sticky; top:0; background:var(--bg-alt); border-bottom:1px solid #e0e0e0; z-index:500; }
@@ -64,7 +92,7 @@
     .btn-download { display:inline-flex; align-items:center; gap:8px; color:var(--clr-green); font-weight:600; text-decoration:none; }
     .btn-download img { width:24px; height:24px; }
     .btn-gift, form button { background:var(--clr-green); color:#fff; border:none; border-radius:8px; padding:12px; cursor:pointer; width:100%; text-align:center; }
-    .hero-address a, .details-list a { color:var(--clr-green); text-decoration:none; }
+    .hero-address a, .details-list a { color:var(--clr-link); text-decoration:none; }
     /* Timeline layout */
     .timeline-item { display:flex; align-items:flex-start; margin:20px 0; }
     .icon-container { display:flex; flex-direction:column; align-items:center; margin-right:15px; width:80px; }
@@ -102,9 +130,12 @@ nav button:hover {
   max-width: 600px;
   margin: 40px auto;
   padding: 40px 30px;
-  background: 
+  background:
+    /* White wash (top layer) — increase alpha for less texture: */
+    linear-gradient(rgba(255,255,255,0.80), rgba(255,255,255,0.80)),
+    /* Paper texture (middle layer): */
     url('images/background/paper.png') center/cover no-repeat,
-        linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)),
+    /* Fallback background color (bottom layer): */
     var(--bg-alt);
   border: 1px solid #e0e0e0;
   border-radius: 12px;
@@ -187,7 +218,7 @@ html {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  z-index: 1000;
+  z-index: 500;
 }
 .site-nav a, .site-nav button {
   font-family: 'Playfair Display', serif;
@@ -247,14 +278,42 @@ html {
   color: var(--clr-text);
   border-bottom: 2px solid var(--clr-deep-green);
 }
+.btn-gift-link {
+  text-decoration: none;
+  color: var(--clr-text);
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+.btn-gift-link:hover {
+  color: var(--clr-accent);
+}
 
+/* Calendar invite highlight */
+#calendar-unlock {
+  background: rgba(157, 167, 157, 0.1);  /* a very light green wash */
+  border: 2px solid var(--clr-green);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 40px auto;
+  max-width: 360px;
+}
+#calendar-unlock .btn-download {
+  font-size: 1.1em;
+}
 
 
   </style>
+
+
+
+
 </head>
 <body>
   <!-- Access Gate -->
-  <div id="gate-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:1000;">
+  <div id="gate-overlay" style="position:fixed;inset:0;
+     background:rgba(0,0,0,0.95);
+     display:flex;align-items:center;justify-content:center;
+     z-index:2000;">
     <div style="background:#fff;border-radius:12px;padding:40px;max-width:360px;text-align:center;">
       <h2 style="margin:0 0 20px;font-family:'Playfair Display',serif;font-size:1.6em;color:var(--clr-accent);">Welcome to Our Celebration</h2>
       <p style="margin:0 0 30px;color:#555;">Please enter the access code to continue.</p>
@@ -272,6 +331,9 @@ html {
     <!-- New external page -->
     <a href="photos.html">Photos</a>
       <a href="gifts.html">Gifts</a>
+      <button id="theme-toggle" aria-label="Toggle dark mode" style="background:none;border:none;cursor:pointer;font-size:1.2em;">
+  🌙
+</button>
   </nav>
 
   <!-- Main Content -->
@@ -303,11 +365,6 @@ html {
 </div>
       </div>
 
-      <div class="section-alt" style="text-align:center;animation:fadeInUp 1s forwards 0.7s;">
-        <a href="images/JamesAndOllyWeddingInnvite.ics" download class="btn-download" style="animation:fadeInUp 1s forwards 0.8s;">
-          <img src="images/download-icon.png" alt="Calendar Icon">Add to Your Calendar
-        </a>
-      </div>
 
       <!-- Tiled Background Timeline -->
       <div class="timeline section" id="timeline" style="background-color:var(--bg-timeline); background-image:url('images/timeline-background.png'); background-repeat:repeat; background-size:auto; animation:fadeInUp 1s ease forwards 1s;">
@@ -423,22 +480,25 @@ html {
       <ul>
         <li>
           <a href="https://www.yotel.com/en/hotels/yotel-london-city" target="_blank">YOTEL London City</a><br>
-          1.0 mi (20 min walk)—sleek tech-driven pod rooms with skyline views
+          <i>0.1 mi (3 min walk)</i><br>
+          sleek tech-driven pod rooms with skyline views
         </li>
         <li>
-          <a href="https://www.ihg.com/hotelindigo/hotels/us/en/london/luxcl/hoteldetail" target="_blank">Hotel Indigo London Clerkenwell by IHG</a><br>
-          0.3 mi (6 min walk)—boutique design reflecting local art and heritage
+          <a href="https://www.ihg.com/hotelindigo/hotels/us/en/london/lonrc/hoteldetail" target="_blank">Hotel Indigo London Clerkenwell by IHG</a><br>
+          <i>0.2 mi (6 min walk)<br></i>
+          boutique design reflecting local art and heritage
         </li>
         <li>
           <a href="https://www.premierinn.com/gb/en/hotels/england/greater-london/london/london-farringdon.html" target="_blank">Premier Inn London Farringdon (Smithfield)</a><br>
-          0.2 mi (4 min walk)—reliable budget-friendly comfort
+          <i>0.3 mi (8 min walk)<br></i>
+          reliable budget-friendly comfort
         </li>
       </ul>
     </li>
 
     <li>
       <strong>Contact:</strong>
-      Questions or last-minute changes? Drop James a note at 
+      Questions or last-minute changes? Drop us a note at 
       <a href="mailto:jamesandolly@googlemail.com">jamesandolly@googlemail.com</a>
     </li>
   </ul>
@@ -454,7 +514,7 @@ html {
 </div>
   <h2>Kindly Reply</h2>
   <p class="rsvp-intro">
-    This invitation is for you personally — we’re keeping things small and intentional.<br>
+    This invitation is just for you — we’re keeping the celebration small and personal.<br>
     Please RSVP by: <strong>14 November 2025</strong>
   </p>
 
@@ -466,7 +526,7 @@ html {
   >
     <!-- name -->
     <div class="field">
-      <label for="rsvp-name">Name(s)</label>
+      <label for="rsvp-name">Name</label>
       <input id="rsvp-name" name="name" type="text" required placeholder="Your full name">
     </div>
     <!-- attend -->
@@ -500,6 +560,15 @@ html {
     Thank you — we can’t wait to see you there. You’ll receive an email confirmation shortly.
   </div>
 </div>
+<!-- Calendar invite (hidden until RSVP=yes) -->
+<div id="calendar-unlock" style="display:none; text-align:center;">
+  <p style="margin-bottom:12px; font-family:'Playfair Display',serif; color:var(--clr-text);">
+    🎉 You’re all set! <br>Add this event to your calendar:
+  </p>
+  <a href="images/JamesAndOllyWeddingInnvite.ics" download class="btn-download">
+    <img src="images/download-icon.png" alt="Calendar Icon">Add to Your Calendar
+  </a>
+</div>
 
 <script>
   // hijack the form submission so we can show a message instead of redirecting
@@ -513,10 +582,15 @@ html {
       body: new FormData(form),
       headers: { 'Accept': 'application/json' }
     }).then(response => {
-      if (response.ok) {
-        form.style.display = 'none';
-        document.getElementById('rsvp-confirmation').style.display = 'block';
-      } else {
+     if (response.ok) {
+  form.style.display = 'none';
+  document.getElementById('rsvp-confirmation').style.display = 'block';
+  // show calendar link if they said Yes
+  const willAttend = form.querySelector('input[name="attend"]:checked').value;
+  if (willAttend === 'Yes') {
+    document.getElementById('calendar-unlock').style.display = 'block';
+  }
+} else {
         alert('Oops! There was a problem submitting your RSVP.');
       }
     }).catch(() => {
@@ -609,9 +683,9 @@ html {
   <h2 style="font-family:'Playfair Display',serif;color:var(--clr-text);">Your Presence Is Enough</h2>
 <p style="color:#555;line-height:1.6;">But if you’d like to mark the moment, we’re saving for our honeymoon and would be deeply grateful for your help on our journey.</p>
 <p style="margin-top:20px;">
-  <a href="gifts.html" style="text-decoration:none;color:var(--clr-text);font-weight:600;">
-    Open Gifts & Honeymoon Fund
-  </a>
+<a href="gifts.html" class="btn-gift-link">
+  Open Gifts & Honeymoon Fund
+</a>
 </p>
     </section>
 
@@ -822,6 +896,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   sections.forEach(section => observer.observe(section));
 });
+
+// DARK MODE TOGGLE
+const themeToggle = document.getElementById('theme-toggle');
+const applyDark = on => {
+  document.body.classList.toggle('dark-mode', on);
+  localStorage.setItem('darkMode', on);
+  themeToggle.textContent = on ? '☀️' : '🌙';
+};
+themeToggle.addEventListener('click', () => applyDark(!document.body.classList.contains('dark-mode')));
+// initialize
+applyDark(localStorage.getItem('darkMode') === 'true');
+
+
 
 </script>
 
