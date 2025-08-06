@@ -38,7 +38,7 @@
       transition: background 0.3s, color 0.3s;
     }
 
-    /* Toolbar at bottom, hidden until hover */
+    /* LightGallery toolbar styling */
     .lg-toolbar {
       top: auto !important;
       bottom: 0 !important;
@@ -92,11 +92,12 @@
       cursor: pointer;
     }
 
-    h1,h2,h3 {
+    h1, h2, h3 {
       font-family: 'Playfair Display', serif;
       text-align: center;
     }
-    .upload-section, .gallery-section {
+    .upload-section,
+    .gallery-section {
       max-width: 1000px;
       margin: auto;
       padding: 40px 20px;
@@ -196,14 +197,11 @@
     }
   </style>
 
-  <!-- core LightGallery JS -->
+  <!-- LightGallery core + autoplay plugin -->
   <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.umd.min.js"></script>
-  <!-- autoplay plugin -->
   <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/autoplay/lg-autoplay.umd.min.js"></script>
-  <!-- expose the autoplay constructor -->
-  <script>
-    const lgAutoplay = window.lgAutoplay;
-  </script>
+  <script>const lgAutoplay = window.lgAutoplay;</script>
+
   <!-- Cloudinary Upload Widget -->
   <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 </head>
@@ -243,12 +241,13 @@
   <div id="toast" class="toast"></div>
 
   <script>
+    // your Cloudinary & LightGallery config
     const CLOUD_NAME    = 'dh8f8hnhe';
     const UPLOAD_PRESET = 'guest_upload';
     const TAG_NAME      = 'gallery';
 
     document.addEventListener('DOMContentLoaded', () => {
-      // ---- theme toggle ----
+      // theme toggle
       const toggle = document.getElementById('theme-toggle');
       const applyTheme = dark => {
         document.body.classList.toggle('dark-mode', dark);
@@ -258,19 +257,19 @@
       toggle.addEventListener('click', () => applyTheme(!document.body.classList.contains('dark-mode')));
       applyTheme(localStorage.getItem('darkMode') === 'true');
 
-      // ---- gallery init ----
+      // LightGallery init
       const galleryEl = document.getElementById('gallery-grid');
       const lg = lightGallery(galleryEl, {
         selector:         'div > a',
-        plugins:          [ lgAutoplay ],   // ← wire in autoplay
-        controls:         true,             // ← prev/next arrows
-        autoplay:         false,            // ← start paused
-        autoplayControls: true,             // ← show ▶️/⏸️ buttons
-        speed:            500,              // ← slide animation duration
-        pause:            5000             // ← 5s between slides when playing
+        plugins:          [ lgAutoplay ],
+        controls:         true,
+        autoplay:         false,
+        autoplayControls: true,
+        speed:            500,
+        pause:            5000
       });
 
-      // ---- helper UI ----
+      // helper UI
       const seen = new Set();
       const toast = document.getElementById('toast');
       function showToast(msg) {
@@ -284,7 +283,7 @@
         const wrapper = document.createElement('div');
         wrapper.style.position = 'relative';
 
-        // lightgallery anchor
+        // LightGallery anchor
         const link = document.createElement('a');
         link.href = url;
         const img = document.createElement('img');
@@ -316,10 +315,10 @@
         if (prepend) galleryEl.prepend(wrapper);
         else         galleryEl.appendChild(wrapper);
 
-        lg.refresh(); // always re-scan new items after injection
+        lg.refresh();
       }
 
-      // ---- initial load ----
+      // initial load
       fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
         .then(r => r.json())
         .then(data => {
@@ -329,12 +328,11 @@
               seen.add(res.asset_id);
               renderImage(res);
             });
-          // one-time refresh so controls & autoplay buttons appear
           lg.refresh();
         })
         .catch(console.error);
 
-      // ---- live polling ----
+      // live polling
       setInterval(() => {
         fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
           .then(r => r.json())
@@ -354,20 +352,39 @@
           .catch(console.error);
       }, 30000);
 
-      // ---- upload widget ----
+      // custom in-page Cloudinary upload widget
       const widget = cloudinary.createUploadWidget({
         cloudName:           CLOUD_NAME,
         uploadPreset:        UPLOAD_PRESET,
         tags:                [TAG_NAME],
-        sources:             ['local','url','camera'],
+        sources:             ['camera','local'],     // camera & photo library only
+        showAdvancedOptions: false,
         multiple:            true,
-        moderation:          'manual',
-        showAdvancedOptions: true,
         cropping:            false,
-        clientAllowedFormats:[
-          'png','jpg','jpeg','gif','webp','heic',
-          'mp4','mov','webm','ogg'
-        ]
+        showPoweredBy:       false,
+        singleUploadAutoClose: true,
+        styles: {
+          palette: {
+            window:        "#F9F7F3",
+            windowBorder:  "#e0e0e0",
+            tabIcon:       "#778053",
+            menuIcons:     "#3D4739",
+            textDark:      "#3D4739",
+            textLight:     "#ffffff",
+            link:          "#C9486A",
+            action:        "#C9486A",
+            inactiveTabIcon:"#9DA79D",
+            error:         "#F44336",
+            inProgress:    "#3D4739"
+          },
+          fonts: {
+            default: null,
+            "'Inter', sans-serif": {
+              url:    "https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap",
+              active: true
+            }
+          }
+        }
       }, (err, result) => {
         if (!err && result.event === 'success') {
           seen.add(result.info.asset_id);
@@ -376,8 +393,7 @@
       });
 
       document.getElementById('upload-btn')
-        .addEventListener('click', () => widget.open(), false);
-
+              .addEventListener('click', () => widget.open(), false);
     });
   </script>
 </body>
