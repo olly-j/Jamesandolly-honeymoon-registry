@@ -39,7 +39,7 @@
       --clr-green: #9DA79D;
       --bg-timeline: #E6E1D9;
       --clr-deep-green: #778053;
-      --clr-link: var(--clr-deep-green);
+      --clr-link: var(--clr-accent);
       --nav-height: 50px;
     }
 
@@ -122,6 +122,13 @@
       justify-content: center;
       z-index: 2000;
       backdrop-filter: blur(8px);
+    }
+
+    /* Scroll lock when gate is active */
+    body.gate-active {
+      overflow: hidden;
+      touch-action: none;
+      -webkit-overflow-scrolling: touch;
     }
 
     /* Hero section */
@@ -270,7 +277,7 @@
       max-width: 600px;
       margin: 40px auto;
       padding: 40px 30px;
-      background: linear-gradient(rgba(255,255,255,0.80), rgba(255,255,255,0.80)),
+      background: linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.85)),
                   url('images/background/paper.png') center/cover no-repeat,
                   var(--bg-alt);
       border: 1px solid #e0e0e0;
@@ -487,6 +494,90 @@
       background: var(--clr-accent);
     }
 
+    /* Interactive Map */
+    .map-container {
+      max-width: 600px;
+      margin: 30px auto;
+      text-align: center;
+    }
+    
+    .map-toggle {
+      background: var(--clr-green);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 20px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 auto;
+    }
+    
+    .map-toggle:hover {
+      background: var(--clr-accent);
+    }
+    
+    .map-toggle-icon {
+      transition: transform 0.3s ease;
+    }
+    
+    .map-toggle.expanded .map-toggle-icon {
+      transform: rotate(180deg);
+    }
+    
+    .map-embed {
+      margin-top: 15px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .map-embed iframe {
+      border-radius: 8px;
+    }
+
+    /* Countdown Widget */
+    .countdown-widget {
+      max-width: 500px;
+      margin: 40px auto;
+      text-align: center;
+    }
+    
+    .countdown-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    
+    .countdown-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 80px;
+    }
+    
+    .countdown-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5em;
+      font-weight: 600;
+      color: var(--clr-deep-green);
+      line-height: 1;
+    }
+    
+    .countdown-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9em;
+      color: var(--clr-text);
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
     /* Calendar invite */
     #calendar-unlock {
       background: rgba(157, 167, 157, 0.1);
@@ -523,6 +614,18 @@
     body.dark-mode .section-alt,
     body.dark-mode .rsvp-card {
       background: var(--bg-alt);
+    }
+    
+    body.dark-mode .countdown-number {
+      color: var(--clr-accent);
+    }
+    
+    body.dark-mode .map-toggle {
+      background: var(--clr-accent);
+    }
+    
+    body.dark-mode .map-toggle:hover {
+      background: var(--clr-green);
     }
 
     /* Gate modal styling */
@@ -599,6 +702,22 @@
         margin: 20px;
         padding: 30px 20px;
       }
+      
+      .countdown-container {
+        gap: 15px;
+      }
+      
+      .countdown-number {
+        font-size: 2em;
+      }
+      
+      .countdown-label {
+        font-size: 0.8em;
+      }
+      
+      .map-container {
+        margin: 20px auto;
+      }
     }
   </style>
 </head>
@@ -654,6 +773,25 @@
         <div style="text-align:center;margin:20px 0;">
   <img src="images/dividers/mono-divide.png" alt="Monogram Divider" style="max-width:100%;max-height:80px;">
 </div>
+        
+        <!-- Interactive Map -->
+        <div class="map-container">
+          <button class="map-toggle" id="map-toggle" aria-label="Toggle map view">
+            <span class="map-toggle-text">📍 View on Map</span>
+            <span class="map-toggle-icon">▼</span>
+          </button>
+          <div class="map-embed" id="map-embed" style="display: none;">
+            <iframe 
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.8987!2d-0.1022!3d51.5234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48761b5b7b435a5f%3A0x1b8b3b3b3b3b3b3b!2sLuca+Restaurant!5e0!3m2!1sen!2suk!4v1234567890"
+              width="100%" 
+              height="300" 
+              style="border:0;" 
+              allowfullscreen="" 
+              loading="lazy" 
+              referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+          </div>
+        </div>
       </div>
 
 
@@ -797,6 +935,24 @@
 <div style="text-align:center;margin:0px 0;">
   <img src="images/dividers/wave.png" alt="Gold Wave Divider" style="max-width:60%;">
 </div>
+<!-- Countdown Widget -->
+<div class="countdown-widget" style="animation:fadeInUp 1s ease forwards 1.5s;">
+  <div class="countdown-container">
+    <div class="countdown-item">
+      <span class="countdown-number" id="days">--</span>
+      <span class="countdown-label">Days</span>
+    </div>
+    <div class="countdown-item">
+      <span class="countdown-number" id="hours">--</span>
+      <span class="countdown-label">Hours</span>
+    </div>
+    <div class="countdown-item">
+      <span class="countdown-number" id="minutes">--</span>
+      <span class="countdown-label">Minutes</span>
+    </div>
+  </div>
+</div>
+
 <!-- RSVP Section via Formspree -->
 <div class="rsvp-card" id="rsvp" style="animation:fadeInUp 1s ease forwards 1.6s;">
   <div style="text-align:center; margin-bottom: -10px;">
@@ -1089,6 +1245,9 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.gate.style.display = 'none';
       elements.main.style.display = 'block';
       
+      // Remove scroll lock
+      document.body.classList.remove('gate-active');
+      
       // Trigger animations after access is granted
       setTimeout(() => {
         document.querySelectorAll('.section, .section-alt, .timeline').forEach((el, i) => {
@@ -1098,6 +1257,58 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
       console.error('Error granting access:', error);
     }
+  }
+
+  // Apply scroll lock when gate is active
+  function applyScrollLock() {
+    document.body.classList.add('gate-active');
+  }
+
+  // Countdown Timer
+  function updateCountdown() {
+    const weddingDate = new Date('December 19, 2025 18:30:00').getTime();
+    const now = new Date().getTime();
+    const distance = weddingDate - now;
+
+    if (distance < 0) {
+      // Wedding has passed
+      document.getElementById('days').textContent = '0';
+      document.getElementById('hours').textContent = '0';
+      document.getElementById('minutes').textContent = '0';
+      return;
+    }
+
+    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+    document.getElementById('days').textContent = days;
+    document.getElementById('hours').textContent = hours;
+    document.getElementById('minutes').textContent = minutes;
+  }
+
+  // Initialize countdown and update every minute
+  updateCountdown();
+  setInterval(updateCountdown, 60000);
+
+  // Map Toggle Functionality
+  const mapToggle = document.getElementById('map-toggle');
+  const mapEmbed = document.getElementById('map-embed');
+  
+  if (mapToggle && mapEmbed) {
+    mapToggle.addEventListener('click', () => {
+      const isExpanded = mapEmbed.style.display !== 'none';
+      
+      if (isExpanded) {
+        mapEmbed.style.display = 'none';
+        mapToggle.classList.remove('expanded');
+        mapToggle.querySelector('.map-toggle-text').textContent = '📍 View on Map';
+      } else {
+        mapEmbed.style.display = 'block';
+        mapToggle.classList.add('expanded');
+        mapToggle.querySelector('.map-toggle-text').textContent = '📍 Hide Map';
+      }
+    });
   }
 
   function handleCodeSubmit() {
@@ -1118,6 +1329,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Check for existing access
   if (localStorage.getItem('accessGranted') === 'true') {
     grantAccess();
+  } else {
+    // Apply scroll lock if gate is active
+    applyScrollLock();
   }
 
   // Event listeners

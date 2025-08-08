@@ -272,15 +272,29 @@
 
       // LightGallery init
       const galleryEl = document.getElementById('gallery-grid');
-      const lg = lightGallery(galleryEl, {
-        selector:         'div > a',
-        plugins:          [ lgAutoplay ],
-        controls:         true,
-        autoplay:         false,
-        autoplayControls: true,
-        speed:            500,
-        pause:            5000
-      });
+      let lg = null;
+      
+      function initLightGallery() {
+        if (lg) {
+          lg.destroy();
+        }
+        
+        lg = lightGallery(galleryEl, {
+          selector: 'div > a',
+          plugins: [lgAutoplay],
+          controls: true,
+          autoplay: false,
+          autoplayControls: true,
+          speed: 500,
+          pause: 5000,
+          download: false,
+          counter: true,
+          showThumbByDefault: false
+        });
+      }
+      
+      // Initialize gallery
+      initLightGallery();
 
       // helper UI
       const seen = new Set();
@@ -328,7 +342,12 @@
         if (prepend) galleryEl.prepend(wrapper);
         else         galleryEl.appendChild(wrapper);
 
-        lg.refresh();
+        // Refresh gallery after adding new images
+        setTimeout(() => {
+          if (lg) {
+            lg.refresh();
+          }
+        }, 100);
       }
 
       // initial load
@@ -341,7 +360,12 @@
               seen.add(res.asset_id);
               renderImage(res);
             });
-          lg.refresh();
+          // Refresh gallery after initial load
+          setTimeout(() => {
+            if (lg) {
+              lg.refresh();
+            }
+          }, 200);
         })
         .catch(console.error);
 
@@ -360,23 +384,27 @@
                   added = true;
                 }
               });
-            if (added) lg.refresh();
+            if (added) {
+              setTimeout(() => {
+                if (lg) {
+                  lg.refresh();
+                }
+              }, 100);
+            }
           })
           .catch(console.error);
       }, 30000);
 
       // custom in-page Cloudinary upload widget
       const widget = cloudinary.createUploadWidget({
-        cloudName:           CLOUD_NAME,
-        uploadPreset:        UPLOAD_PRESET,
-        tags:                [TAG_NAME],
-        sources:                 'local',
-    'camera' 
-  ],
+        cloudName: CLOUD_NAME,
+        uploadPreset: UPLOAD_PRESET,
+        tags: [TAG_NAME],
+        sources: ['local', 'camera'],
         showAdvancedOptions: false,
-        multiple:            true,
-        cropping:            false,
-        showPoweredBy:       false,
+        multiple: true,
+        cropping: false,
+        showPoweredBy: false,
         styles: {
           palette: {
             window:        "#F9F7F3",
@@ -403,6 +431,10 @@
         if (!err && result.event === 'success') {
           seen.add(result.info.asset_id);
           renderImage(result.info, true);
+          showToast('Photo uploaded successfully!');
+        } else if (err) {
+          console.error('Upload error:', err);
+          showToast('Upload failed. Please try again.');
         }
       });
 

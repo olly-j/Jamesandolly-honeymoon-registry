@@ -119,6 +119,20 @@
 
     .divider img {
       max-width: 60%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .divider.mirrored img {
+      transform: scaleY(-1);
+    }
+
+    /* Responsive flourishes */
+    @media (max-width: 768px) {
+      .divider img {
+        max-width: 80%;
+      }
     }
   </style>
 </head>
