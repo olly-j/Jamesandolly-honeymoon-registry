@@ -1,15 +1,52 @@
 {
   "name": "James & Oliver Wedding",
   "short_name": "J&O",
+  "description": "Join James & Oliver for their wedding celebration on December 19, 2025",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#F9F7F3",
   "theme_color": "#9DA79D",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["events", "lifestyle"],
   "icons": [
     {
       "src": "images/apple-touch-icon.png",
       "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "images/favicon.png",
+      "sizes": "32x32",
       "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "RSVP",
+      "short_name": "RSVP",
+      "description": "RSVP for the wedding",
+      "url": "/#rsvp",
+      "icons": [
+        {
+          "src": "images/favicon.png",
+          "sizes": "32x32"
+        }
+      ]
+    },
+    {
+      "name": "Gifts",
+      "short_name": "Gifts",
+      "description": "View gift registry",
+      "url": "/gifts.html",
+      "icons": [
+        {
+          "src": "images/favicon.png",
+          "sizes": "32x32"
+        }
+      ]
     }
   ]
 }

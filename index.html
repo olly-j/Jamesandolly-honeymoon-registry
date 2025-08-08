@@ -6,30 +6,55 @@
   <meta name="description" content="Join James & Oliver for their wedding celebration on December 19, 2025 at Luca Restaurant, London. RSVP and gift registry included.">
   <meta name="theme-color" content="#F9F7F3">
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  
+  <!-- Open Graph Meta Tags for Social Sharing -->
+  <meta property="og:title" content="James & Oliver's Wedding Celebration">
+  <meta property="og:description" content="Join us for our celebration on December 19, 2025 at Luca Restaurant, London">
+  <meta property="og:image" content="https://yoursite.com/images/hero-bg.jpg">
+  <meta property="og:url" content="https://yoursite.com">
+  <meta property="og:type" content="website">
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="James & Oliver's Wedding Celebration">
+  <meta name="twitter:description" content="Join us for our celebration on December 19, 2025">
+  <meta name="twitter:image" content="https://yoursite.com/images/hero-bg.jpg">
 
   <title>James & Oliver's Wedding Celebration | December 19, 2025</title>
   
   <!-- Security Headers -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://formspree.io https://fonts.googleapis.com https://cdn.jsdelivr.net https://widget.cloudinary.com https://res.cloudinary.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formspree.io https://res.cloudinary.com; frame-src https://www.google.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://formspree.io https://fonts.googleapis.com https://cdn.jsdelivr.net https://widget.cloudinary.com https://res.cloudinary.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formspree.io https://res.cloudinary.com https://www.google-analytics.com; frame-src https://www.google.com https://www.paypal.com;">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
   <meta http-equiv="X-XSS-Protection" content="1; mode=block">
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
   
   <!-- Preload critical resources -->
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" as="style">
   <link rel="preload" href="images/hero-bg.jpg" as="image" type="image/jpeg">
   <link rel="preload" href="images/favicon.png" as="image" type="image/png">
+  <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js" as="script">
   
   <!-- DNS prefetch for external resources -->
   <link rel="dns-prefetch" href="//fonts.googleapis.com">
   <link rel="dns-prefetch" href="//formspree.io">
+  <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+  <link rel="dns-prefetch" href="//www.googletagmanager.com">
+  
+  <!-- Preconnect to critical domains -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://formspree.io">
   
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
   <link rel="icon" href="images/favicon.png" type="image/png">
   <link rel="manifest" href="manifest.json">
   
-  <!-- Google Analytics -->
+  <!-- DOMPurify for input sanitization -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js"></script>
+  
+  <!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -529,6 +554,7 @@
     .field-error {
       border-color: #ff4444 !important;
       box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.2) !important;
+      animation: shake 0.5s ease-in-out;
     }
     
     .error-message {
@@ -536,11 +562,45 @@
       font-size: 0.9em;
       margin-top: 4px;
       animation: fadeIn 0.3s ease;
+      display: none;
+    }
+    
+    .error-message:not(:empty) {
+      display: block;
     }
     
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-5px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
+    /* Loading states */
+    .btn-loading {
+      display: none;
+    }
+    
+    .btn-rsvp:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+    
+    /* Focus improvements */
+    .rsvp-card input:focus,
+    .rsvp-card button:focus {
+      outline: 2px solid var(--clr-accent);
+      outline-offset: 2px;
+    }
+    
+    /* Required field indicator */
+    span[aria-label="required"] {
+      color: #ff4444;
+      font-weight: bold;
     }
 
 
@@ -880,36 +940,69 @@
     action="https://formspree.io/f/mzzvajyj" 
     method="POST"
     style="max-width:500px;margin:0 auto;"
+    novalidate
   >
     <!-- name -->
     <div class="field">
-      <label for="rsvp-name">Name</label>
-      <input id="rsvp-name" name="name" type="text" required placeholder="Your full name">
+      <label for="rsvp-name">Name <span aria-label="required">*</span></label>
+      <input 
+        id="rsvp-name" 
+        name="name" 
+        type="text" 
+        required 
+        placeholder="Your full name"
+        minlength="2"
+        maxlength="100"
+        pattern="[A-Za-z\s\-']{2,100}"
+        aria-describedby="name-error"
+      >
+      <div id="name-error" class="error-message" role="alert" aria-live="polite"></div>
     </div>
     <!-- attend -->
     <div class="field">
-      <label>Will you attend?</label>
-      <div class="radios">
+      <label>Will you attend? <span aria-label="required">*</span></label>
+      <div class="radios" role="radiogroup" aria-describedby="attend-error">
         <label><input type="radio" name="attend" value="Yes" required> Yes</label>
         <label><input type="radio" name="attend" value="No"> No</label>
       </div>
+      <div id="attend-error" class="error-message" role="alert" aria-live="polite"></div>
     </div>
     <!-- dietary -->
     <div class="field">
       <label for="rsvp-diet">Dietary Needs</label>
-      <input id="rsvp-diet" name="diet" type="text" placeholder="e.g. vegetarian, gluten-free">
+      <input 
+        id="rsvp-diet" 
+        name="diet" 
+        type="text" 
+        placeholder="e.g. vegetarian, gluten-free"
+        maxlength="200"
+        aria-describedby="diet-error"
+      >
+      <div id="diet-error" class="error-message" role="alert" aria-live="polite"></div>
     </div>
     <!-- access -->
     <div class="field">
       <label for="rsvp-access">Accessibility or Mobility Notes</label>
-      <input id="rsvp-access" name="access" type="text" placeholder="Let us know any requirements">
+      <input 
+        id="rsvp-access" 
+        name="access" 
+        type="text" 
+        placeholder="Let us know any requirements"
+        maxlength="200"
+        aria-describedby="access-error"
+      >
+      <div id="access-error" class="error-message" role="alert" aria-live="polite"></div>
     </div>
     <!-- honeypot to avoid spam -->
-    <input type="text" name="_gotcha" style="display:none">
+    <input type="text" name="_gotcha" style="display:none" tabindex="-1" aria-hidden="true">
     <!-- remove redirect so we stay on page -->
     <!-- <input type="hidden" name="_redirect" value="thank-you.html"> -->
     
-    <button type="submit" class="btn-rsvp">Submit RSVP</button>
+    <button type="submit" class="btn-rsvp" aria-describedby="submit-error">
+      <span class="btn-text">Submit RSVP</span>
+      <span class="btn-loading" style="display:none;">Sending...</span>
+    </button>
+    <div id="submit-error" class="error-message" role="alert" aria-live="polite"></div>
   </form>
 
   <!-- Inline confirmation message, hidden until JS flips it in -->
@@ -1255,45 +1348,115 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Enhanced RSVP Form with validation and analytics
+  // Enhanced RSVP Form with comprehensive validation and analytics
   if (elements.rsvpForm && elements.thankMsg) {
-    elements.rsvpForm.addEventListener('submit', async function(e) {
+    const form = elements.rsvpForm;
+    
+    // Real-time validation
+    const validateField = (field, rules) => {
+      const value = field.value.trim();
+      const errorElement = document.getElementById(field.id + '-error') || field.parentNode.querySelector('.error-message');
+      
+      // Clear previous errors
+      if (errorElement) {
+        errorElement.textContent = '';
+        errorElement.style.display = 'none';
+      }
+      field.classList.remove('field-error');
+      
+      // Apply validation rules
+      for (const rule of rules) {
+        if (!rule.test(value)) {
+          field.classList.add('field-error');
+          if (errorElement) {
+            errorElement.textContent = rule.message;
+            errorElement.style.display = 'block';
+          }
+          return false;
+        }
+      }
+      return true;
+    };
+    
+    // Validation rules
+    const validationRules = {
+      'rsvp-name': [
+        { test: (value) => value.length >= 2, message: 'Name must be at least 2 characters' },
+        { test: (value) => /^[A-Za-z\s\-']{2,100}$/.test(value), message: 'Name contains invalid characters' }
+      ],
+      'rsvp-diet': [
+        { test: (value) => value.length <= 200, message: 'Dietary needs must be under 200 characters' }
+      ],
+      'rsvp-access': [
+        { test: (value) => value.length <= 200, message: 'Accessibility notes must be under 200 characters' }
+      ]
+    };
+    
+    // Add real-time validation listeners
+    Object.keys(validationRules).forEach(fieldId => {
+      const field = document.getElementById(fieldId);
+      if (field) {
+        field.addEventListener('blur', () => validateField(field, validationRules[fieldId]));
+        field.addEventListener('input', () => {
+          if (field.classList.contains('field-error')) {
+            validateField(field, validationRules[fieldId]);
+          }
+        });
+      }
+    });
+    
+    form.addEventListener('submit', async function(e) {
       e.preventDefault();
       
       const submitBtn = this.querySelector('button[type="submit"]');
-      const originalText = submitBtn.textContent;
+      const btnText = submitBtn.querySelector('.btn-text');
+      const btnLoading = submitBtn.querySelector('.btn-loading');
+      const submitError = document.getElementById('submit-error');
       
-      // Enhanced form validation
-      const name = this.querySelector('#rsvp-name').value.trim();
-      const attend = this.querySelector('input[name="attend"]:checked');
-      const diet = this.querySelector('#rsvp-diet').value.trim();
-      const access = this.querySelector('#rsvp-access').value.trim();
-      
-      // Clear previous error states
-      this.querySelectorAll('.error-message').forEach(el => el.remove());
+      // Clear previous errors
+      this.querySelectorAll('.error-message').forEach(el => {
+        el.textContent = '';
+        el.style.display = 'none';
+      });
       this.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
       
-      let hasErrors = false;
+      // Validate all fields
+      const name = this.querySelector('#rsvp-name');
+      const attend = this.querySelector('input[name="attend"]:checked');
+      const diet = this.querySelector('#rsvp-diet');
+      const access = this.querySelector('#rsvp-access');
+      
+      let isValid = true;
       
       // Validate name
-      if (!name || name.length < 2) {
-        showFieldError(this.querySelector('#rsvp-name'), 'Please enter your full name');
-        hasErrors = true;
+      if (!validateField(name, validationRules['rsvp-name'])) {
+        isValid = false;
       }
       
       // Validate attendance
       if (!attend) {
-        showFieldError(this.querySelector('.radios'), 'Please select whether you will attend');
-        hasErrors = true;
+        const attendError = document.getElementById('attend-error');
+        if (attendError) {
+          attendError.textContent = 'Please select whether you will attend';
+          attendError.style.display = 'block';
+        }
+        isValid = false;
       }
       
-      // Validate dietary needs if attending
-      if (attend && attend.value === 'Yes' && diet.length > 200) {
-        showFieldError(this.querySelector('#rsvp-diet'), 'Dietary needs must be under 200 characters');
-        hasErrors = true;
+      // Validate optional fields
+      if (diet.value.trim()) {
+        if (!validateField(diet, validationRules['rsvp-diet'])) {
+          isValid = false;
+        }
       }
       
-      if (hasErrors) {
+      if (access.value.trim()) {
+        if (!validateField(access, validationRules['rsvp-access'])) {
+          isValid = false;
+        }
+      }
+      
+      if (!isValid) {
         // Track validation errors
         if (typeof gtag !== 'undefined') {
           gtag('event', 'form_validation_error', {
@@ -1306,13 +1469,23 @@ document.addEventListener('DOMContentLoaded', () => {
       
       try {
         // Show loading state
-        submitBtn.textContent = 'Sending...';
+        btnText.style.display = 'none';
+        btnLoading.style.display = 'inline';
         submitBtn.disabled = true;
-        submitBtn.classList.add('loading');
-
+        
+        // Sanitize inputs
+        const formData = new FormData(this);
+        const sanitizedData = new FormData();
+        
+        for (const [key, value] of formData.entries()) {
+          if (key !== '_gotcha') { // Skip honeypot
+            sanitizedData.append(key, DOMPurify.sanitize(value.toString().trim()));
+          }
+        }
+        
         const response = await fetch(this.action, {
           method: this.method,
-          body: new FormData(this),
+          body: sanitizedData,
           headers: { 'Accept': 'application/json' }
         });
 
@@ -1343,6 +1516,12 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (error) {
         console.error('RSVP submission error:', error);
         
+        // Show user-friendly error
+        if (submitError) {
+          submitError.textContent = 'Sorry, there was a problem submitting your RSVP. Please try again or email us directly.';
+          submitError.style.display = 'block';
+        }
+        
         // Track error analytics
         if (typeof gtag !== 'undefined') {
           gtag('event', 'form_submission_error', {
@@ -1350,27 +1529,13 @@ document.addEventListener('DOMContentLoaded', () => {
             event_label: 'submission_failed'
           });
         }
-        
-        alert('Sorry, there was a problem submitting your RSVP. Please try again or email us directly.');
       } finally {
         // Reset button state
-        submitBtn.textContent = originalText;
+        btnText.style.display = 'inline';
+        btnLoading.style.display = 'none';
         submitBtn.disabled = false;
-        submitBtn.classList.remove('loading');
       }
     });
-    
-    // Helper function to show field errors
-    function showFieldError(field, message) {
-      field.classList.add('field-error');
-      const errorDiv = document.createElement('div');
-      errorDiv.className = 'error-message';
-      errorDiv.style.color = '#ff4444';
-      errorDiv.style.fontSize = '0.9em';
-      errorDiv.style.marginTop = '4px';
-      errorDiv.textContent = message;
-      field.parentNode.appendChild(errorDiv);
-    }
   }
 
   // Modal close handler
@@ -1479,6 +1644,91 @@ if ('serviceWorker' in navigator) {
       });
   });
 }
+
+// Performance monitoring
+window.addEventListener('load', () => {
+  // Measure Core Web Vitals
+  if ('PerformanceObserver' in window) {
+    try {
+      // Largest Contentful Paint
+      const lcpObserver = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        const lastEntry = entries[entries.length - 1];
+        console.log('LCP:', lastEntry.startTime);
+        
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'lcp', {
+            event_category: 'Performance',
+            value: Math.round(lastEntry.startTime)
+          });
+        }
+      });
+      lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+      
+      // First Input Delay
+      const fidObserver = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        entries.forEach(entry => {
+          console.log('FID:', entry.processingStart - entry.startTime);
+          
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'fid', {
+              event_category: 'Performance',
+              value: Math.round(entry.processingStart - entry.startTime)
+            });
+          }
+        });
+      });
+      fidObserver.observe({ entryTypes: ['first-input'] });
+      
+      // Cumulative Layout Shift
+      const clsObserver = new PerformanceObserver((list) => {
+        let clsValue = 0;
+        const entries = list.getEntries();
+        entries.forEach(entry => {
+          if (!entry.hadRecentInput) {
+            clsValue += entry.value;
+          }
+        });
+        console.log('CLS:', clsValue);
+        
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'cls', {
+            event_category: 'Performance',
+            value: Math.round(clsValue * 1000) / 1000
+          });
+        }
+      });
+      clsObserver.observe({ entryTypes: ['layout-shift'] });
+    } catch (error) {
+      console.error('Performance monitoring error:', error);
+    }
+  }
+  
+  // Error tracking
+  window.addEventListener('error', (event) => {
+    console.error('JavaScript error:', event.error);
+    
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'exception', {
+        description: event.error?.message || 'Unknown error',
+        fatal: false
+      });
+    }
+  });
+  
+  // Unhandled promise rejections
+  window.addEventListener('unhandledrejection', (event) => {
+    console.error('Unhandled promise rejection:', event.reason);
+    
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'exception', {
+        description: event.reason?.message || 'Unhandled promise rejection',
+        fatal: false
+      });
+    }
+  });
+});
 </script>
 
 <div id="a2hs-prompt" style="
