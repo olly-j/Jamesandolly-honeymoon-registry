@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Join James & Oliver for their wedding celebration on December 19, 2025 at Luca Restaurant, London. RSVP and gift registry included.">
   <meta name="theme-color" content="#F9F7F3">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
   <meta property="og:title" content="James & Oliver's Wedding Celebration">
   <meta property="og:description" content="Join us for our wedding celebration on December 19, 2025 at Luca Restaurant, London">
   <meta property="og:image" content="https://yoursite.com/images/hero-bg.jpg">
@@ -15,10 +15,17 @@
   <meta name="twitter:description" content="Join us for our celebration on December 19, 2025">
   <title>James & Oliver's Wedding Celebration | December 19, 2025</title>
   
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://formspree.io https://fonts.googleapis.com https://cdn.jsdelivr.net https://widget.cloudinary.com https://res.cloudinary.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formspree.io https://res.cloudinary.com; frame-src https://www.google.com;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  
   <!-- Preload critical resources -->
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" as="style">
-  <link rel="preload" href="images/hero-bg.jpg" as="image">
-  <link rel="preload" href="images/favicon.png" as="image">
+  <link rel="preload" href="images/hero-bg.jpg" as="image" type="image/jpeg">
+  <link rel="preload" href="images/favicon.png" as="image" type="image/png">
   
   <!-- DNS prefetch for external resources -->
   <link rel="dns-prefetch" href="//fonts.googleapis.com">
@@ -27,6 +34,21 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
   <link rel="icon" href="images/favicon.png" type="image/png">
   <link rel="manifest" href="manifest.json">
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_MEASUREMENT_ID', {
+      page_title: 'James & Oliver Wedding',
+      custom_map: {
+        'custom_parameter_1': 'rsvp_status',
+        'custom_parameter_2': 'gift_contribution'
+      }
+    });
+  </script>
   
   <!-- Critical CSS inline for faster rendering -->
   <style>
@@ -134,11 +156,26 @@
     /* Hero section */
     .hero-section {
       height: 60vh;
-      background: url('images/hero-bg.jpg') center/cover no-repeat;
+      background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('images/hero-bg.jpg') center/cover no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
+      background-attachment: fixed;
+    }
+    
+    /* Optimized hero image with responsive sizes */
+    @media (max-width: 768px) {
+      .hero-section {
+        background-attachment: scroll;
+        background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('images/hero-bg.jpg');
+      }
+    }
+    
+    @media (min-width: 769px) and (max-width: 1200px) {
+      .hero-section {
+        background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('images/hero-bg.jpg');
+      }
     }
 
     .hero-content {
@@ -493,90 +530,26 @@
     .btn-rsvp:hover {
       background: var(--clr-accent);
     }
-
-    /* Interactive Map */
-    .map-container {
-      max-width: 600px;
-      margin: 30px auto;
-      text-align: center;
+    
+    /* Form validation styles */
+    .field-error {
+      border-color: #ff4444 !important;
+      box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.2) !important;
     }
     
-    .map-toggle {
-      background: var(--clr-green);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 12px 20px;
-      font-family: 'Inter', sans-serif;
+    .error-message {
+      color: #ff4444;
       font-size: 0.9em;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin: 0 auto;
-    }
-    
-    .map-toggle:hover {
-      background: var(--clr-accent);
-    }
-    
-    .map-toggle-icon {
-      transition: transform 0.3s ease;
-    }
-    
-    .map-toggle.expanded .map-toggle-icon {
-      transform: rotate(180deg);
-    }
-    
-    .map-embed {
-      margin-top: 15px;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-    
-    .map-embed iframe {
-      border-radius: 8px;
-    }
-
-    /* Countdown Widget */
-    .countdown-widget {
-      max-width: 500px;
-      margin: 40px auto;
-      text-align: center;
-    }
-    
-    .countdown-container {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-    
-    .countdown-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 80px;
-    }
-    
-    .countdown-number {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5em;
-      font-weight: 600;
-      color: var(--clr-deep-green);
-      line-height: 1;
-    }
-    
-    .countdown-label {
-      font-family: 'Inter', sans-serif;
-      font-size: 0.9em;
-      color: var(--clr-text);
       margin-top: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      animation: fadeIn 0.3s ease;
     }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+
 
     /* Calendar invite */
     #calendar-unlock {
@@ -616,17 +589,7 @@
       background: var(--bg-alt);
     }
     
-    body.dark-mode .countdown-number {
-      color: var(--clr-accent);
-    }
-    
-    body.dark-mode .map-toggle {
-      background: var(--clr-accent);
-    }
-    
-    body.dark-mode .map-toggle:hover {
-      background: var(--clr-green);
-    }
+
 
     /* Gate modal styling */
     .gate-modal {
@@ -703,21 +666,7 @@
         padding: 30px 20px;
       }
       
-      .countdown-container {
-        gap: 15px;
-      }
-      
-      .countdown-number {
-        font-size: 2em;
-      }
-      
-      .countdown-label {
-        font-size: 0.8em;
-      }
-      
-      .map-container {
-        margin: 20px auto;
-      }
+
     }
   </style>
 </head>
@@ -771,42 +720,25 @@
           We’re so glad to celebrate together in this beautiful space.
         </p>
         <div style="text-align:center;margin:20px 0;">
-  <img src="images/dividers/mono-divide.png" alt="Monogram Divider" style="max-width:100%;max-height:80px;">
+  <img src="images/dividers/mono-divide.png" alt="Monogram Divider" style="max-width:100%;max-height:80px;" loading="lazy">
 </div>
         
-        <!-- Interactive Map -->
-        <div class="map-container">
-          <button class="map-toggle" id="map-toggle" aria-label="Toggle map view">
-            <span class="map-toggle-text">📍 View on Map</span>
-            <span class="map-toggle-icon">▼</span>
-          </button>
-          <div class="map-embed" id="map-embed" style="display: none;">
-            <iframe 
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.8987!2d-0.1022!3d51.5234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48761b5b7b435a5f%3A0x1b8b3b3b3b3b3b3b!2sLuca+Restaurant!5e0!3m2!1sen!2suk!4v1234567890"
-              width="100%" 
-              height="300" 
-              style="border:0;" 
-              allowfullscreen="" 
-              loading="lazy" 
-              referrerpolicy="no-referrer-when-downgrade">
-            </iframe>
-          </div>
-        </div>
+
       </div>
 
 
       <!-- Tiled Background Timeline -->
       <div class="timeline section" id="timeline" style="background-color:var(--bg-timeline); background-image:url('images/timeline-background.png'); background-repeat:repeat; background-size:auto; animation:fadeInUp 1s ease forwards 1s;">
         <div style="text-align:center;margin:0px 0;">
-  <img src="images/dividers/london.png" alt="London Divider" style="max-width:100%;height:auto;">
+  <img src="images/dividers/london.png" alt="London Divider" style="max-width:100%;height:auto;" loading="lazy">
 </div>
         <h2 style="font-family:'Playfair Display',serif;color:var(--clr-deep-green);text-align:center;">The Shape of the Evening</h2>
         <div style="max-width:600px;margin:auto;">
           <!-- Entry 1 -->
           <div class="timeline-item">
             <div class="icon-container">
-              <img src="images/icon-aperitivo.png" class="icon" alt="Aperitivo">
-              <div class="timeline-arrow"><img src="images/arrow-down.png" alt="Down Arrow"></div>
+              <img src="images/icon-aperitivo.png" class="icon" alt="Aperitivo" loading="lazy">
+              <div class="timeline-arrow"><img src="images/arrow-down.png" alt="Down Arrow" loading="lazy"></div>
             </div>
             <div class="details">
               <div class="time-label">6:30 PM</div>
@@ -817,8 +749,8 @@
           <!-- Entry 2 -->
           <div class="timeline-item">
             <div class="icon-container">
-              <img src="images/icon-dinner.png" class="icon" alt="Dinner">
-              <div class="timeline-arrow"><img src="images/arrow-down.png" alt="Down Arrow"></div>
+              <img src="images/icon-dinner.png" class="icon" alt="Dinner" loading="lazy">
+              <div class="timeline-arrow"><img src="images/arrow-down.png" alt="Down Arrow" loading="lazy"></div>
             </div>
             <div class="details">
               <div class="time-label">7:00 PM</div>
@@ -829,8 +761,8 @@
           <!-- Entry 3 -->
           <div class="timeline-item">
             <div class="icon-container">
-              <img src="images/icon-toasts.png" class="icon" alt="Toasts">
-              <div class="timeline-arrow"><img src="images/arrow-down.png" alt="Down Arrow"></div>
+              <img src="images/icon-toasts.png" class="icon" alt="Toasts" loading="lazy">
+              <div class="timeline-arrow"><img src="images/arrow-down.png" alt="Down Arrow" loading="lazy"></div>
             </div>
             <div class="details">
               <div class="time-label">8:30 PM</div>
@@ -841,8 +773,8 @@
           <!-- Entry 4 -->
           <div class="timeline-item">
             <div class="icon-container">
-              <img src="images/icon-dessert.png" class="icon" alt="Dessert">
-              <div class="timeline-arrow"><img src="images/arrow-down.png" alt="Down Arrow"></div>
+              <img src="images/icon-dessert.png" class="icon" alt="Dessert" loading="lazy">
+              <div class="timeline-arrow"><img src="images/arrow-down.png" alt="Down Arrow" loading="lazy"></div>
             </div>
             <div class="details">
               <div class="time-label">9:30 PM</div>
@@ -853,7 +785,7 @@
           <!-- Entry 5 -->
           <div class="timeline-item">
             <div class="icon-container">
-              <img src="images/icon-music.png" class="icon" alt="Music">
+              <img src="images/icon-music.png" class="icon" alt="Music" loading="lazy">
             </div>
             <div class="details">
               <div class="time-label">10:00 PM Onward</div>
@@ -933,31 +865,15 @@
   </ul>
 </div>
 <div style="text-align:center;margin:0px 0;">
-  <img src="images/dividers/wave.png" alt="Gold Wave Divider" style="max-width:60%;">
+  <img src="images/dividers/wave.png" alt="Gold Wave Divider" style="max-width:60%;" loading="lazy">
 </div>
-<!-- Countdown Widget -->
-<div class="countdown-widget" style="animation:fadeInUp 1s ease forwards 1.5s;">
-  <div class="countdown-container">
-    <div class="countdown-item">
-      <span class="countdown-number" id="days">--</span>
-      <span class="countdown-label">Days</span>
-    </div>
-    <div class="countdown-item">
-      <span class="countdown-number" id="hours">--</span>
-      <span class="countdown-label">Hours</span>
-    </div>
-    <div class="countdown-item">
-      <span class="countdown-number" id="minutes">--</span>
-      <span class="countdown-label">Minutes</span>
-    </div>
-  </div>
-</div>
+
 
 <!-- RSVP Section via Formspree -->
 <div class="rsvp-card" id="rsvp" style="animation:fadeInUp 1s ease forwards 1.6s;">
   <div style="text-align:center; margin-bottom: -10px;">
   <img src="images/flourishes/glass-cheers.png" alt="Cheers Icon"
-       style="max-width:100px; opacity:1;">
+       style="max-width:100px; opacity:1;" loading="lazy">
 </div>
   <h2>Kindly Reply</h2>
   <p class="rsvp-intro">
@@ -1013,7 +929,7 @@
     🎉 You’re all set! <br>Add this event to your calendar:
   </p>
   <a href="images/JamesAndOllyWeddingInnvite.ics" download class="btn-download">
-    <img src="images/download-icon.png" alt="Calendar Icon">Add to Your Calendar
+    <img src="images/download-icon.png" alt="Calendar Icon" loading="lazy">Add to Your Calendar
   </a>
 </div>
 
@@ -1125,7 +1041,7 @@
       <div class="section" style="text-align:center;animation:fadeInUp 1s forwards 1.8s;">
         <div style="text-align:center; margin-bottom: 0px;">
   <img src="images/flourishes/lightGreen-coupe.png" alt="Coupe Glasses"
-       style="max-height:80px; opacity:1;">
+       style="max-height:80px; opacity:1;" loading="lazy">
 </div>
   <h2 style="font-family:'Playfair Display',serif;color:var(--clr-text);">Your Presence Is Enough</h2>
 <p style="color:#555;line-height:1.6;">But if you’d like to mark the moment, we’re saving for our honeymoon and would be deeply grateful for your help on our journey.</p>
@@ -1203,7 +1119,7 @@
       This night is about great food, glowing glasses, and being present.<br>
       <div style="margin:0px 0;">
   <img src="images/flourishes/lightGreen-coupe.png" alt="Toasting Glasses"
-       style="max-height:50px; opacity:1;">
+       style="max-height:50px; opacity:1;" loading="lazy">
 </div>
       Love,<br>
       James &amp; Oliver
@@ -1264,52 +1180,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.add('gate-active');
   }
 
-  // Countdown Timer
-  function updateCountdown() {
-    const weddingDate = new Date('December 19, 2025 18:30:00').getTime();
-    const now = new Date().getTime();
-    const distance = weddingDate - now;
 
-    if (distance < 0) {
-      // Wedding has passed
-      document.getElementById('days').textContent = '0';
-      document.getElementById('hours').textContent = '0';
-      document.getElementById('minutes').textContent = '0';
-      return;
-    }
 
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
 
-    document.getElementById('days').textContent = days;
-    document.getElementById('hours').textContent = hours;
-    document.getElementById('minutes').textContent = minutes;
-  }
-
-  // Initialize countdown and update every minute
-  updateCountdown();
-  setInterval(updateCountdown, 60000);
-
-  // Map Toggle Functionality
-  const mapToggle = document.getElementById('map-toggle');
-  const mapEmbed = document.getElementById('map-embed');
-  
-  if (mapToggle && mapEmbed) {
-    mapToggle.addEventListener('click', () => {
-      const isExpanded = mapEmbed.style.display !== 'none';
-      
-      if (isExpanded) {
-        mapEmbed.style.display = 'none';
-        mapToggle.classList.remove('expanded');
-        mapToggle.querySelector('.map-toggle-text').textContent = '📍 View on Map';
-      } else {
-        mapEmbed.style.display = 'block';
-        mapToggle.classList.add('expanded');
-        mapToggle.querySelector('.map-toggle-text').textContent = '📍 Hide Map';
-      }
-    });
-  }
 
   function handleCodeSubmit() {
     const code = elements.codeInput.value.trim().toLowerCase();
@@ -1360,13 +1233,24 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Error updating gift progress:', error);
   }
 
-  // Gift Contribution Logic
+  // Enhanced Gift Contribution Logic with analytics
   document.querySelectorAll('.btn-gift').forEach(btn => {
     btn.addEventListener('click', () => {
       try {
         const card = btn.closest('.card');
         const amount = card?.getAttribute('data-amount');
+        const giftType = card?.getAttribute('data-id');
         const url = amount ? `https://paypal.me/yourname/${amount}` : 'https://paypal.me/yourname';
+        
+        // Track gift click analytics
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'gift_clicked', {
+            event_category: 'Gifts',
+            event_label: giftType || 'custom',
+            custom_parameter_2: amount || 'custom'
+          });
+        }
+        
         window.open(url, '_blank');
         if (elements.thankyouModal) {
           elements.thankyouModal.style.display = 'flex';
@@ -1377,13 +1261,54 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // RSVP Form with better error handling
+  // Enhanced RSVP Form with validation and analytics
   if (elements.rsvpForm && elements.thankMsg) {
     elements.rsvpForm.addEventListener('submit', async function(e) {
       e.preventDefault();
       
       const submitBtn = this.querySelector('button[type="submit"]');
       const originalText = submitBtn.textContent;
+      
+      // Enhanced form validation
+      const name = this.querySelector('#rsvp-name').value.trim();
+      const attend = this.querySelector('input[name="attend"]:checked');
+      const diet = this.querySelector('#rsvp-diet').value.trim();
+      const access = this.querySelector('#rsvp-access').value.trim();
+      
+      // Clear previous error states
+      this.querySelectorAll('.error-message').forEach(el => el.remove());
+      this.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+      
+      let hasErrors = false;
+      
+      // Validate name
+      if (!name || name.length < 2) {
+        showFieldError(this.querySelector('#rsvp-name'), 'Please enter your full name');
+        hasErrors = true;
+      }
+      
+      // Validate attendance
+      if (!attend) {
+        showFieldError(this.querySelector('.radios'), 'Please select whether you will attend');
+        hasErrors = true;
+      }
+      
+      // Validate dietary needs if attending
+      if (attend && attend.value === 'Yes' && diet.length > 200) {
+        showFieldError(this.querySelector('#rsvp-diet'), 'Dietary needs must be under 200 characters');
+        hasErrors = true;
+      }
+      
+      if (hasErrors) {
+        // Track validation errors
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'form_validation_error', {
+            event_category: 'RSVP',
+            event_label: 'validation_failed'
+          });
+        }
+        return;
+      }
       
       try {
         // Show loading state
@@ -1401,13 +1326,21 @@ document.addEventListener('DOMContentLoaded', () => {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
+        // Success - track analytics
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'rsvp_submitted', {
+            event_category: 'RSVP',
+            event_label: attend.value,
+            custom_parameter_1: attend.value
+          });
+        }
+
         // Success
         this.style.display = 'none';
         elements.thankMsg.style.display = 'block';
         
         // Show calendar link if they said Yes
-        const willAttend = this.querySelector('input[name="attend"]:checked')?.value;
-        if (willAttend === 'Yes') {
+        if (attend.value === 'Yes') {
           const calendarUnlock = document.getElementById('calendar-unlock');
           if (calendarUnlock) {
             calendarUnlock.style.display = 'block';
@@ -1415,6 +1348,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       } catch (error) {
         console.error('RSVP submission error:', error);
+        
+        // Track error analytics
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'form_submission_error', {
+            event_category: 'RSVP',
+            event_label: 'submission_failed'
+          });
+        }
+        
         alert('Sorry, there was a problem submitting your RSVP. Please try again or email us directly.');
       } finally {
         // Reset button state
@@ -1423,6 +1365,18 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.classList.remove('loading');
       }
     });
+    
+    // Helper function to show field errors
+    function showFieldError(field, message) {
+      field.classList.add('field-error');
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'error-message';
+      errorDiv.style.color = '#ff4444';
+      errorDiv.style.fontSize = '0.9em';
+      errorDiv.style.marginTop = '4px';
+      errorDiv.textContent = message;
+      field.parentNode.appendChild(errorDiv);
+    }
   }
 
   // Modal close handler
@@ -1432,12 +1386,20 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Dark mode toggle with better UX
+  // Enhanced Dark mode toggle with analytics
   function applyDarkMode(isDark) {
     try {
       document.body.classList.toggle('dark-mode', isDark);
       localStorage.setItem('darkMode', isDark);
       elements.themeToggle.textContent = isDark ? '☀️' : '🌙';
+      
+      // Track theme change analytics
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'theme_changed', {
+          event_category: 'UI',
+          event_label: isDark ? 'dark' : 'light'
+        });
+      }
     } catch (error) {
       console.error('Error toggling dark mode:', error);
     }

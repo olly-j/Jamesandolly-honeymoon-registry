@@ -5,9 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="A heartfelt thank you from James & Oliver">
   <meta name="theme-color" content="#F9F7F3">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Thank You – James & Oliver">
+  <meta property="og:description" content="A heartfelt thank you from James & Oliver">
+  <meta property="og:image" content="https://jamesandolly.com/images/hero-bg.jpg">
+  <meta property="og:url" content="https://jamesandolly.com/thankyou.html">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Thank You – James & Oliver">
+  <meta name="twitter:description" content="A heartfelt thank you from James & Oliver">
+  
+  <!-- Security Headers -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  
   <title>Thank You – James & Oliver</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
   <link rel="icon" href="images/favicon.png" type="image/png">
+  
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_MEASUREMENT_ID', {
+      page_title: 'Thank You',
+      custom_map: {
+        'custom_parameter_1': 'thank_you_page',
+        'custom_parameter_2': 'gratitude'
+      }
+    });
+  </script>
   <style>
     :root {
       --bg-default: #F9F7F3;
@@ -93,11 +124,11 @@
   </nav>
 
   <div class="container">
-    <img src="images/monogram/JO_Circle.png" alt="Monogram" class="flourish">
+    <img src="images/monograms/JO_Circle.png" alt="Monogram" class="flourish" loading="lazy">
     <h1>Thank You So Much</h1>
     <p>Your generosity means the world to us. Whether you joined us in person or sent love from afar, your presence in our lives is felt and cherished deeply.</p>
     <p>This celebration is more than a single night — it's the start of a new chapter, surrounded by the people we love. Thank you for being a part of it.</p>
-    <img src="images/dividers/mono-divide.png" alt="Divider" class="divider">
+    <img src="images/dividers/mono-divide.png" alt="Divider" class="divider" loading="lazy">
     <p style="font-style: italic;">We can’t wait to toast you over limoncello. Until then, sending love and gratitude from us both.</p>
     <p style="margin-top:30px;font-weight:600;">With love,<br>James & Oliver</p>
   </div>
@@ -106,7 +137,7 @@
     <p>Questions or last-minute changes?<br>
     Email us at <a href="mailto:jamesandolly@googlemail.com">jamesandolly@googlemail.com</a></p>
     <div>
-      <img src="images/flourishes/lightGreen-coupe.png" alt="Cheers" class="flourish">
+      <img src="images/flourishes/lightGreen-coupe.png" alt="Cheers" class="flourish" loading="lazy">
     </div>
   </footer>
 </body>
