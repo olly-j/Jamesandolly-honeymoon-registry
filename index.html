@@ -822,12 +822,51 @@
       color: var(--clr-green); 
       font-weight: 600; 
       text-decoration: none;
-      transition: color 0.2s ease;
+      transition: all 0.3s ease;
+      padding: 12px 20px;
+      border: 2px solid var(--clr-green);
+      border-radius: 8px;
+      background: rgba(157, 167, 157, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .btn-download:hover {
+      color: var(--clr-accent);
+      border-color: var(--clr-accent);
+      background: rgba(184, 55, 91, 0.1);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(184, 55, 91, 0.2);
+    }
+    
+    .btn-download:active {
+      transform: translateY(0);
     }
     
     .btn-download img { 
       width: 24px; 
-      height: 24px; 
+      height: 24px;
+      transition: transform 0.3s ease;
+    }
+    
+    .btn-download:hover img {
+      transform: scale(1.1);
+    }
+    
+    /* Add a subtle shine effect on hover */
+    .btn-download::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .btn-download:hover::before {
+      left: 100%;
     }
     
     .btn-gift, form button { 
@@ -1236,7 +1275,7 @@
 
 
 
-    /* Calendar invite */
+    /* Calendar invite with elegant attention animation */
     #calendar-unlock {
       background: rgba(157, 167, 157, 0.1);
       border: 2px solid var(--clr-green);
@@ -1244,10 +1283,87 @@
       padding: 20px;
       margin: 40px auto;
       max-width: 360px;
+      position: relative;
+      animation: calendarGlow 3s ease-in-out infinite;
+      transition: all 0.3s ease;
+    }
+    
+    #calendar-unlock:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(157, 167, 157, 0.3);
     }
     
     #calendar-unlock .btn-download {
       font-size: 1.1em;
+      animation: downloadPulse 2s ease-in-out infinite;
+      transition: all 0.3s ease;
+    }
+    
+    #calendar-unlock .btn-download:hover {
+      animation: none;
+      transform: scale(1.05);
+    }
+    
+    /* Elegant glow animation for calendar box */
+    @keyframes calendarGlow {
+      0%, 100% {
+        box-shadow: 0 4px 15px rgba(157, 167, 157, 0.2);
+        border-color: var(--clr-green);
+      }
+      50% {
+        box-shadow: 0 6px 20px rgba(157, 167, 157, 0.4);
+        border-color: var(--clr-accent);
+      }
+    }
+    
+    /* Gentle pulse animation for download button */
+    @keyframes downloadPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.02);
+        opacity: 0.9;
+      }
+    }
+    
+    /* Sparkle effect for extra elegance */
+    #calendar-unlock::before {
+      content: '✨';
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      font-size: 20px;
+      animation: sparkle 2s ease-in-out infinite;
+      opacity: 0.7;
+    }
+    
+    @keyframes sparkle {
+      0%, 100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 0.7;
+      }
+      50% {
+        transform: scale(1.2) rotate(180deg);
+        opacity: 1;
+      }
+    }
+    
+    /* Entrance animation when calendar box appears */
+    #calendar-unlock.show {
+      animation: calendarEntrance 0.6s ease-out, calendarGlow 3s ease-in-out infinite 0.6s;
+    }
+    
+    @keyframes calendarEntrance {
+      0% {
+        opacity: 0;
+        transform: scale(0.9) translateY(10px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
 
     /* Gift link */
@@ -2751,13 +2867,22 @@ document.addEventListener('DOMContentLoaded', () => {
         this.style.display = 'none';
         elements.thankMsg.style.display = 'block';
         
-        // Show calendar link if they said Yes
-        if (attend.value === 'Yes') {
-          const calendarUnlock = document.getElementById('calendar-unlock');
-          if (calendarUnlock) {
-            calendarUnlock.style.display = 'block';
-          }
-        }
+                    // Show calendar link if they said Yes
+            if (attend.value === 'Yes') {
+              const calendarUnlock = document.getElementById('calendar-unlock');
+              if (calendarUnlock) {
+                calendarUnlock.style.display = 'block';
+                calendarUnlock.classList.add('show');
+                
+                // Track calendar unlock analytics
+                if (typeof gtag !== 'undefined') {
+                  gtag('event', 'calendar_unlocked', {
+                    event_category: 'RSVP',
+                    event_label: 'calendar_download_available'
+                  });
+                }
+              }
+            }
       } catch (error) {
         console.error('RSVP submission error:', error);
         
