@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Join James & Oliver for their wedding celebration on December 19, 2025 at Luca Restaurant, London. RSVP and gift registry included.">
   <meta name="theme-color" content="#F9F7F3">
-  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, nocache">
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
   
   <!-- Open Graph Meta Tags for Social Sharing -->
   <meta property="og:title" content="James & Oliver's Wedding Celebration">
@@ -22,6 +24,47 @@
 
   <title>James & Oliver's Wedding Celebration | December 19, 2025</title>
   
+  <!-- Structured Data for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Event",
+    "name": "James & Oliver's Wedding Celebration",
+    "description": "An intimate evening celebration of James & Oliver's marriage at Luca Restaurant, London",
+    "startDate": "2025-12-19T18:30:00+00:00",
+    "endDate": "2025-12-20T02:00:00+00:00",
+    "location": {
+      "@type": "Place",
+      "name": "Luca Restaurant",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "88 St John Street",
+        "addressLocality": "Clerkenwell",
+        "addressRegion": "London",
+        "postalCode": "EC1M 4EH",
+        "addressCountry": "GB"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.5234,
+        "longitude": -0.1023
+      }
+    },
+    "organizer": {
+      "@type": "Person",
+      "name": "James & Oliver"
+    },
+    "eventStatus": "https://schema.org/EventScheduled",
+    "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "GBP",
+      "availability": "https://schema.org/InStock"
+    }
+  }
+  </script>
+  
   <!-- Security Headers -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://formspree.io https://fonts.googleapis.com https://cdn.jsdelivr.net https://widget.cloudinary.com https://res.cloudinary.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formspree.io https://res.cloudinary.com https://www.google-analytics.com; frame-src https://www.google.com https://www.paypal.com;">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
@@ -35,6 +78,10 @@
   <link rel="preload" href="images/hero-bg.jpg" as="image" type="image/jpeg">
   <link rel="preload" href="images/favicon.png" as="image" type="image/png">
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js" as="script">
+  
+  <!-- Preload critical fonts -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtXK-F2qC0s.woff2" as="font" type="font/woff2" crossorigin>
   
   <!-- DNS prefetch for external resources -->
   <link rel="dns-prefetch" href="//fonts.googleapis.com">
@@ -67,6 +114,55 @@
         'custom_parameter_2': 'gift_contribution'
       }
     });
+    
+    // Core Web Vitals tracking
+    if ('PerformanceObserver' in window) {
+      // Largest Contentful Paint
+      const lcpObserver = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        const lastEntry = entries[entries.length - 1];
+        gtag('event', 'lcp', { value: Math.round(lastEntry.startTime) });
+      });
+      lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+      
+      // First Input Delay
+      const fidObserver = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        entries.forEach((entry) => {
+          gtag('event', 'fid', { value: Math.round(entry.processingStart - entry.startTime) });
+        });
+      });
+      fidObserver.observe({ entryTypes: ['first-input'] });
+      
+      // Cumulative Layout Shift
+      const clsObserver = new PerformanceObserver((list) => {
+        let clsValue = 0;
+        const entries = list.getEntries();
+        entries.forEach((entry) => {
+          if (!entry.hadRecentInput) {
+            clsValue += entry.value;
+          }
+        });
+        gtag('event', 'cls', { value: Math.round(clsValue * 1000) / 1000 });
+      });
+      clsObserver.observe({ entryTypes: ['layout-shift'] });
+    }
+    
+    // Error tracking
+    window.addEventListener('error', function(e) {
+      gtag('event', 'exception', {
+        description: e.message,
+        fatal: false
+      });
+    });
+    
+    // Unhandled promise rejection tracking
+    window.addEventListener('unhandledrejection', function(e) {
+      gtag('event', 'exception', {
+        description: e.reason,
+        fatal: false
+      });
+    });
   </script>
   
   <!-- Critical CSS inline for faster rendering -->
@@ -76,12 +172,30 @@
       --bg-default: #F9F7F3;
       --bg-alt: #FFFFFF;
       --clr-text: #3D4739;
-      --clr-accent: #C9486A;
+      --clr-accent: #B8375B; /* Improved contrast ratio */
       --clr-green: #9DA79D;
       --bg-timeline: #E6E1D9;
       --clr-deep-green: #778053;
       --clr-link: var(--clr-accent);
       --nav-height: 50px;
+      
+      /* Design tokens for consistency */
+      --space-xs: 0.5rem;
+      --space-sm: 1rem;
+      --space-md: 1.5rem;
+      --space-lg: 2rem;
+      --space-xl: 3rem;
+      
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      
+      --duration-fast: 150ms;
+      --duration-normal: 300ms;
+      --duration-slow: 500ms;
+      
+      --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+      --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
 
     /* Dark mode variables */
@@ -231,36 +345,316 @@
       } 
     }
 
-    /* Responsive design */
+    /* Enhanced responsive design */
     @media (max-width: 768px) {
       .site-nav {
         padding: 8px;
         gap: 8px;
+        flex-wrap: wrap;
+        justify-content: center;
       }
       
       .site-nav a, .site-nav button {
         font-size: 0.9em;
-        padding: 4px 6px;
+        padding: 8px 12px;
+        min-height: 44px;
+        min-width: 44px;
       }
       
       .hero-content {
         padding: 20px;
         margin: 0 20px;
       }
+      
+      /* Mobile timeline improvements */
+      .timeline-item {
+        flex-direction: column;
+        text-align: center;
+        margin: 30px 0;
+      }
+      
+      .icon-container {
+        margin-right: 0;
+        margin-bottom: 15px;
+        width: 100%;
+      }
+      
+      .icon-container .icon {
+        width: 60px;
+        height: 60px;
+      }
+      
+      /* Mobile form improvements */
+      .field input[type="text"],
+      .field input[type="email"] {
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: 12px;
+      }
+      
+      .radio-label {
+        padding: 15px;
+        margin-bottom: 10px;
+      }
+      
+      .btn-rsvp {
+        width: 100%;
+        padding: 16px;
+        font-size: 1.1rem;
+      }
+    }
+    
+    /* Footer styling */
+    .site-footer {
+      background: var(--bg-alt);
+      border-top: 1px solid #e0e0e0;
+      padding: 20px;
+      margin-top: 40px;
+      text-align: center;
+    }
+    
+    .footer-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .footer-content p {
+      margin: 0 0 10px;
+      color: #666;
+      font-size: 0.9em;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    
+    .footer-links a {
+      color: var(--clr-accent);
+      text-decoration: none;
+      font-size: 0.9em;
+      transition: color var(--duration-fast) var(--ease-smooth);
+    }
+    
+    .footer-links a:hover {
+      color: var(--clr-deep-green);
+    }
+    
+    /* Small mobile devices */
+    @media (max-width: 480px) {
+      .site-nav {
+        padding: 6px;
+        gap: 6px;
+      }
+      
+      .site-nav a, .site-nav button {
+        font-size: 0.8em;
+        padding: 6px 8px;
+      }
+      
+      .hero-content h1 {
+        font-size: 2.5em;
+      }
+      
+      .hero-content p {
+        font-size: 1em;
+      }
+      
+      .section, .section-alt {
+        padding: 20px 15px;
+      }
+      
+      .footer-links {
+        flex-direction: column;
+        gap: 10px;
+      }
     }
 
+    /* Enhanced form styling */
+    .form-progress {
+      width: 100%;
+      height: 4px;
+      background: #e0e0e0;
+      border-radius: 2px;
+      margin-bottom: var(--space-lg);
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      background: var(--clr-accent);
+      transition: width var(--duration-normal) var(--ease-smooth);
+    }
+    
+    .field {
+      margin-bottom: var(--space-lg);
+    }
+    
+    .field label {
+      display: block;
+      margin-bottom: var(--space-xs);
+      font-weight: 600;
+      color: var(--clr-text);
+    }
+    
+    .field input[type="text"],
+    .field input[type="email"] {
+      width: 100%;
+      padding: var(--space-sm);
+      border: 2px solid #e0e0e0;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      transition: border-color var(--duration-fast) var(--ease-smooth),
+                  transform var(--duration-fast) var(--ease-smooth);
+    }
+    
+    .field input:focus {
+      border-color: var(--clr-accent);
+      transform: translateY(-1px);
+      outline: none;
+    }
+    
+    .field input.valid {
+      border-color: var(--clr-green);
+    }
+    
+    .field input.invalid {
+      border-color: #e74c3c;
+    }
+    
+    .help-text {
+      font-size: 0.875rem;
+      color: #666;
+      margin-top: var(--space-xs);
+    }
+    
+    .error-message {
+      color: #e74c3c;
+      font-size: 0.875rem;
+      margin-top: var(--space-xs);
+      display: none;
+    }
+    
+    .error-message.show {
+      display: block;
+      animation: shake 0.5s var(--ease-bounce);
+    }
+    
+    .radio-label {
+      display: flex;
+      align-items: center;
+      margin-bottom: var(--space-sm);
+      cursor: pointer;
+      padding: var(--space-sm);
+      border-radius: var(--radius-md);
+      transition: background-color var(--duration-fast) var(--ease-smooth);
+    }
+    
+    .radio-label:hover {
+      background-color: rgba(157, 167, 157, 0.1);
+    }
+    
+    .radio-custom {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #e0e0e0;
+      border-radius: 50%;
+      margin-right: var(--space-sm);
+      position: relative;
+      transition: border-color var(--duration-fast) var(--ease-smooth);
+    }
+    
+    .radio-label input:checked + .radio-custom {
+      border-color: var(--clr-accent);
+    }
+    
+    .radio-label input:checked + .radio-custom::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 8px;
+      height: 8px;
+      background: var(--clr-accent);
+      border-radius: 50%;
+    }
+    
+    .radio-label input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+    
+    /* Button enhancements */
+    .btn-rsvp {
+      background: var(--clr-accent);
+      color: white;
+      border: none;
+      padding: var(--space-md) var(--space-xl);
+      border-radius: var(--radius-md);
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--duration-fast) var(--ease-smooth);
+      min-height: 48px;
+      min-width: 120px;
+    }
+    
+    .btn-rsvp:hover {
+      background: var(--clr-deep-green);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    
+    .btn-rsvp:active {
+      transform: translateY(0);
+    }
+    
+    .btn-rsvp.loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+    
+    /* Animations */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
     /* Loading states */
     .loading {
       opacity: 0.6;
       pointer-events: none;
     }
 
-    /* Focus styles for accessibility */
-    button:focus,
-    input:focus,
-    a:focus {
+    /* Enhanced focus styles for accessibility */
+    button:focus-visible,
+    input:focus-visible,
+    a:focus-visible,
+    .site-nav button:focus-visible,
+    .site-nav a:focus-visible {
       outline: 2px solid var(--clr-accent);
       outline-offset: 2px;
+      border-radius: var(--radius-sm);
+    }
+    
+    /* Improved touch targets for mobile */
+    .site-nav a, .site-nav button {
+      min-height: 44px;
+      min-width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Enhanced hover states with motion */
+    .site-nav a:hover, .site-nav button:hover {
+      color: var(--clr-accent);
+      transform: translateY(-1px);
+      transition: color var(--duration-fast) var(--ease-smooth),
+                  transform var(--duration-fast) var(--ease-smooth);
     }
   </style>
   
@@ -1296,9 +1690,15 @@
     method="POST"
     style="max-width:500px;margin:0 auto;"
     novalidate
+    data-validate
   >
+    <!-- Progress indicator -->
+    <div class="form-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+      <div class="progress-bar" style="width: 0%"></div>
+    </div>
+    
     <!-- name -->
-    <div class="field">
+    <div class="field" data-validate>
       <label for="rsvp-name">Name <span aria-label="required">*</span></label>
       <input 
         id="rsvp-name" 
@@ -1309,18 +1709,31 @@
         minlength="2"
         maxlength="100"
         pattern="[A-Za-z\s\-']{2,100}"
-        aria-describedby="name-error"
+        aria-describedby="name-error name-help"
+        autocomplete="name"
       >
+      <div id="name-help" class="help-text">Please enter your full name as it appears on your invitation</div>
       <div id="name-error" class="error-message" role="alert" aria-live="polite"></div>
     </div>
+    
     <!-- attend -->
-    <div class="field">
-      <label>Will you attend? <span aria-label="required">*</span></label>
-      <div class="radios" role="radiogroup" aria-describedby="attend-error">
-        <label><input type="radio" name="attend" value="Yes" required> Yes</label>
-        <label><input type="radio" name="attend" value="No"> No</label>
-      </div>
-      <div id="attend-error" class="error-message" role="alert" aria-live="polite"></div>
+    <div class="field" data-validate>
+      <fieldset>
+        <legend>Will you attend? <span aria-label="required">*</span></legend>
+        <div class="radios" role="radiogroup" aria-describedby="attend-error">
+          <label class="radio-label">
+            <input type="radio" name="attend" value="Yes" required aria-describedby="attend-error">
+            <span class="radio-custom"></span>
+            Yes, I'll be there!
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="attend" value="No" aria-describedby="attend-error">
+            <span class="radio-custom"></span>
+            Sadly, I can't make it
+          </label>
+        </div>
+        <div id="attend-error" class="error-message" role="alert" aria-live="polite"></div>
+      </fieldset>
     </div>
     <!-- dietary -->
     <div class="field">
@@ -1376,33 +1789,294 @@
 </div>
 
 <script>
-  // hijack the form submission so we can show a message instead of redirecting
-  document.getElementById('rsvp-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const form = this;
-
-    // send via XHR
-    fetch(form.action, {
-      method: form.method,
-      body: new FormData(form),
-      headers: { 'Accept': 'application/json' }
-    }).then(response => {
-     if (response.ok) {
-  form.style.display = 'none';
-  document.getElementById('rsvp-confirmation').style.display = 'block';
-  // show calendar link if they said Yes
-  const willAttend = form.querySelector('input[name="attend"]:checked').value;
-  if (willAttend === 'Yes') {
-    document.getElementById('calendar-unlock').style.display = 'block';
-  }
-} else {
-        alert('Oops! There was a problem submitting your RSVP.');
+  // Enhanced RSVP Form Handler with validation and analytics
+  class RSVPForm {
+    constructor(formElement) {
+      this.form = formElement;
+      this.fields = this.form.querySelectorAll('[data-validate]');
+      this.progressBar = this.form.querySelector('.progress-bar');
+      this.submitButton = this.form.querySelector('.btn-rsvp');
+      this.init();
+    }
+    
+    init() {
+      this.bindEvents();
+      this.setupValidation();
+      this.trackFormStart();
+    }
+    
+    bindEvents() {
+      this.form.addEventListener('submit', this.handleSubmit.bind(this));
+      this.fields.forEach(field => {
+        const inputs = field.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+          input.addEventListener('blur', this.validateField.bind(this, input));
+          input.addEventListener('input', this.updateProgress.bind(this));
+        });
+      });
+    }
+    
+    setupValidation() {
+      this.validationRules = {
+        name: {
+          required: true,
+          minLength: 2,
+          maxLength: 100,
+          pattern: /^[A-Za-z\s\-']{2,100}$/
+        },
+        attend: {
+          required: true
+        }
+      };
+    }
+    
+    validateField(input) {
+      const field = input.closest('.field');
+      const errorElement = field.querySelector('.error-message');
+      const value = DOMPurify.sanitize(input.value.trim());
+      
+      // Clear previous states
+      input.classList.remove('valid', 'invalid');
+      errorElement.classList.remove('show');
+      errorElement.textContent = '';
+      
+      // Get validation rules
+      const fieldName = input.name;
+      const rules = this.validationRules[fieldName];
+      
+      if (!rules) return true;
+      
+      let isValid = true;
+      let errorMessage = '';
+      
+      // Required validation
+      if (rules.required && !value) {
+        isValid = false;
+        errorMessage = 'This field is required';
       }
-    }).catch(() => {
-      alert('Oops! There was a problem submitting your RSVP.');
-    });
+      
+      // Length validation
+      if (value && rules.minLength && value.length < rules.minLength) {
+        isValid = false;
+        errorMessage = `Must be at least ${rules.minLength} characters`;
+      }
+      
+      if (value && rules.maxLength && value.length > rules.maxLength) {
+        isValid = false;
+        errorMessage = `Must be no more than ${rules.maxLength} characters`;
+      }
+      
+      // Pattern validation
+      if (value && rules.pattern && !rules.pattern.test(value)) {
+        isValid = false;
+        errorMessage = 'Please enter a valid name';
+      }
+      
+      // Update UI
+      if (isValid) {
+        input.classList.add('valid');
+      } else {
+        input.classList.add('invalid');
+        errorElement.textContent = errorMessage;
+        errorElement.classList.add('show');
+        this.trackFormError(fieldName, errorMessage);
+      }
+      
+      return isValid;
+    }
+    
+    updateProgress() {
+      const totalFields = this.fields.length;
+      let completedFields = 0;
+      
+      this.fields.forEach(field => {
+        const inputs = field.querySelectorAll('input, textarea');
+        const hasValue = Array.from(inputs).some(input => {
+          if (input.type === 'radio') {
+            return input.checked;
+          }
+          return input.value.trim().length > 0;
+        });
+        
+        if (hasValue) completedFields++;
+      });
+      
+      const progress = (completedFields / totalFields) * 100;
+      this.progressBar.style.width = `${progress}%`;
+      this.progressBar.setAttribute('aria-valuenow', progress);
+    }
+    
+    async handleSubmit(e) {
+      e.preventDefault();
+      
+      // Validate all fields
+      const inputs = this.form.querySelectorAll('input, textarea');
+      let allValid = true;
+      
+      inputs.forEach(input => {
+        if (!this.validateField(input)) {
+          allValid = false;
+        }
+      });
+      
+      if (!allValid) {
+        this.trackFormError('submit', 'Validation failed');
+        return;
+      }
+      
+      // Show loading state
+      this.submitButton.classList.add('loading');
+      this.submitButton.querySelector('.btn-text').style.display = 'none';
+      this.submitButton.querySelector('.btn-loading').style.display = 'inline';
+      
+      try {
+        const formData = new FormData(this.form);
+        const response = await fetch(this.form.action, {
+          method: this.form.method,
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        });
+        
+        if (response.ok) {
+          this.handleSuccess();
+        } else {
+          throw new Error('Submission failed');
+        }
+      } catch (error) {
+        this.handleError(error);
+      }
+    }
+    
+    handleSuccess() {
+      this.form.style.display = 'none';
+      document.getElementById('rsvp-confirmation').style.display = 'block';
+      
+      // Show calendar link if they said Yes
+      const willAttend = this.form.querySelector('input[name="attend"]:checked').value;
+      if (willAttend === 'Yes') {
+        document.getElementById('calendar-unlock').style.display = 'block';
+      }
+      
+      this.trackFormSuccess(willAttend);
+    }
+    
+    handleError(error) {
+      this.submitButton.classList.remove('loading');
+      this.submitButton.querySelector('.btn-text').style.display = 'inline';
+      this.submitButton.querySelector('.btn-loading').style.display = 'none';
+      
+      alert('Something went wrong. Please try again or contact us directly.');
+      this.trackFormError('submit', error.message);
+    }
+    
+    // Analytics tracking
+    trackFormStart() {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'begin_checkout', {
+          event_category: 'rsvp',
+          event_label: 'form_started'
+        });
+      }
+    }
+    
+    trackFormSuccess(attendance) {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'purchase', {
+          event_category: 'rsvp',
+          event_label: 'form_completed',
+          value: 1,
+          custom_parameter_1: attendance
+        });
+      }
+    }
+    
+    trackFormError(field, error) {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'exception', {
+          event_category: 'rsvp',
+          event_label: `error_${field}`,
+          description: error
+        });
+      }
+    }
+  }
+  
+       // Initialize form when DOM is ready
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('rsvp-form');
+    if (form) {
+      new RSVPForm(form);
+    }
+    
+    // Initialize performance monitoring
+    initializePerformanceMonitoring();
+    
+    // Initialize error tracking
+    initializeErrorTracking();
   });
-</script>
+  
+  // Performance monitoring
+  function initializePerformanceMonitoring() {
+    // Track page load time
+    window.addEventListener('load', function() {
+      const loadTime = performance.now();
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'timing_complete', {
+          name: 'load',
+          value: Math.round(loadTime)
+        });
+      }
+    });
+    
+    // Track resource loading
+    if ('PerformanceObserver' in window) {
+      const resourceObserver = new PerformanceObserver((list) => {
+        list.getEntries().forEach((entry) => {
+          if (entry.initiatorType === 'img' && entry.duration > 3000) {
+            gtag('event', 'slow_resource', {
+              resource_name: entry.name,
+              duration: Math.round(entry.duration)
+            });
+          }
+        });
+      });
+      resourceObserver.observe({ entryTypes: ['resource'] });
+    }
+  }
+  
+  // Error tracking
+  function initializeErrorTracking() {
+    // Track JavaScript errors
+    window.addEventListener('error', function(e) {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'exception', {
+          description: `${e.message} at ${e.filename}:${e.lineno}`,
+          fatal: false
+        });
+      }
+    });
+    
+    // Track unhandled promise rejections
+    window.addEventListener('unhandledrejection', function(e) {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'exception', {
+          description: e.reason,
+          fatal: false
+        });
+      }
+    });
+    
+    // Track network errors
+    window.addEventListener('offline', function() {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'exception', {
+          description: 'User went offline',
+          fatal: false
+        });
+      }
+    });
+  }
+  </script>
 
 <style>
   .rsvp-card {
@@ -2254,6 +2928,16 @@ window.addEventListener('load', () => {
   </div>
 </div>
 </div>
+
+<!-- Footer -->
+<footer class="site-footer">
+  <div class="footer-content">
+    <p>&copy; 2025 James & Oliver. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="privacy.html" aria-label="View privacy policy">Privacy Policy</a>
+    </div>
+  </div>
+</footer>
 
 </body>
 </html>

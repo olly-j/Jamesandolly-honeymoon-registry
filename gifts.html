@@ -155,10 +155,149 @@
       transform: scaleY(-1);
     }
 
+    /* Gift options styling */
+    .gift-options {
+      margin: 30px 0;
+    }
+    
+    .gift-options h3 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--clr-deep-green);
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .amount-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .amount-option {
+      background: white;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .amount-option:hover {
+      border-color: var(--clr-green);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .amount-option.selected {
+      border-color: var(--clr-accent);
+      background: rgba(185, 55, 91, 0.05);
+    }
+    
+    .amount-option .amount {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--clr-text);
+      display: block;
+    }
+    
+    .amount-option .description {
+      font-size: 0.875rem;
+      color: #666;
+      margin-top: 5px;
+      display: block;
+    }
+    
+    .amount-option.custom {
+      border-style: dashed;
+    }
+    
+    #custom-amount {
+      text-align: center;
+    }
+    
+    #custom-amount label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+    
+    #custom-amount-input {
+      width: 120px;
+      padding: 8px 12px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 1rem;
+    }
+    
+    #custom-amount-input:focus {
+      border-color: var(--clr-accent);
+      outline: none;
+    }
+    
+    /* Footer styling */
+    .site-footer {
+      background: var(--bg-alt);
+      border-top: 1px solid #e0e0e0;
+      padding: 20px;
+      margin-top: 40px;
+      text-align: center;
+    }
+    
+    .footer-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .footer-content p {
+      margin: 0 0 10px;
+      color: #666;
+      font-size: 0.9em;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    
+    .footer-links a {
+      color: var(--clr-accent);
+      text-decoration: none;
+      font-size: 0.9em;
+      transition: color 0.2s ease;
+    }
+    
+    .footer-links a:hover {
+      color: var(--clr-deep-green);
+    }
+    
     /* Responsive flourishes */
     @media (max-width: 768px) {
       .divider img {
         max-width: 80%;
+      }
+      
+      .amount-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      
+      .amount-option {
+        min-height: 70px;
+        padding: 12px;
+      }
+      
+      .footer-links {
+        flex-direction: column;
+        gap: 10px;
       }
     }
   </style>
@@ -185,13 +324,43 @@
     <div class="divider">
       <img src="images/dividers/wave.png" alt="Wave Divider" loading="lazy" />
     </div>
-<div style="text-align: center; margin-top: 30px;">
-  <form action="https://www.paypal.com/donate" method="post" target="_blank" style="display: inline-block;">
-    <input type="hidden" name="hosted_button_id" value="K6FMQWUHHCQ6E" />
-    <input type="hidden" name="currency_code" value="GBP" />
-    <input type="submit" value="Give a Honeymoon Gift" class="gift-button" />
-  </form>
-</div>
+    
+    <!-- Gift contribution section with suggested amounts -->
+    <div class="gift-options">
+      <h3>Suggested Contribution Amounts</h3>
+      <div class="amount-grid">
+        <button class="amount-option" data-amount="25" onclick="selectAmount(25)">
+          <span class="amount">£25</span>
+          <span class="description">A lovely dinner</span>
+        </button>
+        <button class="amount-option selected" data-amount="50" onclick="selectAmount(50)">
+          <span class="amount">£50</span>
+          <span class="description">A special experience</span>
+        </button>
+        <button class="amount-option" data-amount="100" onclick="selectAmount(100)">
+          <span class="amount">£100</span>
+          <span class="description">A memorable adventure</span>
+        </button>
+        <button class="amount-option custom" onclick="showCustomAmount()">
+          <span class="amount">Custom</span>
+          <span class="description">Your choice</span>
+        </button>
+      </div>
+      
+      <div id="custom-amount" style="display: none; margin-top: 20px;">
+        <label for="custom-amount-input">Enter amount (£):</label>
+        <input type="number" id="custom-amount-input" min="1" max="1000" placeholder="Enter amount">
+      </div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 30px;">
+      <form id="gift-form" action="https://www.paypal.com/donate" method="post" target="_blank" style="display: inline-block;">
+        <input type="hidden" name="hosted_button_id" value="K6FMQWUHHCQ6E" />
+        <input type="hidden" name="currency_code" value="GBP" />
+        <input type="hidden" name="amount" id="gift-amount" value="50" />
+        <input type="submit" value="Give a Honeymoon Gift" class="gift-button" id="gift-submit" />
+      </form>
+    </div>
 <div class="divider mirrored">
   <img src="images/dividers/wave.png" alt="Wave Divider" loading="lazy" />
 </div>
@@ -202,8 +371,94 @@
     </p>
   </div>
 
-  <footer>
-    With love, James & Oliver
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p>With love, James & Oliver</p>
+      <div class="footer-links">
+        <a href="privacy.html" aria-label="View privacy policy">Privacy Policy</a>
+      </div>
+    </div>
   </footer>
+  
+  <script>
+    // Gift amount selection functionality
+    let selectedAmount = 50;
+    
+    function selectAmount(amount) {
+      selectedAmount = amount;
+      
+      // Update UI
+      document.querySelectorAll('.amount-option').forEach(option => {
+        option.classList.remove('selected');
+      });
+      
+      const selectedOption = document.querySelector(`[data-amount="${amount}"]`);
+      if (selectedOption) {
+        selectedOption.classList.add('selected');
+      }
+      
+      // Update form
+      document.getElementById('gift-amount').value = amount;
+      
+      // Hide custom amount input
+      document.getElementById('custom-amount').style.display = 'none';
+      
+      // Track selection
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'select_content', {
+          event_category: 'gift',
+          event_label: `amount_${amount}`,
+          value: amount
+        });
+      }
+    }
+    
+    function showCustomAmount() {
+      // Update UI
+      document.querySelectorAll('.amount-option').forEach(option => {
+        option.classList.remove('selected');
+      });
+      
+      // Show custom input
+      document.getElementById('custom-amount').style.display = 'block';
+      document.getElementById('custom-amount-input').focus();
+      
+      // Track custom selection
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'select_content', {
+          event_category: 'gift',
+          event_label: 'custom_amount'
+        });
+      }
+    }
+    
+    // Handle custom amount input
+    document.getElementById('custom-amount-input').addEventListener('input', function(e) {
+      const amount = parseInt(e.target.value);
+      if (amount > 0) {
+        selectedAmount = amount;
+        document.getElementById('gift-amount').value = amount;
+      }
+    });
+    
+    // Track gift form submission
+    document.getElementById('gift-form').addEventListener('submit', function(e) {
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'begin_checkout', {
+          event_category: 'gift',
+          event_label: 'gift_submitted',
+          value: selectedAmount
+        });
+      }
+    });
+    
+    // Track page view
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'page_view', {
+        page_title: 'Gift Registry',
+        page_location: window.location.href
+      });
+    }
+  </script>
 </body>
 </html>
