@@ -692,17 +692,206 @@
       background: var(--clr-deep-green);
     }
 
+    /* Tab Navigation Styling */
+    .tab-navigation {
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      margin: 30px 0;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--clr-green);
+    }
+    
+    .tab-button {
+      flex: 1;
+      padding: 12px 20px;
+      background: var(--bg-alt);
+      border: none;
+      cursor: pointer;
+      font-family: 'Playfair Display', serif;
+      font-size: 1em;
+      color: var(--clr-text);
+      transition: all 0.3s ease;
+      border-right: 1px solid var(--clr-green);
+    }
+    
+    .tab-button:last-child {
+      border-right: none;
+    }
+    
+    .tab-button:hover {
+      background: rgba(157, 167, 157, 0.1);
+    }
+    
+    .tab-button.active {
+      background: var(--clr-green);
+      color: white;
+    }
+    
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .tab-content.active {
+      display: block;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* FAQ Section Styling */
+    .faq-section {
+      margin: 30px 0;
+    }
+    
+    .faq-container {
+      max-width: 100%;
+    }
+    
+    .faq-item {
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .faq-item:hover {
+      border-color: var(--clr-green);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: rgba(157, 167, 157, 0.05);
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--clr-text);
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    
+    .faq-question:hover {
+      background: rgba(157, 167, 157, 0.1);
+    }
+    
+    .faq-icon {
+      font-size: 1.2em;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+    
+    .faq-arrow {
+      font-size: 0.8em;
+      color: var(--clr-green);
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+    
+    .faq-item[open] .faq-arrow {
+      transform: rotate(180deg);
+    }
+    
+    .faq-answer {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .faq-item[open] .faq-answer {
+      padding: 16px 20px;
+      max-height: 200px;
+      background: rgba(255, 255, 255, 0.5);
+    }
+    
+    .faq-answer p {
+      margin: 0;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    /* Enhanced Timeline Responsive Design */
+    .timeline-item {
+      display: flex;
+      align-items: flex-start;
+      margin: 20px 0;
+    }
+    
+    .icon-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-right: 15px;
+      width: 80px;
+      flex-shrink: 0;
+    }
+    
+    .icon-container .icon {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+    }
+    
+    .timeline-arrow {
+      margin-top: 8px;
+    }
+    
+    .timeline-arrow img {
+      width: 80px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      object-fit: contain;
+    }
+
     /* Responsive improvements */
     @media (max-width: 768px) {
       .timeline-item {
         flex-direction: column;
         text-align: center;
+        margin: 30px 0;
       }
       
       .icon-container {
         margin-right: 0;
         margin-bottom: 15px;
         width: 100%;
+        max-width: 120px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      .icon-container .icon {
+        width: 100%;
+        height: auto;
+        max-width: 80px;
+        max-height: 80px;
+      }
+      
+      .timeline-arrow img {
+        width: 60px;
+        max-width: 100%;
+      }
+      
+      .details {
+        text-align: center;
+        padding: 0 10px;
+      }
+      
+      .time-label {
+        font-size: 1.1em;
+      }
+      
+      .time-title {
+        font-size: 1.3em;
       }
       
       .info-card {
@@ -720,7 +909,92 @@
         padding: 30px 20px;
       }
       
-
+      /* Tab navigation mobile improvements */
+      .tab-navigation {
+        margin: 20px 0;
+      }
+      
+      .tab-button {
+        padding: 10px 16px;
+        font-size: 0.9em;
+      }
+      
+      /* FAQ mobile improvements */
+      .faq-question {
+        padding: 14px 16px;
+        font-size: 0.95em;
+      }
+      
+      .faq-icon {
+        font-size: 1.1em;
+        margin-right: 10px;
+      }
+      
+      .faq-item[open] .faq-answer {
+        padding: 14px 16px;
+      }
+      
+      /* Navigation improvements */
+      .site-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 8px;
+      }
+      
+      .site-nav a, .site-nav button {
+        font-size: 0.85em;
+        padding: 6px 8px;
+        white-space: nowrap;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .timeline-item {
+        margin: 25px 0;
+      }
+      
+      .icon-container {
+        max-width: 70px;
+      }
+      
+      .icon-container .icon {
+        max-width: 70px;
+        max-height: 70px;
+      }
+      
+      .timeline-arrow img {
+        width: 50px;
+      }
+      
+      .time-label {
+        font-size: 1em;
+      }
+      
+      .time-title {
+        font-size: 1.2em;
+      }
+      
+      .faq-question {
+        padding: 12px 14px;
+        font-size: 0.9em;
+      }
+      
+      .site-nav {
+        gap: 6px;
+        padding: 10px 6px;
+      }
+      
+      .site-nav a, .site-nav button {
+        font-size: 0.8em;
+        padding: 5px 6px;
+      }
+      
+      /* Tab navigation for very small screens */
+      .tab-button {
+        padding: 8px 12px;
+        font-size: 0.85em;
+      }
     }
   </style>
 </head>
@@ -739,7 +1013,7 @@
     <a href="#invite" aria-label="Go to invitation section">Invite</a>
     <a href="#timeline" aria-label="Go to timeline section">Timeline</a>
     <a href="#dress-code" aria-label="Go to dress code section">Dress Code</a>
-    <a href="#info" aria-label="Go to information section">Info</a>
+    <a href="#info" aria-label="Go to information section">Info & FAQ</a>
     <a href="#rsvp" aria-label="Go to RSVP section">RSVP</a>
     <!-- External pages -->
     <a href="photos.html" aria-label="View photo gallery">Photos</a>
@@ -771,7 +1045,7 @@
           From 6:30 PM until late<br>
           <span class="hero-address"><a href="https://maps.app.goo.gl/Zggn3QHdpq2Qa5L39" target="_blank">Luca Restaurant<br>88 St John Street, Clerkenwell, London EC1M 4EH</a></span></strong><br><br>
           An intimate dinner and celebration with our favourite people.<br>
-          We’re so glad to celebrate together in this beautiful space.
+          We're so glad to celebrate together in this beautiful space.
         </p>
         <div style="text-align:center;margin:20px 0;">
   <img src="images/dividers/mono-divide.png" alt="Monogram Divider" style="max-width:100%;max-height:80px;" loading="lazy">
@@ -867,56 +1141,137 @@
  <!-- What You Need to Know -->
 <div class="info-card" id="info" style="animation:fadeInUp 1s forwards 1.4s;">
   <h3>What You Need to Know</h3>
-  <ul class="details-list">
-    <li><strong>Arrival:</strong> 6:30 PM sharp</li>
+  
+  <!-- Tab Navigation -->
+  <div class="tab-navigation">
+    <button class="tab-button active" data-tab="need-to-know">Need to Know</button>
+    <button class="tab-button" data-tab="faq">FAQ</button>
+  </div>
+  
+  <!-- Need to Know Tab Content -->
+  <div class="tab-content active" id="need-to-know">
+    <ul class="details-list">
+      <li><strong>Arrival:</strong> 6:30 PM sharp</li>
 
-    <li><strong>Closest Tube Stations:</strong>
-      <ul>
-        <li><a href="https://maps.app.goo.gl/SoAfSC8z6QdkuPBx5" target="_blank">Farringdon Station (5-min walk)</a></li>
-        <li><a href="https://maps.app.goo.gl/3xkQBGkU94wVuQVL7" target="_blank">Farringdon Elizabeth Line (5-min walk)</a></li>
-        <li><a href="https://maps.app.goo.gl/o3pYfyhfUkENzb3K6" target="_blank">Liverpool Street Station (20-min walk)</a></li>
-      </ul>
-    </li>
+      <li><strong>Closest Tube Stations:</strong>
+        <ul>
+          <li><a href="https://maps.app.goo.gl/SoAfSC8z6QdkuPBx5" target="_blank">Farringdon Station (5-min walk)</a></li>
+          <li><a href="https://maps.app.goo.gl/3xkQBGkU94wVuQVL7" target="_blank">Farringdon Elizabeth Line (5-min walk)</a></li>
+          <li><a href="https://maps.app.goo.gl/o3pYfyhfUkENzb3K6" target="_blank">Liverpool Street Station (20-min walk)</a></li>
+        </ul>
+      </li>
 
-    <li><strong>Transport:</strong>
-      <ul>
-        <li>
-          Luca is a 5-minute walk from 
-          <a href="https://maps.app.goo.gl/SoAfSC8z6QdkuPBx5" target="_blank">Farringdon Station</a> 
-          (Elizabeth Line, Thameslink, Circle, Hammersmith & City, Metropolitan)—all run late on Fridays.
-        </li>
-        <li>For real-time routes, use <a href="https://citymapper.com" target="_blank">Citymapper</a>.</li>
-        <li>Taxis are less common after dark, but <a href="https://www.uber.com" target="_blank">Uber</a> and <a href="https://bolt.eu" target="_blank">Bolt</a> operate reliably.</li>
-        <li>The <a href="https://tfl.gov.uk/modes/night-tube" target="_blank">Night Tube</a> and Elizabeth Line make getting home smooth.</li>
-      </ul>
-    </li>
+      <li><strong>Transport:</strong>
+        <ul>
+          <li>
+            Luca is a 5-minute walk from 
+            <a href="https://maps.app.goo.gl/SoAfSC8z6QdkuPBx5" target="_blank">Farringdon Station</a> 
+            (Elizabeth Line, Thameslink, Circle, Hammersmith & City, Metropolitan)—all run late on Fridays.
+          </li>
+          <li>For real-time routes, use <a href="https://citymapper.com" target="_blank">Citymapper</a>.</li>
+          <li>Taxis are less common after dark, but <a href="https://www.uber.com" target="_blank">Uber</a> and <a href="https://bolt.eu" target="_blank">Bolt</a> operate reliably.</li>
+          <li>The <a href="https://tfl.gov.uk/modes/night-tube" target="_blank">Night Tube</a> and Elizabeth Line make getting home smooth.</li>
+        </ul>
+      </li>
 
-    <li><strong>Nearby Hotels:</strong>
-      <ul>
-        <li>
-          <a href="https://www.yotel.com/en/hotels/yotel-london-city" target="_blank">YOTEL London City</a><br>
-          <i>0.1 mi (3 min walk)</i><br>
-          sleek tech-driven pod rooms with skyline views
-        </li>
-        <li>
-          <a href="https://www.ihg.com/hotelindigo/hotels/us/en/london/lonrc/hoteldetail" target="_blank">Hotel Indigo London Clerkenwell by IHG</a><br>
-          <i>0.2 mi (6 min walk)<br></i>
-          boutique design reflecting local art and heritage
-        </li>
-        <li>
-          <a href="https://www.premierinn.com/gb/en/hotels/england/greater-london/london/london-farringdon.html" target="_blank">Premier Inn London Farringdon (Smithfield)</a><br>
-          <i>0.3 mi (8 min walk)<br></i>
-          reliable budget-friendly comfort
-        </li>
-      </ul>
-    </li>
+      <li><strong>Nearby Hotels:</strong>
+        <ul>
+          <li>
+            <a href="https://www.yotel.com/en/hotels/yotel-london-city" target="_blank">YOTEL London City</a><br>
+            <i>0.1 mi (3 min walk)</i><br>
+            sleek tech-driven pod rooms with skyline views
+          </li>
+          <li>
+            <a href="https://www.ihg.com/hotelindigo/hotels/us/en/london/lonrc/hoteldetail" target="_blank">Hotel Indigo London Clerkenwell by IHG</a><br>
+            <i>0.2 mi (6 min walk)<br></i>
+            boutique design reflecting local art and heritage
+          </li>
+          <li>
+            <a href="https://www.premierinn.com/gb/en/hotels/england/greater-london/london/london-farringdon.html" target="_blank">Premier Inn London Farringdon (Smithfield)</a><br>
+            <i>0.3 mi (8 min walk)<br></i>
+            reliable budget-friendly comfort
+          </li>
+        </ul>
+      </li>
 
-    <li>
-      <strong>Contact:</strong>
-      Questions or last-minute changes? Drop us a note at 
-      <a href="mailto:jamesandolly@googlemail.com">jamesandolly@googlemail.com</a>
-    </li>
-  </ul>
+      <li>
+        <strong>Contact:</strong>
+        Questions or last-minute changes? Drop us a note at 
+        <a href="mailto:jamesandolly@googlemail.com">jamesandolly@googlemail.com</a>
+      </li>
+    </ul>
+  </div>
+  
+  <!-- FAQ Tab Content -->
+  <div class="tab-content" id="faq">
+    <div class="faq-container">
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span class="faq-icon">👔</span>
+          What's the dress code?
+          <span class="faq-arrow">▼</span>
+        </summary>
+        <div class="faq-answer">
+          <p>Cocktail attire, winter-friendly. Think relaxed elegance — no need for suits or gowns, just your favourite eveningwear. (Feel free to layer!)</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span class="faq-icon">👥</span>
+          Can I bring a plus-one?
+          <span class="faq-arrow">▼</span>
+        </summary>
+        <div class="faq-answer">
+          <p>We're keeping things intimate, so invites are just for those named. Thank you for understanding.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span class="faq-icon">🥗</span>
+          What if I have dietary requirements?
+          <span class="faq-arrow">▼</span>
+        </summary>
+        <div class="faq-answer">
+          <p>You'll be able to share any dietary needs when you RSVP on the website. Luca's team will take excellent care of you.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span class="faq-icon">🍷</span>
+          Is there an open bar?
+          <span class="faq-arrow">▼</span>
+        </summary>
+        <div class="faq-answer">
+          <p>Wines will be served with dinner. A cash/card bar will be open afterwards for anyone who'd like something more.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span class="faq-icon">⏰</span>
+          When should I arrive?
+          <span class="faq-arrow">▼</span>
+        </summary>
+        <div class="faq-answer">
+          <p>Please arrive by 6:30 PM so we can start the evening together, glass in hand.</p>
+        </div>
+      </details>
+
+      <details class="faq-item">
+        <summary class="faq-question">
+          <span class="faq-icon">💃</span>
+          Will there be dancing or music later?
+          <span class="faq-arrow">▼</span>
+        </summary>
+        <div class="faq-answer">
+          <p>The evening will stay relaxed — more conversation than club.</p>
+        </div>
+      </details>
+    </div>
+  </div>
 </div>
 <div style="text-align:center;margin:0px 0;">
   <img src="images/dividers/wave.png" alt="Gold Wave Divider" style="max-width:60%;" loading="lazy">
@@ -929,7 +1284,7 @@
   <img src="images/flourishes/glass-cheers.png" alt="Cheers Icon"
        style="max-width:100px; opacity:1;" loading="lazy">
 </div>
-  <h2>Kindly Reply</h2>
+  <h2>RSVP</h2>
   <p class="rsvp-intro">
     This invitation is just for you — we are keeping the celebration small and personal.<br>
     Please RSVP by: <strong>14 November 2025</strong>
@@ -1007,13 +1362,13 @@
 
   <!-- Inline confirmation message, hidden until JS flips it in -->
   <div id="rsvp-confirmation" style="display:none; margin-top:24px; text-align:center; font-style:italic; color:var(--clr-text);">
-    Thank you — we can’t wait to see you there. You’ll receive an email confirmation shortly.
+    Thank you — we can't wait to see you there. You'll receive an email confirmation shortly.
   </div>
 </div>
 <!-- Calendar invite (hidden until RSVP=yes) -->
 <div id="calendar-unlock" style="display:none; text-align:center;">
   <p style="margin-bottom:12px; font-family:'Playfair Display',serif; color:var(--clr-text);">
-    🎉 You’re all set! <br>Add this event to your calendar:
+    🎉 You're all set! <br>Add this event to your calendar:
   </p>
   <a href="images/JamesAndOllyWeddingInnvite.ics" download class="btn-download">
     <img src="images/download-icon.png" alt="Calendar Icon" loading="lazy">Add to Your Calendar
@@ -1131,7 +1486,7 @@
        style="max-height:80px; opacity:1;" loading="lazy">
 </div>
   <h2 style="font-family:'Playfair Display',serif;color:var(--clr-text);">Your Presence Is Enough</h2>
-<p style="color:#555;line-height:1.6;">But if you’d like to mark the moment, we’re saving for our honeymoon and would be deeply grateful for your help on our journey.</p>
+<p style="color:#555;line-height:1.6;">But if you'd like to mark the moment, we're saving for our honeymoon and would be deeply grateful for your help on our journey.</p>
 <p style="margin-top:20px;">
 <a href="gifts.html" class="btn-gift-link">
   Open Gifts & Honeymoon Fund
@@ -1200,9 +1555,29 @@
       </div>
     </section>
 
+    <!-- Back to Top Button -->
+    <button id="back-to-top" aria-label="Back to top" style="
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--clr-green);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      z-index: 1000;
+      font-size: 1.2em;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    ">↑</button>
+
     <!-- Footer -->
     <footer style="text-align:center;padding:40px;background:var(--clr-text);color:var(--bg-default);font-size:0.95em;">
-      We’re so glad you’ll be with us. If you have any questions,<br> email us at <a href="mailto:jamesandolly@googlemail.com" style="color:var(--bg-default);text-decoration:underline;">jamesandolly@googlemail.com</a> or call <a href="https://www.youtube.com/shorts/Ay8lynMZ4mE?themeRefresh=1" target="_blank" style="color:var(--bg-default);text-decoration:underline;">0800-you-know-our-number</a>.<br><br>
+      We're so glad you'll be with us. If you have any questions,<br> email us at <a href="mailto:jamesandolly@googlemail.com" style="color:var(--bg-default);text-decoration:underline;">jamesandolly@googlemail.com</a> or call <a href="https://www.youtube.com/shorts/Ay8lynMZ4mE?themeRefresh=1" target="_blank" style="color:var(--bg-default);text-decoration:underline;">0800-you-know-our-number</a>.<br><br>
       This night is about great food, glowing glasses, and being present.<br>
       <div style="margin:0px 0;">
   <img src="images/flourishes/lightGreen-coupe.png" alt="Toasting Glasses"
@@ -1564,6 +1939,122 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // FAQ Section Enhancement
+  function initFAQ() {
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(item => {
+      const summary = item.querySelector('summary');
+      const details = item.querySelector('details');
+      
+      // Add click tracking
+      summary.addEventListener('click', () => {
+        const isOpen = item.hasAttribute('open');
+        
+        // Track FAQ interaction analytics
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'faq_interaction', {
+            event_category: 'FAQ',
+            event_label: isOpen ? 'faq_closed' : 'faq_opened',
+            custom_parameter_1: summary.textContent.trim()
+          });
+        }
+      });
+      
+      // Add keyboard navigation
+      summary.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          summary.click();
+        }
+      });
+    });
+  }
+
+  // Initialize FAQ functionality
+  initFAQ();
+
+  // Tab Navigation Functionality
+  function initTabNavigation() {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const targetTab = button.getAttribute('data-tab');
+        
+        // Remove active class from all buttons and contents
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+        
+        // Add active class to clicked button and corresponding content
+        button.classList.add('active');
+        document.getElementById(targetTab).classList.add('active');
+        
+        // Track tab switching analytics
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'tab_switched', {
+            event_category: 'Navigation',
+            event_label: targetTab
+          });
+        }
+      });
+    });
+  }
+
+  // Initialize tab navigation
+  initTabNavigation();
+
+  // Timeline Animation Setup
+  function initTimelineAnimations() {
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    
+    timelineItems.forEach((item, index) => {
+      // Add staggered animation delay
+      item.style.animationDelay = `${1.2 + (index * 0.1)}s`;
+    });
+  }
+
+  // Initialize timeline animations
+  initTimelineAnimations();
+
+  // Back to Top Button Functionality
+  function initBackToTop() {
+    const backToTopBtn = document.getElementById('back-to-top');
+    
+    if (backToTopBtn) {
+      // Show/hide button based on scroll position
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+          backToTopBtn.style.opacity = '1';
+          backToTopBtn.style.visibility = 'visible';
+        } else {
+          backToTopBtn.style.opacity = '0';
+          backToTopBtn.style.visibility = 'hidden';
+        }
+      });
+      
+      // Smooth scroll to top when clicked
+      backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+        
+        // Track analytics
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'back_to_top_clicked', {
+            event_category: 'Navigation',
+            event_label: 'back_to_top'
+          });
+        }
+      });
+    }
+  }
+
+  // Initialize back to top functionality
+  initBackToTop();
+
   if (elements.themeToggle) {
     elements.themeToggle.addEventListener('click', () => {
       const isDark = !document.body.classList.contains('dark-mode');
@@ -1755,7 +2246,7 @@ window.addEventListener('load', () => {
       <strong>"Add to Home Screen"</strong>.
     </p>
     <p style="font-style:italic; font-size:0.9em; color:#888;">
-      So you’re just one tap away from the big night 🌿
+      So you're just one tap away from the big night 🌿
     </p>
     <button onclick="dismissA2HS()" style="margin-top:10px; background:#778053; color:#fff; border:none; border-radius:6px; padding:10px 16px; font-size:0.9em; cursor:pointer;">
       Got it, thanks!
@@ -1765,5 +2256,4 @@ window.addEventListener('load', () => {
 </div>
 
 </body>
-</html>
 </html>
