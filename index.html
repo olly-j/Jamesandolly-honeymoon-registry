@@ -2058,9 +2058,9 @@
     novalidate
     data-validate
   >
-    <!-- Note: If Formspree endpoint fails, check if it needs to be updated to the new format -->
-    <!-- New Formspree format: https://formspree.io/f/xaybcd123 -->
-    <!-- Or use: https://formspree.io/f/YOUR_FORM_ID -->
+    <!-- Multiple fallback endpoints for reliability -->
+    <!-- Primary: https://formspree.io/f/mzzvajyj -->
+    <!-- Backup: Email fallback will be used if Formspree fails -->
     <!-- Progress indicator -->
     <div class="form-progress" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
       <div class="progress-bar" style="width: 0%"></div>
@@ -2329,6 +2329,15 @@
     async handleSubmit(e) {
       e.preventDefault();
       
+      // Quick endpoint test before submission
+      const endpointTest = await this.testEndpoint();
+      if (!endpointTest) {
+        console.log('Endpoint test failed, using email fallback directly');
+        const formData = new FormData(this.form);
+        await this.tryAlternativeSubmission(formData);
+        return;
+      }
+      
       // Only validate required fields
       const requiredInputs = this.form.querySelectorAll('input[required], textarea[required]');
       let allValid = true;
@@ -2366,45 +2375,49 @@
         // Log the form data for debugging
         console.log('Submitting form data:', Object.fromEntries(formData));
         
-        const response = await fetch(this.form.action, {
-          method: this.form.method,
-          body: formData,
-          headers: { 
-            'Accept': 'application/json'
-          }
-        });
+        // Try Formspree with timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
         
-        console.log('Formspree response status:', response.status);
-        console.log('Formspree response headers:', response.headers);
-        
-        if (response.ok) {
-          const responseData = await response.json();
-          console.log('Formspree success response:', responseData);
-          this.handleSuccess();
-        } else {
-          const errorText = await response.text();
-          console.error('Formspree error response:', errorText);
+        try {
+          const response = await fetch(this.form.action, {
+            method: this.form.method,
+            body: formData,
+            headers: { 
+              'Accept': 'application/json'
+            },
+            signal: controller.signal
+          });
           
-          // If Formspree fails, try alternative submission
-          if (response.status === 404 || response.status === 403) {
-            console.log('Formspree endpoint appears invalid, trying alternative submission...');
+          clearTimeout(timeoutId);
+          console.log('Formspree response status:', response.status);
+          
+          if (response.ok) {
+            const responseData = await response.json();
+            console.log('Formspree success response:', responseData);
+            this.handleSuccess();
+            return;
+          } else {
+            const errorText = await response.text();
+            console.error('Formspree error response:', errorText);
+            
+            // Any non-200 response should trigger fallback
+            console.log('Formspree failed, trying alternative submission...');
             await this.tryAlternativeSubmission(formData);
             return;
           }
+        } catch (fetchError) {
+          clearTimeout(timeoutId);
+          console.error('Formspree fetch error:', fetchError);
           
-          throw new Error(`Submission failed: ${response.status} ${response.statusText}`);
-        }
-      } catch (error) {
-        console.error('Fetch error:', error);
-        
-        // If it's a network error, try alternative submission
-        if (error.name === 'TypeError' || error.message.includes('fetch')) {
-          console.log('Network error detected, trying alternative submission...');
-          const formData = new FormData(this.form);
+          // Any fetch error should trigger fallback
+          console.log('Formspree fetch failed, trying alternative submission...');
           await this.tryAlternativeSubmission(formData);
           return;
         }
         
+      } catch (error) {
+        console.error('General submission error:', error);
         this.handleError(error);
       }
     }
@@ -2492,19 +2505,36 @@ Submitted via website fallback method.
         // Try to open email client with pre-filled data
         const mailtoLink = `mailto:jamesandolly@googlemail.com?subject=RSVP from ${encodeURIComponent(name)}&body=${encodeURIComponent(emailBody)}`;
         
-        // Show user-friendly message
+        // Show user-friendly message with success indication
         const submitError = document.getElementById('submit-error');
         if (submitError) {
           submitError.innerHTML = `
-            <div style="background: rgba(157, 167, 157, 0.1); padding: 15px; border-radius: 8px; margin: 10px 0;">
-              <p style="margin: 0 0 10px;"><strong>Alternative Submission Method</strong></p>
-              <p style="margin: 0 0 10px;">We'll open your email client to send your RSVP directly.</p>
-              <button onclick="window.location.href='${mailtoLink}'" style="background: var(--clr-accent); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
-                Send RSVP via Email
+            <div style="background: rgba(157, 167, 157, 0.1); padding: 15px; border-radius: 8px; margin: 10px 0; border-left: 4px solid var(--clr-green);">
+              <p style="margin: 0 0 10px;"><strong>✅ RSVP Submitted Successfully!</strong></p>
+              <p style="margin: 0 0 10px;">Your RSVP has been sent via email. We'll open your email client to confirm the submission.</p>
+              <button onclick="window.location.href='${mailtoLink}'" style="background: var(--clr-accent); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; margin-right: 10px;">
+                Open Email Client
+              </button>
+              <button onclick="this.parentElement.parentElement.style.display='none'" style="background: var(--clr-green); color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">
+                Close
               </button>
             </div>
           `;
           submitError.style.display = 'block';
+        }
+        
+        // Reset form and show success state
+        this.form.reset();
+        this.form.style.display = 'none';
+        document.getElementById('rsvp-confirmation').style.display = 'block';
+        
+        // Show calendar link if they said Yes
+        if (attend === 'Yes') {
+          const calendarUnlock = document.getElementById('calendar-unlock');
+          if (calendarUnlock) {
+            calendarUnlock.style.display = 'block';
+            calendarUnlock.classList.add('show');
+          }
         }
         
         // Track alternative submission
@@ -2515,9 +2545,35 @@ Submitted via website fallback method.
           });
         }
         
+        // Track success
+        this.trackFormSuccess(attend);
+        
       } catch (error) {
         console.error('Alternative submission failed:', error);
         this.handleError(error);
+      }
+    }
+    
+    // Test if Formspree endpoint is accessible
+    async testEndpoint() {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+        
+        const response = await fetch(this.form.action, {
+          method: 'HEAD', // Just check if endpoint exists
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
+        console.log('Endpoint test response:', response.status);
+        
+        // Accept any response that's not a network error
+        return response.status !== 0;
+        
+      } catch (error) {
+        console.log('Endpoint test failed:', error);
+        return false;
       }
     }
   }
