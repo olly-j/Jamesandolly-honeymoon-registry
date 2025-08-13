@@ -2195,6 +2195,14 @@
         },
         attend: {
           required: true
+        },
+        diet: {
+          required: false,
+          maxLength: 200
+        },
+        access: {
+          required: false,
+          maxLength: 200
         }
       };
     }
@@ -2254,6 +2262,49 @@
       return isValid;
     }
     
+    validateOptionalField(input) {
+      const field = input.closest('.field');
+      const errorElement = field.querySelector('.error-message');
+      const value = DOMPurify.sanitize(input.value.trim());
+      
+      // Clear previous states
+      input.classList.remove('valid', 'invalid');
+      errorElement.classList.remove('show');
+      errorElement.textContent = '';
+      
+      // If field is empty, it's valid (optional field)
+      if (!value) {
+        return true;
+      }
+      
+      // Get validation rules
+      const fieldName = input.name;
+      const rules = this.validationRules[fieldName];
+      
+      if (!rules) return true;
+      
+      let isValid = true;
+      let errorMessage = '';
+      
+      // Length validation for optional fields
+      if (value && rules.maxLength && value.length > rules.maxLength) {
+        isValid = false;
+        errorMessage = `Must be no more than ${rules.maxLength} characters`;
+      }
+      
+      // Update UI
+      if (isValid) {
+        input.classList.add('valid');
+      } else {
+        input.classList.add('invalid');
+        errorElement.textContent = errorMessage;
+        errorElement.classList.add('show');
+        this.trackFormError(fieldName, errorMessage);
+      }
+      
+      return isValid;
+    }
+    
     updateProgress() {
       const totalFields = this.fields.length;
       let completedFields = 0;
@@ -2278,13 +2329,24 @@
     async handleSubmit(e) {
       e.preventDefault();
       
-      // Validate all fields
-      const inputs = this.form.querySelectorAll('input, textarea');
+      // Only validate required fields
+      const requiredInputs = this.form.querySelectorAll('input[required], textarea[required]');
       let allValid = true;
       
-      inputs.forEach(input => {
+      requiredInputs.forEach(input => {
         if (!this.validateField(input)) {
           allValid = false;
+        }
+      });
+      
+      // For optional fields, only validate if they have content
+      const optionalInputs = this.form.querySelectorAll('input:not([required]), textarea:not([required])');
+      optionalInputs.forEach(input => {
+        if (input.value.trim()) {
+          // Only validate optional fields if they have content
+          if (!this.validateOptionalField(input)) {
+            allValid = false;
+          }
         }
       });
       
@@ -2308,8 +2370,7 @@
           method: this.form.method,
           body: formData,
           headers: { 
-            'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Accept': 'application/json'
           }
         });
         
