@@ -252,7 +252,7 @@ open http://localhost:8000
 
 ## 📞 Support
 
-For questions or issues, contact: jamesandolly@googlemail.com
+For questions or issues, contact: 
 
 ---
 
