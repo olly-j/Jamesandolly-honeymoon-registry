@@ -194,14 +194,7 @@
       --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
     }
 
-    /* Dark mode variables */
-    body.dark-mode {
-      --bg-default: #1e1e1e;
-      --bg-alt: #2a2a2a;
-      --clr-text: #f0f0f0;
-      --clr-accent: #ff7f50;
-      --clr-green: #6b8e23;
-    }
+
 
     /* Base styles */
     * { box-sizing: border-box; }
@@ -297,14 +290,7 @@
     }
 
     /* Dark mode overrides */
-    body.dark-mode .site-nav {
-      background: var(--bg-alt);
-      border-color: #444;
-    }
-    
-    body.dark-mode .site-nav a {
-      color: #ccc;
-    }
+
 
     /* Access gate */
     #gate-overlay {
@@ -2496,17 +2482,7 @@
       color: var(--clr-accent);
     }
 
-    /* Dark mode overrides */
-    body.dark-mode {
-      background: var(--bg-default);
-      color: var(--clr-text);
-    }
-    
-    body.dark-mode .info-card,
-    body.dark-mode .section-alt,
-    body.dark-mode .rsvp-card {
-      background: var(--bg-alt);
-    }
+
     
 
 
@@ -2909,9 +2885,7 @@
     <!-- External pages -->
     <a href="photos.html" aria-label="View photo gallery">Photos</a>
     <a href="gifts.html" aria-label="View gift registry">Gifts</a>
-    <button id="theme-toggle" aria-label="Toggle dark mode" role="switch" aria-checked="false">
-      🌙
-    </button>
+    
   </nav>
 
   <!-- Main Content -->
@@ -3916,7 +3890,7 @@ Submitted via website fallback method.
       main: document.getElementById('main-content'),
       rsvpForm: document.getElementById('rsvp-form'),
       thankMsg: document.getElementById('rsvp-confirmation'),
-      themeToggle: document.getElementById('theme-toggle'),
+
       giftProgressBar: document.getElementById('gift-progress-bar'),
       giftProgressText: document.getElementById('gift-progress-text'),
       thankyouModal: document.getElementById('thankyou-modal'),
@@ -4027,6 +4001,11 @@ Submitted via website fallback method.
         }, 800);
       }
       
+      // Ensure gate is hidden
+      if (elements.gate) {
+        elements.gate.style.display = 'none';
+      }
+      
       // Show main content
       if (mainContent) {
         mainContent.style.display = 'block';
@@ -4080,6 +4059,7 @@ Submitted via website fallback method.
     // Check for existing access
     if (localStorage.getItem('accessGranted') === 'true') {
       // Skip envelope animation for returning users
+      elements.gate.style.display = 'none';
       showMainContent();
     } else {
       // Apply scroll lock if gate is active
@@ -4387,21 +4367,7 @@ Submitted via website fallback method.
       });
     }
 
-    // Enhanced Dark mode toggle with analytics
-    function applyDarkMode(isDark) {
-      try {
-        document.body.classList.toggle('dark-mode', isDark);
-        localStorage.setItem('darkMode', isDark);
-        if (elements.themeToggle) {
-          elements.themeToggle.textContent = isDark ? '☀️' : '🌙';
-        }
-
-        // Track theme change analytics
-        analytics.trackInteraction('theme_changed', isDark ? 'dark' : 'light');
-      } catch (error) {
-        console.error('Error toggling dark mode:', error);
-      }
-    }
+    
 
     // FAQ Section Enhancement
     function initFAQ() {
@@ -4506,15 +4472,7 @@ Submitted via website fallback method.
   // Initialize Advanced Features
   initCelebrationEffects();
 
-    if (elements.themeToggle) {
-      elements.themeToggle.addEventListener('click', () => {
-        const isDark = !document.body.classList.contains('dark-mode');
-        applyDarkMode(isDark);
-      });
-
-      // Initialize dark mode
-      applyDarkMode(localStorage.getItem('darkMode') === 'true');
-    }
+    
 
     // Intersection Observer for nav highlighting
     const navLinks = document.querySelectorAll('.site-nav a[href^="#"]');
@@ -5109,23 +5067,7 @@ Submitted via website fallback method.
     }
   }
 
-  // Check for existing access
-  if (localStorage.getItem('accessGranted') === 'true') {
-    // If access was already granted, show content directly (skip animation)
-    elements.gate.style.display = 'none';
-    elements.main.style.display = 'block';
-    document.body.classList.remove('gate-active');
-    
-    // Trigger page animations
-    setTimeout(() => {
-      document.querySelectorAll('.section, .section-alt, .timeline').forEach((el, i) => {
-        el.style.animation = `fadeInUp 0.8s ease forwards ${0.5 + i * 0.2}s`;
-      });
-    }, 100);
-  } else {
-    // Apply scroll lock if gate is active
-    applyScrollLock();
-  }
+
 
   // Event listeners
   if (elements.codeSubmit) {
@@ -5388,24 +5330,7 @@ Submitted via website fallback method.
     });
   }
 
-  // Enhanced Dark mode toggle with analytics
-  function applyDarkMode(isDark) {
-    try {
-      document.body.classList.toggle('dark-mode', isDark);
-      localStorage.setItem('darkMode', isDark);
-      additionalElements.themeToggle.textContent = isDark ? '☀️' : '🌙';
-      
-      // Track theme change analytics
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'theme_change', {
-          event_category: 'UI',
-          event_label: isDark ? 'dark' : 'light'
-        });
-      }
-    } catch (error) {
-      console.error('Error toggling dark mode:', error);
-    }
-  }
+
 
   // FAQ Section Enhancement
   function initFAQ() {
@@ -5523,15 +5448,7 @@ Submitted via website fallback method.
   // Initialize back to top functionality
   initBackToTop();
 
-  if (additionalElements.themeToggle) {
-    additionalElements.themeToggle.addEventListener('click', () => {
-      const isDark = !document.body.classList.contains('dark-mode');
-      applyDarkMode(isDark);
-    });
-    
-    // Initialize dark mode
-    applyDarkMode(localStorage.getItem('darkMode') === 'true');
-  }
+
 
   // Intersection Observer for nav highlighting
   const navLinks = document.querySelectorAll('.site-nav a[href^="#"]');
