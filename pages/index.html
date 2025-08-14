@@ -3440,8 +3440,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const ctx = canvas.getContext('2d');
     const bokehSpots = [];
-    let animationId = null;
-    let isInitialized = false;
     
     function resizeCanvas() {
       canvas.width = canvas.offsetWidth;
@@ -3460,11 +3458,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function initBokeh() {
-      if (isInitialized) return; // Prevent multiple initializations
-      isInitialized = true;
-      
       resizeCanvas();
-      bokehSpots.length = 0; // Clear existing spots
       for (let i = 0; i < 15; i++) {
         bokehSpots.push(createBokehSpot());
       }
@@ -3493,33 +3487,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
       
-      animationId = requestAnimationFrame(animateBokeh);
-    }
-    
-    function handleResize() {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-      }
-      resizeCanvas();
-      // Reposition existing spots instead of recreating
-      bokehSpots.forEach(spot => {
-        if (spot.y > canvas.height) {
-          spot.y = -spot.radius;
-          spot.x = Math.random() * canvas.width;
-        }
-      });
-      animationId = requestAnimationFrame(animateBokeh);
+      requestAnimationFrame(animateBokeh);
     }
     
     initBokeh();
     animateBokeh();
-    
-    // Debounced resize handler
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(handleResize, 100);
-    });
+    window.addEventListener('resize', initBokeh);
   }
 
   // Particle Background
@@ -3529,8 +3502,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const ctx = canvas.getContext('2d');
     const particles = [];
-    let animationId = null;
-    let isInitialized = false;
     
     function resizeCanvas() {
       canvas.width = canvas.offsetWidth;
@@ -3550,11 +3521,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function initParticles() {
-      if (isInitialized) return; // Prevent multiple initializations
-      isInitialized = true;
-      
       resizeCanvas();
-      particles.length = 0; // Clear existing particles
       for (let i = 0; i < 50; i++) {
         particles.push(createParticle());
       }
@@ -3578,33 +3545,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
       });
       
-      animationId = requestAnimationFrame(animateParticles);
-    }
-    
-    function handleResize() {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-      }
-      resizeCanvas();
-      // Reposition existing particles instead of recreating
-      particles.forEach(particle => {
-        if (particle.x < 0) particle.x = canvas.width;
-        if (particle.x > canvas.width) particle.x = 0;
-        if (particle.y < 0) particle.y = canvas.height;
-        if (particle.y > canvas.height) particle.y = 0;
-      });
-      animationId = requestAnimationFrame(animateParticles);
+      requestAnimationFrame(animateParticles);
     }
     
     initParticles();
     animateParticles();
-    
-    // Debounced resize handler
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(handleResize, 100);
-    });
+    window.addEventListener('resize', initParticles);
   }
 
   // Liquid Lights
@@ -3614,8 +3560,6 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const ctx = canvas.getContext('2d');
     const lights = [];
-    let animationId = null;
-    let isInitialized = false;
     
     function resizeCanvas() {
       canvas.width = canvas.offsetWidth;
@@ -3634,11 +3578,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function initLights() {
-      if (isInitialized) return; // Prevent multiple initializations
-      isInitialized = true;
-      
       resizeCanvas();
-      lights.length = 0; // Clear existing lights
       for (let i = 0;  i < 8; i++) {
         lights.push(createLight());
       }
@@ -3671,33 +3611,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (light.y > canvas.height) light.y = 0;
       });
       
-      animationId = requestAnimationFrame(animateLights);
-    }
-    
-    function handleResize() {
-      if (animationId) {
-        cancelAnimationFrame(animationId);
-      }
-      resizeCanvas();
-      // Reposition existing lights instead of recreating
-      lights.forEach(light => {
-        if (light.x < 0) light.x = canvas.width;
-        if (light.x > canvas.width) light.x = 0;
-        if (light.y < 0) light.y = canvas.height;
-        if (light.y > canvas.height) light.y = 0;
-      });
-      animationId = requestAnimationFrame(animateLights);
+      requestAnimationFrame(animateLights);
     }
     
     initLights();
     animateLights();
-    
-    // Debounced resize handler
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(handleResize, 100);
-    });
+    window.addEventListener('resize', initLights);
   }
 
   // Shape Shifting Text
@@ -3842,13 +3761,7 @@ document.addEventListener('DOMContentLoaded', () => {
     textElement.addEventListener('click', animateShapeShift);
     
     resizeCanvas();
-    
-    // Debounced resize handler for shape-shifting canvas
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(resizeCanvas, 100);
-    });
+    window.addEventListener('resize', resizeCanvas);
   }
 
   // Apply scroll lock when gate is active
