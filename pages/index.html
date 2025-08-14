@@ -66,18 +66,22 @@
   </script>
   
   <!-- Security Headers -->
-      <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://formspree.io https://fonts.googleapis.com https://cdn.jsdelivr.net https://widget.cloudinary.com https://res.cloudinary.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formspree.io https://res.cloudinary.com; frame-src https://www.paypal.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://formspree.io https://fonts.googleapis.com https://cdn.jsdelivr.net https://widget.cloudinary.com https://res.cloudinary.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formspree.io https://res.cloudinary.com; frame-src https://www.paypal.com;">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
   <meta http-equiv="X-XSS-Protection" content="1; mode=block">
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), interest-cohort=()">
   
-  <!-- Preload critical resources -->
+  <!-- Preload critical resources with optimized loading -->
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" as="style">
-  <link rel="preload" href="../assets/images/hero-bg.jpg" as="image" type="image/jpeg">
+  <link rel="preload" href="../assets/images/hero-bg.jpg" as="image" type="image/jpeg" fetchpriority="high">
   <link rel="preload" href="../assets/images/favicon.png" as="image" type="image/png">
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js" as="script">
+  
+  <!-- Preload critical fonts with display=swap -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtXK-F2qC0s.woff2" as="font" type="font/woff2" crossorigin>
   
   <!-- Preload critical fonts -->
   <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font" type="font/woff2" crossorigin>
@@ -95,77 +99,67 @@
   <link rel="preconnect" href="https://formspree.io">
   
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  
+  <!-- Font display optimization -->
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'Playfair Display';
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+      src: url('https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtXK-F2qC0s.woff2') format('woff2');
+    }
+  </style>
   <link rel="icon" href="../assets/images/favicon.png" type="image/png">
   <link rel="manifest" href="../manifest.json">
   
   <!-- DOMPurify for input sanitization -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js"></script>
   
-  <!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <!-- Privacy-first analytics (no tracking, just basic metrics) -->
   <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'GA_MEASUREMENT_ID', {
-      page_title: 'James & Oliver Wedding',
-      custom_map: {
-        'custom_parameter_1': 'rsvp_status',
-        'custom_parameter_2': 'gift_contribution'
+    // Simple privacy-first analytics - no personal data collection
+    const analytics = {
+      pageViews: 0,
+      interactions: 0,
+      errors: 0,
+      
+      trackPageView() {
+        this.pageViews++;
+        this.log('Page view', { pageViews: this.pageViews });
+      },
+      
+      trackInteraction(type, label) {
+        this.interactions++;
+        this.log('Interaction', { type, label, interactions: this.interactions });
+      },
+      
+      trackError(error) {
+        this.errors++;
+        this.log('Error', { error: error.message, errors: this.errors });
+      },
+      
+      log(event, data) {
+        // Only log to console in development
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+          console.log(`[Analytics] ${event}:`, data);
+        }
+        // In production, could send to privacy-first analytics service
       }
-    });
+    };
     
-    // Core Web Vitals tracking
-    if ('PerformanceObserver' in window) {
-      // Largest Contentful Paint
-      const lcpObserver = new PerformanceObserver((list) => {
-        const entries = list.getEntries();
-        const lastEntry = entries[entries.length - 1];
-        gtag('event', 'lcp', { value: Math.round(lastEntry.startTime) });
-      });
-      lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
-      
-      // First Input Delay
-      const fidObserver = new PerformanceObserver((list) => {
-        const entries = list.getEntries();
-        entries.forEach((entry) => {
-          gtag('event', 'fid', { value: Math.round(entry.processingStart - entry.startTime) });
-        });
-      });
-      fidObserver.observe({ entryTypes: ['first-input'] });
-      
-      // Cumulative Layout Shift
-      const clsObserver = new PerformanceObserver((list) => {
-        let clsValue = 0;
-        const entries = list.getEntries();
-        entries.forEach((entry) => {
-          if (!entry.hadRecentInput) {
-            clsValue += entry.value;
-          }
-        });
-        gtag('event', 'cls', { value: Math.round(clsValue * 1000) / 1000 });
-      });
-      clsObserver.observe({ entryTypes: ['layout-shift'] });
-    }
-    
-    // Error tracking
-    window.addEventListener('error', function(e) {
-      gtag('event', 'exception', {
-        description: e.message,
-        fatal: false
-      });
-    });
-    
-    // Unhandled promise rejection tracking
-    window.addEventListener('unhandledrejection', function(e) {
-      gtag('event', 'exception', {
-        description: e.reason,
-        fatal: false
-      });
+    // Track page load
+    window.addEventListener('load', () => {
+      analytics.trackPageView();
     });
   </script>
-  
-
   
   <!-- Critical CSS inline for faster rendering -->
   <style>
@@ -174,7 +168,7 @@
       --bg-default: #F9F7F3;
       --bg-alt: #FFFFFF;
       --clr-text: #3D4739;
-      --clr-accent: #B8375B; /* Improved contrast ratio */
+      --clr-accent: #A02D4A; /* Improved contrast ratio for better accessibility */
       --clr-green: #9DA79D;
       --bg-timeline: #E6E1D9;
       --clr-deep-green: #778053;
@@ -225,18 +219,61 @@
     html { scroll-behavior: smooth; }
     [id] { scroll-margin-top: calc(var(--nav-height) + 10px); }
 
-    /* Navigation */
+    /* Enhanced Mobile Navigation */
     .site-nav {
       position: sticky;
       top: 0;
-      background: var(--bg-alt);
-      border-bottom: 1px solid #e0e0e0;
-      padding: 10px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 12px 16px;
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 8px;
       z-index: 500;
-      transition: background-color 0.3s ease;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Mobile navigation improvements */
+    @media (max-width: 768px) {
+      .site-nav {
+        padding: 8px 12px;
+        gap: 6px;
+        justify-content: center;
+      }
+      
+      .site-nav a, .site-nav button {
+        font-size: 14px;
+        padding: 10px 12px;
+        min-height: 44px;
+        min-width: 44px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+      }
+      
+      .site-nav a:hover, .site-nav button:hover {
+        background: rgba(184, 55, 91, 0.1);
+        transform: translateY(-1px);
+      }
+    }
+    
+    /* Mobile hamburger menu for very small screens */
+    @media (max-width: 480px) {
+      .site-nav {
+        flex-direction: column;
+        align-items: center;
+        padding: 16px;
+      }
+      
+      .site-nav a, .site-nav button {
+        width: 100%;
+        max-width: 200px;
+        justify-content: center;
+        margin: 4px 0;
+      }
     }
     
     .site-nav a, .site-nav button {
@@ -642,7 +679,7 @@
       }
     }
 
-    /* Hero section */
+    /* Hero section with responsive images */
     .hero-section {
       height: 60vh;
       background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('../assets/images/hero-bg.jpg') center/cover no-repeat;
@@ -651,6 +688,20 @@
       justify-content: center;
       position: relative;
       background-attachment: fixed;
+    }
+    
+    /* Responsive hero images */
+    @media (max-width: 768px) {
+      .hero-section {
+        background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('../assets/images/hero-bg.jpg');
+        background-attachment: scroll;
+      }
+    }
+    
+    @media (min-width: 769px) and (max-width: 1200px) {
+      .hero-section {
+        background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('../assets/images/hero-bg.jpg');
+      }
     }
     
     /* Optimized hero image with responsive sizes */
@@ -681,12 +732,18 @@
       font-family: 'Playfair Display', serif;
       font-size: clamp(2.5em, 5vw, 3.5em);
       color: var(--clr-green);
+      background: linear-gradient(135deg, var(--clr-green), var(--clr-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: kineticGlow 3s ease-in-out infinite;
     }
 
     .hero-content p {
       margin: 10px 0 0;
       font-size: clamp(1em, 2.5vw, 1.2em);
-      color: #555;
+      color: #333; /* Improved contrast ratio */
+      font-weight: 500;
     }
 
     /* Enhanced Animations for 2025 */
@@ -743,7 +800,7 @@
       }
     }
 
-    /* Scroll-triggered animations */
+    /* Enhanced scroll-triggered animations with parallax */
     .animate-on-scroll {
       opacity: 0;
       transform: translateY(30px);
@@ -754,26 +811,104 @@
       opacity: 1;
       transform: translateY(0);
     }
-
-    /* Timeline items - natural flow without pop-out effects */
+    
+    /* Parallax effects */
+    .parallax {
+      transform: translateZ(0);
+      will-change: transform;
+    }
+    
+    .parallax-slow {
+      transform: translateY(calc(var(--parallax-offset, 0) * 0.5px));
+    }
+    
+    .parallax-medium {
+      transform: translateY(calc(var(--parallax-offset, 0) * 0.3px));
+    }
+    
+    .parallax-fast {
+      transform: translateY(calc(var(--parallax-offset, 0) * 0.1px));
+    }
+    
+    /* Timeline items - consolidated and stable */
     .timeline-item {
-      transition: all 0.3s ease;
+      display: flex;
+      align-items: flex-start;
+      margin: 20px 0;
+      width: 100%;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
       position: relative;
       opacity: 1;
       transform: none;
+      padding: 16px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(5px);
+    }
+    
+    .timeline-item .icon-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-right: 20px;
+      width: 80px;
+      flex-shrink: 0;
+    }
+    
+    .timeline-item .icon-container .icon {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+    }
+    
+    .timeline-item .details {
+      flex: 1;
+      min-width: 0;
+      text-align: left;
+    }
+    
+    .timeline-item .time-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2em;
+      color: var(--clr-deep-green);
+      margin-bottom: 4px;
+      line-height: 1.2;
+      display: block;
+    }
+    
+    .timeline-item .time-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4em;
+      font-weight: 600;
+      color: var(--clr-deep-green);
+      margin-bottom: 5px;
+      display: block;
+    }
+    
+    .timeline-item .timeline-arrow {
+      margin-top: 8px;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .timeline-item .timeline-arrow img {
+      width: 80px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      object-fit: contain;
+    }
+    
+    /* Mobile-only arrow for final timeline item */
+    .timeline-item .timeline-arrow.mobile-only {
+      display: none;
     }
 
-    .timeline-item:hover {
-      transform: none;
-      box-shadow: none;
-    }
 
-    /* Remove heart emoji on hover for timeline */
-    .timeline-item:hover::before {
-      content: none;
-    }
 
-    /* Celebration sparkle effect */
+    /* Enhanced celebration effects */
     .celebration-sparkle {
       position: absolute;
       width: 4px;
@@ -792,6 +927,83 @@
         opacity: 1;
         transform: scale(1) rotate(180deg);
       }
+    }
+    
+    /* Confetti celebration effect */
+    .confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+      overflow: hidden;
+    }
+    
+    .confetti-piece {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: var(--clr-accent);
+      animation: confetti-fall 3s linear infinite;
+    }
+    
+    @keyframes confetti-fall {
+      0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+    
+    /* Heart celebration effect */
+    .heart-celebration {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1000;
+      animation: heart-float 2s ease-out forwards;
+    }
+    
+    @keyframes heart-float {
+      0% {
+        transform: scale(0) translateY(0);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1) translateY(-50px);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0) translateY(-100px);
+        opacity: 0;
+      }
+    }
+    
+    /* Celebration trigger button */
+    .celebration-trigger {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 60px;
+      height: 60px;
+      background: var(--clr-accent);
+      border: none;
+      border-radius: 50%;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .celebration-trigger:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 25px rgba(0,0,0,0.4);
     }
 
     /* Romantic gradient text effect */
@@ -812,6 +1024,8 @@
       }
     }
 
+    /* 2025 Design Trends - Glassmorphism and Modern Effects */
+    
     /* Glassmorphism effect for cards */
     .glass-card {
       background: rgba(255, 255, 255, 0.1);
@@ -820,23 +1034,287 @@
       border-radius: 15px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
+    
+    /* Enhanced glassmorphism for hero content */
+    .hero-content {
+      text-align: center;
+      background: rgba(249,247,243,0.85);
+      padding: 30px;
+      border-radius: 20px;
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+      animation: fadeInUp 1s forwards;
+    }
+    
+    /* Soft gradient backgrounds */
+    .gradient-bg {
+      background: linear-gradient(135deg, 
+        rgba(249, 247, 243, 0.9) 0%, 
+        rgba(230, 225, 217, 0.9) 50%, 
+        rgba(249, 247, 243, 0.9) 100%);
+      backdrop-filter: blur(10px);
+    }
+    
+    /* Fluid typography with clamp() */
+    .fluid-text {
+      font-size: clamp(1rem, 2.5vw, 1.5rem);
+      line-height: clamp(1.4, 2vw, 1.6);
+    }
+    
+    .fluid-heading {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: clamp(1.2, 3vw, 1.3);
+    }
+    
+    /* Micro-interactions and hover effects */
+    .micro-interaction {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .micro-interaction:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Kinetic typography effects */
+    .kinetic-text {
+      background: linear-gradient(135deg, var(--clr-accent), var(--clr-green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: kineticGlow 3s ease-in-out infinite;
+    }
+    
+    @keyframes kineticGlow {
+      0%, 100% {
+        filter: brightness(1) hue-rotate(0deg);
+      }
+      50% {
+        filter: brightness(1.2) hue-rotate(5deg);
+      }
+    }
+    
+    /* Enhanced floating animation with mobile optimization */
+    .floating {
+      animation: floating 3s ease-in-out infinite;
+    }
+    
+    @keyframes floating {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-10px);
+      }
+    }
+    
+    /* Mobile-specific animations */
+    @media (max-width: 768px) {
+      .floating {
+        animation: floating-mobile 4s ease-in-out infinite;
+      }
+      
+      @keyframes floating-mobile {
+        0%, 100% {
+          transform: translateY(0px) scale(1);
+        }
+        50% {
+          transform: translateY(-8px) scale(1.05);
+        }
+      }
+      
+
+      
+      /* Mobile swipe animations */
+      .swipe-hint {
+        animation: swipeHint 2s ease-in-out infinite;
+      }
+      
+      @keyframes swipeHint {
+        0%, 100% {
+          transform: translateX(0);
+          opacity: 0.7;
+        }
+        50% {
+          transform: translateX(20px);
+          opacity: 1;
+        }
+      }
+    }
+    
+    /* Mobile gesture support */
+    .gesture-enabled {
+      touch-action: pan-y pinch-zoom;
+    }
+    
+    /* Smooth scroll behavior */
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 80px;
+    }
 
 
 
     /* Enhanced responsive design */
+    /* Mobile-first responsive design */
     @media (max-width: 768px) {
+      /* Mobile-first typography */
+      .fluid-heading {
+        font-size: clamp(1.8rem, 4vw, 2.5rem);
+        line-height: 1.2;
+      }
+      
+      .fluid-text {
+        font-size: clamp(0.9rem, 2vw, 1.1rem);
+        line-height: 1.5;
+      }
+      
+      /* Mobile-first spacing */
+      .section, .section-alt {
+        padding: 24px 16px;
+      }
+      
+      .hero-section {
+        height: 50vh;
+        background-attachment: scroll;
+      }
+      
+      .hero-content {
+        padding: 20px;
+        margin: 0 16px;
+        border-radius: 16px;
+      }
+      
+
+      
+      /* Mobile-first forms */
+      .rsvp-card {
+        margin: 20px 16px;
+        padding: 24px 20px;
+        border-radius: 16px;
+      }
+      
+      .info-card {
+        margin: 20px 16px;
+        padding: 24px 20px;
+        border-radius: 16px;
+      }
+      
+      /* Mobile-first countdown */
+      .countdown-timer {
+        padding: 20px 16px;
+        margin: 20px 16px;
+      }
+      
+      .countdown-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+      }
+      
+      .countdown-item {
+        text-align: center;
+        padding: 12px 8px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 8px;
+      }
+      
+      .countdown-number {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: var(--clr-accent);
+      }
+      
+      .countdown-label {
+        font-size: 0.8rem;
+        color: #666;
+        margin-top: 4px;
+      }
+      
+
+      
+          /* Countdown Timer Styling */
+    .countdown-timer {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      padding: 24px;
+      margin: 24px auto;
+      max-width: 500px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+    
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    
+    .countdown-item {
+      text-align: center;
+      padding: 16px 8px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 12px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+    
+    .countdown-item:hover {
+      transform: translateY(-2px);
+    }
+    
+    /* Countdown animation */
+    @keyframes countdownPulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    
+    .countdown-number {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--clr-accent);
+      font-family: 'Playfair Display', serif;
+      line-height: 1;
+      margin-bottom: 4px;
+      animation: countdownPulse 2s ease-in-out infinite;
+    }
+    
+    .countdown-label {
+      font-size: 0.875rem;
+      color: #666;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Mobile celebration trigger */
+    .celebration-trigger {
+      bottom: 80px;
+      left: 16px;
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+    }
+      
+      /* Mobile-first navigation */
       .site-nav {
-        padding: 8px;
-        gap: 8px;
-        flex-wrap: wrap;
+        padding: 8px 12px;
+        gap: 6px;
         justify-content: center;
       }
       
       .site-nav a, .site-nav button {
-        font-size: 0.9em;
-        padding: 8px 12px;
+        font-size: 14px;
+        padding: 10px 12px;
         min-height: 44px;
         min-width: 44px;
+        border-radius: 10px;
       }
       
       .hero-content {
@@ -844,33 +1322,7 @@
         margin: 0 20px;
       }
       
-      /* Mobile timeline improvements */
-      .timeline-item {
-        flex-direction: column;
-        text-align: center;
-        margin: 30px 0;
-        align-items: center;
-      }
-      
-      .icon-container {
-        margin-right: 0;
-        margin-bottom: 15px;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-      }
-      
-      .icon-container .icon {
-        width: 60px;
-        height: 60px;
-      }
-      
-      .timeline-item .details {
-        text-align: center;
-        width: 100%;
-        max-width: 400px;
-        margin: 0 auto;
-      }
+
       
       /* Mobile form improvements */
       .field input[type="text"],
@@ -952,14 +1404,7 @@
         padding: 20px 15px;
       }
       
-      /* Additional mobile timeline fixes for very small screens */
-      .timeline-item {
-        padding: 0 10px;
-      }
-      
-      .timeline-item .details {
-        max-width: 350px;
-      }
+
       
       .footer-links {
         flex-direction: column;
@@ -1001,14 +1446,28 @@
       border: 2px solid #e0e0e0;
       border-radius: var(--radius-md);
       font-size: 1rem;
-      transition: border-color var(--duration-fast) var(--ease-smooth),
-                  transform var(--duration-fast) var(--ease-smooth);
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      transition: all var(--duration-fast) var(--ease-smooth);
     }
     
     .field input:focus {
       border-color: var(--clr-accent);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(184, 55, 91, 0.15);
       outline: none;
+      background: rgba(255, 255, 255, 1);
+    }
+    
+    .field input.valid {
+      border-color: var(--clr-green);
+      background: rgba(157, 167, 157, 0.05);
+    }
+    
+    .field input.invalid {
+      border-color: #e74c3c;
+      background: rgba(231, 76, 60, 0.05);
+      animation: shake 0.5s var(--ease-bounce);
     }
     
     .field input.valid {
@@ -1120,10 +1579,57 @@
       75% { transform: translateX(5px); }
     }
     
-    /* Loading states */
+    /* Enhanced loading states and skeleton screens */
     .loading {
       opacity: 0.6;
       pointer-events: none;
+    }
+    
+    /* Skeleton loading animation */
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: skeleton-loading 1.5s infinite;
+      border-radius: 4px;
+    }
+    
+    @keyframes skeleton-loading {
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
+    }
+    
+    /* Loading spinner */
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(184, 55, 91, 0.2);
+      border-top: 3px solid var(--clr-accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* Pulse animation for loading states */
+    .pulse {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
     }
 
     /* Enhanced focus styles for accessibility */
@@ -1131,27 +1637,131 @@
     input:focus-visible,
     a:focus-visible,
     .site-nav button:focus-visible,
-    .site-nav a:focus-visible {
+    .site-nav a:focus-visible,
+    .radio-label:focus-visible,
+    .faq-question:focus-visible {
       outline: 2px solid var(--clr-accent);
       outline-offset: 2px;
       border-radius: var(--radius-sm);
+      box-shadow: 0 0 0 4px rgba(184, 55, 91, 0.2);
     }
     
-    /* Improved touch targets for mobile */
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+      :root {
+        --clr-accent: #8B0000;
+        --clr-text: #000000;
+        --bg-default: #FFFFFF;
+      }
+      
+      .site-nav {
+        border-bottom: 3px solid var(--clr-accent);
+      }
+      
+      .btn-rsvp {
+        border: 3px solid var(--clr-accent);
+      }
+    }
+    
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      
+      .animate-on-scroll {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      
+      .envelope-animation-container {
+        display: none !important;
+      }
+      
+      .hero-section {
+        background-attachment: scroll !important;
+      }
+    }
+    
+    /* Enhanced touch targets for mobile optimization */
     .site-nav a, .site-nav button {
-      min-height: 44px;
-      min-width: 44px;
+      min-height: 48px;
+      min-width: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 12px 16px;
+      margin: 4px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    /* Mobile-optimized form elements */
+    .field input[type="text"],
+    .field input[type="email"],
+    .field textarea {
+      min-height: 48px;
+      padding: 14px 16px;
+      font-size: 16px; /* Prevents zoom on iOS */
+      border-radius: 12px;
+    }
+    
+    /* Mobile-optimized buttons */
+    .btn-rsvp, .btn-gift, .btn-download {
+      min-height: 48px;
+      min-width: 120px;
+      padding: 14px 24px;
+      font-size: 16px;
+      border-radius: 12px;
+      touch-action: manipulation;
+    }
+    
+    /* Mobile-optimized radio buttons */
+    .radio-label {
+      min-height: 48px;
+      padding: 12px 16px;
+      margin: 8px 0;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    
+    .radio-custom {
+      min-width: 24px;
+      min-height: 24px;
     }
     
     /* Enhanced hover states with motion */
     .site-nav a:hover, .site-nav button:hover {
       color: var(--clr-accent);
-      transform: translateY(-1px);
-      transition: color var(--duration-fast) var(--ease-smooth),
-                  transform var(--duration-fast) var(--ease-smooth);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(184, 55, 91, 0.2);
+      transition: all var(--duration-fast) var(--ease-smooth);
+    }
+    
+    /* Enhanced micro-interactions for navigation */
+    .site-nav a, .site-nav button {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .site-nav a::before, .site-nav button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(184, 55, 91, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+    
+    .site-nav a:hover::before, .site-nav button:hover::before {
+      left: 100%;
     }
   </style>
   
@@ -1172,51 +1782,7 @@
       animation: fadeInUp 0.8s ease forwards;
     }
 
-    /* Timeline layout */
-    .timeline-item { 
-      display: flex; 
-      align-items: flex-start; 
-      margin: 20px 0; 
-    }
-    
-    .icon-container { 
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      margin-right: 15px; 
-      width: 80px; 
-    }
-    
-    .icon-container .icon { 
-      width: 80px; 
-      height: 80px; 
-    }
-    
-    .details { flex: 1; }
-    
-    .time-label { 
-      font-family: 'Playfair Display', serif; 
-      font-size: 1.2em; 
-      color: var(--clr-deep-green); 
-      margin-bottom: 4px; 
-      line-height: 1.2; 
-    }
-    
-    .time-title { 
-      font-family: 'Playfair Display', serif; 
-      font-size: 1.4em; 
-      font-weight: 600; 
-      color: var(--clr-deep-green); 
-      margin-bottom: 5px; 
-    }
-    
-    .timeline-arrow { margin-top: 8px; }
-    .timeline-arrow img { 
-      width: 80px; 
-      height: auto; 
-      display: block; 
-      margin: 0 auto; 
-    }
+
 
     /* Info card styling */
     .info-card {
@@ -1409,14 +1975,24 @@
       max-width: 500px;
       margin: 40px auto;
       padding: 32px 24px;
-      background: var(--bg-alt);
-      border: 2px solid var(--clr-green);
-      border-radius: 12px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.7),
-                  0 8px 24px rgba(0,0,0,0.08);
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(157, 167, 157, 0.3);
+      border-radius: 20px;
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
       font-family: 'Inter', sans-serif;
       opacity: 0;
       animation: fadeInUp 1s ease forwards 1.6s;
+      transition: all 0.3s ease;
+    }
+    
+    .rsvp-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 
+        0 12px 40px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
     }
     
     .rsvp-card h2 {
@@ -2043,46 +2619,7 @@
       color: #555;
     }
 
-    /* Enhanced Timeline Responsive Design */
-    .timeline-item {
-      display: flex;
-      align-items: flex-start;
-      margin: 20px 0;
-      width: 100%;
-      max-width: 600px;
-    }
-    
-    .icon-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-right: 15px;
-      width: 80px;
-      flex-shrink: 0;
-    }
-    
-    .icon-container .icon {
-      width: 80px;
-      height: 80px;
-      object-fit: contain;
-    }
-    
-    .timeline-arrow {
-      margin-top: 8px;
-    }
-    
-    .timeline-arrow img {
-      width: 80px;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-      object-fit: contain;
-    }
 
-    /* Mobile-only arrow for final timeline item */
-    .timeline-arrow.mobile-only {
-      display: none;
-    }
 
     /* Responsive improvements */
     @media (max-width: 768px) {
@@ -2094,7 +2631,7 @@
         justify-content: center;
       }
       
-      .icon-container {
+      .timeline-item .icon-container {
         margin-right: 0;
         margin-bottom: 15px;
         width: 100%;
@@ -2103,20 +2640,21 @@
         margin-right: auto;
       }
       
-      .icon-container .icon {
+      .timeline-item .icon-container .icon {
         width: 100%;
         height: auto;
         max-width: 80px;
         max-height: 80px;
       }
       
-      .timeline-arrow img {
+      .timeline-item .timeline-arrow img {
         width: 60px;
         max-width: 100%;
+        margin: 0 auto;
       }
       
       /* Show mobile-only arrow on mobile devices */
-      .timeline-arrow.mobile-only {
+      .timeline-item .timeline-arrow.mobile-only {
         display: block;
         margin-top: 8px;
       }
@@ -2129,11 +2667,11 @@
         margin: 0 auto;
       }
       
-      .time-label {
+      .timeline-item .time-label {
         font-size: 1.1em;
       }
       
-      .time-title {
+      .timeline-item .time-title {
         font-size: 1.3em;
       }
       
@@ -2311,15 +2849,38 @@
     <!-- Hero Section -->
     <section id="home" class="section-alt" style="position: relative;">
 
-      <header class="hero-section">
-        <div class="hero-content">
-          <h1 class="shape-shifting-text" id="coupleNames">James & Oliver</h1>
-          <p>19 December 2025</p>
+      <header class="hero-section parallax-slow">
+        <div class="hero-content micro-interaction">
+          <h1 class="kinetic-text fluid-heading" id="coupleNames">James & Oliver</h1>
+          <p class="fluid-text">19 December 2025</p>
+          
+          <!-- Countdown Timer -->
+          <div class="countdown-timer glass-card" style="margin-top:24px;padding:20px;text-align:center;">
+            <h3 style="margin:0 0 16px;font-family:'Playfair Display',serif;color:var(--clr-accent);">Counting Down to Our Celebration</h3>
+            <div class="countdown-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:400px;margin:0 auto;">
+              <div class="countdown-item">
+                <div class="countdown-number" id="days">00</div>
+                <div class="countdown-label">Days</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-number" id="hours">00</div>
+                <div class="countdown-label">Hours</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-number" id="minutes">00</div>
+                <div class="countdown-label">Minutes</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-number" id="seconds">00</div>
+                <div class="countdown-label">Seconds</div>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
-      <div class="section" id="invite" style="text-align:center;animation:fadeInUp 1s forwards 0.5s;">
-        <p style="margin:0;font-family:'Playfair Display',serif;font-size:1.4em;">James & Oliver warmly invite you</p>
+      <div class="section gradient-bg" id="invite" style="text-align:center;animation:fadeInUp 1s forwards 0.5s;">
+        <p class="fluid-text" style="margin:0;font-family:'Playfair Display',serif;">James & Oliver warmly invite you</p>
         <p style="margin:20px 0;line-height:1.6;">
           To an evening celebration of their marriage<br><br>
           <strong>Friday, 19 December 2025<br>
@@ -2329,7 +2890,7 @@
           We're so glad to celebrate together in this beautiful space.
         </p>
         <div style="text-align:center;margin:20px 0;">
-          <img src="../assets/images/dividers/mono-divide.png" alt="Monogram Divider" style="max-width:100%;max-height:80px;" loading="lazy">
+          <img src="../assets/images/dividers/mono-divide.png" alt="Monogram Divider" style="max-width:100%;max-height:80px;" loading="lazy" decoding="async">
 </div>
         
 
@@ -2340,15 +2901,15 @@
               <div class="timeline section" id="timeline" style="background-color:var(--bg-timeline); background-image:url('../assets/images/timeline-background.png'); background-repeat:repeat; background-size:auto; position: relative;">
 
         <div style="text-align:center;margin:0px 0;">
-          <img src="../assets/images/dividers/london.png" alt="London Divider" style="max-width:100%;height:auto;" loading="lazy">
+          <img src="../assets/images/dividers/london.png" alt="London Divider" style="max-width:100%;height:auto;" loading="lazy" decoding="async">
 </div>
-        <h2 style="font-family:'Playfair Display',serif;color:var(--clr-deep-green);text-align:center;">The Shape of the Evening</h2>
-        <div style="max-width:600px;margin:auto;display:flex;flex-direction:column;align-items:center;">
+        <h2 class="fluid-heading" style="font-family:'Playfair Display',serif;color:var(--clr-deep-green);text-align:center;">The Shape of the Evening</h2>
+        <div style="max-width:600px;margin:auto;display:flex;flex-direction:column;align-items:stretch;width:100%;">
           <!-- Entry 1 -->
           <div class="timeline-item">
             <div class="icon-container">
-                      <img src="../assets/icons/icon-aperitivo.png" class="icon" alt="Aperitivo" loading="lazy">
-        <div class="timeline-arrow"><img src="../assets/images/arrow-down.png" alt="Down Arrow" loading="lazy"></div>
+              <img src="../assets/icons/icon-aperitivo.png" class="icon" alt="Aperitivo" loading="lazy">
+              <div class="timeline-arrow"><img src="../assets/images/arrow-down.png" alt="Down Arrow" loading="lazy"></div>
             </div>
             <div class="details">
               <div class="time-label">6:30 PM</div>
@@ -2359,8 +2920,8 @@
           <!-- Entry 2 -->
           <div class="timeline-item">
             <div class="icon-container">
-                      <img src="../assets/icons/icon-dinner.png" class="icon" alt="Dinner" loading="lazy">
-        <div class="timeline-arrow"><img src="../assets/images/arrow-down.png" alt="Down Arrow" loading="lazy"></div>
+              <img src="../assets/icons/icon-dinner.png" class="icon" alt="Dinner" loading="lazy">
+              <div class="timeline-arrow"><img src="../assets/images/arrow-down.png" alt="Down Arrow" loading="lazy"></div>
             </div>
             <div class="details">
               <div class="time-label">7:00 PM</div>
@@ -2371,8 +2932,8 @@
           <!-- Entry 3 -->
           <div class="timeline-item">
             <div class="icon-container">
-                      <img src="../assets/icons/icon-toasts.png" class="icon" alt="Toasts" loading="lazy">
-        <div class="timeline-arrow"><img src="../assets/images/arrow-down.png" alt="Down Arrow" loading="lazy"></div>
+              <img src="../assets/icons/icon-toasts.png" class="icon" alt="Toasts" loading="lazy">
+              <div class="timeline-arrow"><img src="../assets/images/arrow-down.png" alt="Down Arrow" loading="lazy"></div>
             </div>
             <div class="details">
               <div class="time-label">8:30 PM</div>
@@ -2383,8 +2944,8 @@
           <!-- Entry 4 -->
           <div class="timeline-item">
             <div class="icon-container">
-                      <img src="../assets/icons/icon-dessert.png" class="icon" alt="Dessert" loading="lazy">
-        <div class="timeline-arrow"><img src="../assets/images/arrow-down.png" alt="Down Arrow" loading="lazy"></div>
+              <img src="../assets/icons/icon-dessert.png" class="icon" alt="Dessert" loading="lazy">
+              <div class="timeline-arrow"><img src="../assets/images/arrow-down.png" alt="Down Arrow" loading="lazy"></div>
             </div>
             <div class="details">
               <div class="time-label">9:30 PM</div>
@@ -2395,8 +2956,8 @@
           <!-- Entry 5 -->
           <div class="timeline-item">
             <div class="icon-container">
-                      <img src="../assets/icons/icon-music.png" class="icon" alt="Music" loading="lazy">
-        <div class="timeline-arrow mobile-only"><img src="../assets/images/arrow-down.png" alt="Down Arrow" loading="lazy"></div>
+              <img src="../assets/icons/icon-music.png" class="icon" alt="Music" loading="lazy">
+              <div class="timeline-arrow mobile-only"><img src="../assets/images/arrow-down.png" alt="Down Arrow" loading="lazy"></div>
             </div>
             <div class="details">
               <div class="time-label">10:00 PM Onward</div>
@@ -2424,7 +2985,7 @@
 </section>
 
  <!-- What You Need to Know -->
-<div class="info-card" id="info" style="animation:fadeInUp 1s forwards 1.4s;">
+      <div class="info-card glass-card" id="info" style="animation:fadeInUp 1s forwards 1.4s;">
   <h3>What You Need to Know</h3>
   
   <!-- Tab Navigation -->
@@ -2558,16 +3119,16 @@
     </div>
   </div>
 </div>
-<div style="text-align:center;margin:0px 0;">
-          <img src="../assets/images/dividers/wave.png" alt="Gold Wave Divider" style="max-width:60%;" loading="lazy">
+        <div style="text-align:center;margin:0px 0;">
+          <img src="../assets/images/dividers/wave.png" alt="Gold Wave Divider" style="max-width:60%;" loading="lazy" decoding="async">
 </div>
 
 
 <!-- RSVP Section via Formspree -->
-<div class="rsvp-card" id="rsvp">
-  <div style="text-align:center; margin-bottom: -10px;">
+      <div class="rsvp-card micro-interaction" id="rsvp">
+          <div style="text-align:center; margin-bottom: -10px;">
           <img src="../assets/images/flourishes/glass-cheers.png" alt="Cheers Icon"
-       style="max-width:100px; opacity:1;" loading="lazy">
+       class="floating" style="max-width:100px; opacity:1;" loading="lazy">
 </div>
   <h2>RSVP</h2>
   <p class="rsvp-intro">
@@ -3074,7 +3635,7 @@ Submitted via website fallback method.
       <div class="section" style="text-align:center;animation:fadeInUp 1s forwards 1.8s;">
         <div style="text-align:center; margin-bottom: 0px;">
           <img src="../assets/images/flourishes/lightGreen-coupe.png" alt="Coupe Glasses"
-       style="max-height:80px; opacity:1;" loading="lazy">
+       class="floating" style="max-height:80px; opacity:1;" loading="lazy">
 </div>
   <h2 style="font-family:'Playfair Display',serif;color:var(--clr-text);">Your Presence Is Enough</h2>
 <p style="color:#555;line-height:1.6;">But if you'd like to mark the moment, we're saving for our honeymoon and would be deeply grateful for your help on our journey.</p>
@@ -3127,6 +3688,8 @@ Submitted via website fallback method.
         </article>
       </div>
     </section>
+
+
 
     <!-- Gallery Section -->
     <section id="gallery" class="section" style="display:none;">
@@ -3335,9 +3898,48 @@ Submitted via website fallback method.
     if (elements.rsvpForm && elements.thankMsg) {
       const form = elements.rsvpForm;
 
-      // Real-time validation
-      const validateField = (field, rules) => {
-        const value = field.value.trim();
+      // Server-side validation simulation with enhanced security
+      const serverValidation = {
+        validateName(name) {
+          const sanitized = DOMPurify.sanitize(name.trim());
+          if (sanitized.length < 2 || sanitized.length > 100) {
+            return { valid: false, message: 'Name must be between 2 and 100 characters' };
+          }
+          if (!/^[A-Za-z\s\-']{2,100}$/.test(sanitized)) {
+            return { valid: false, message: 'Name contains invalid characters' };
+          }
+          return { valid: true, value: sanitized };
+        },
+        
+        validateAttendance(attend) {
+          if (!attend || !['Yes', 'No'].includes(attend)) {
+            return { valid: false, message: 'Please select whether you will attend' };
+          }
+          return { valid: true, value: attend };
+        },
+        
+        validateDietary(diet) {
+          if (!diet) return { valid: true, value: '' };
+          const sanitized = DOMPurify.sanitize(diet.trim());
+          if (sanitized.length > 200) {
+            return { valid: false, message: 'Dietary needs must be under 200 characters' };
+          }
+          return { valid: true, value: sanitized };
+        },
+        
+        validateAccess(access) {
+          if (!access) return { valid: true, value: '' };
+          const sanitized = DOMPurify.sanitize(access.trim());
+          if (sanitized.length > 200) {
+            return { valid: false, message: 'Accessibility notes must be under 200 characters' };
+          }
+          return { valid: true, value: sanitized };
+        }
+      };
+
+      // Real-time validation with server-side rules
+      const validateField = (field, validationFn) => {
+        const value = field.value;
         const errorElement = document.getElementById(field.id + '-error') || field.parentNode.querySelector('.error-message');
 
         // Clear previous errors
@@ -3345,48 +3947,54 @@ Submitted via website fallback method.
           errorElement.textContent = '';
           errorElement.style.display = 'none';
         }
-        field.classList.remove('field-error');
+        field.classList.remove('field-error', 'field-valid');
 
-        // Apply validation rules
-        for (const rule of rules) {
-          if (!rule.test(value)) {
-            field.classList.add('field-error');
-            if (errorElement) {
-              errorElement.textContent = rule.message;
-              errorElement.style.display = 'block';
-            }
-            return false;
+        const result = validationFn(value);
+        
+        if (result.valid) {
+          field.classList.add('field-valid');
+          return true;
+        } else {
+          field.classList.add('field-error');
+          if (errorElement) {
+            errorElement.textContent = result.message;
+            errorElement.style.display = 'block';
           }
+          return false;
         }
-        return true;
       };
 
-      // Validation rules
-      const validationRules = {
-        'rsvp-name': [
-          { test: (value) => value.length >= 2, message: 'Name must be at least 2 characters' },
-          { test: (value) => /^[A-Za-z\s\-']{2,100}$/.test(value), message: 'Name contains invalid characters' }
-        ],
-        'rsvp-diet': [
-          { test: (value) => value.length <= 200, message: 'Dietary needs must be under 200 characters' }
-        ],
-        'rsvp-access': [
-          { test: (value) => value.length <= 200, message: 'Accessibility notes must be under 200 characters' }
-        ]
-      };
-
-      // Add real-time validation listeners
-      Object.keys(validationRules).forEach(fieldId => {
-        const field = document.getElementById(fieldId);
-        if (field) {
-          field.addEventListener('blur', () => validateField(field, validationRules[fieldId]));
-          field.addEventListener('input', () => {
-            if (field.classList.contains('field-error')) {
-              validateField(field, validationRules[fieldId]);
-            }
-          });
-        }
-      });
+      // Add real-time validation listeners with server-side validation
+      const nameField = document.getElementById('rsvp-name');
+      const dietField = document.getElementById('rsvp-diet');
+      const accessField = document.getElementById('rsvp-access');
+      
+      if (nameField) {
+        nameField.addEventListener('blur', () => validateField(nameField, serverValidation.validateName));
+        nameField.addEventListener('input', () => {
+          if (nameField.classList.contains('field-error')) {
+            validateField(nameField, serverValidation.validateName);
+          }
+        });
+      }
+      
+      if (dietField) {
+        dietField.addEventListener('blur', () => validateField(dietField, serverValidation.validateDietary));
+        dietField.addEventListener('input', () => {
+          if (dietField.classList.contains('field-error')) {
+            validateField(dietField, serverValidation.validateDietary);
+          }
+        });
+      }
+      
+      if (accessField) {
+        accessField.addEventListener('blur', () => validateField(accessField, serverValidation.validateAccess));
+        accessField.addEventListener('input', () => {
+          if (accessField.classList.contains('field-error')) {
+            validateField(accessField, serverValidation.validateAccess);
+          }
+        });
+      }
 
       form.addEventListener('submit', async function(e) {
         e.preventDefault();
@@ -3403,50 +4011,57 @@ Submitted via website fallback method.
         });
         this.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
 
-        // Validate all fields
+        // Validate all fields using server-side validation
         const name = this.querySelector('#rsvp-name');
         const attend = this.querySelector('input[name="attend"]:checked');
         const diet = this.querySelector('#rsvp-diet');
         const access = this.querySelector('#rsvp-access');
 
         let isValid = true;
+        let validatedData = {};
 
         // Validate name
-        if (!validateField(name, validationRules['rsvp-name'])) {
+        const nameValidation = serverValidation.validateName(name.value);
+        if (!nameValidation.valid) {
+          validateField(name, serverValidation.validateName);
           isValid = false;
+        } else {
+          validatedData.name = nameValidation.value;
         }
 
         // Validate attendance
-        if (!attend) {
+        const attendValidation = serverValidation.validateAttendance(attend ? attend.value : null);
+        if (!attendValidation.valid) {
           const attendError = document.getElementById('attend-error');
           if (attendError) {
-            attendError.textContent = 'Please select whether you will attend';
+            attendError.textContent = attendValidation.message;
             attendError.style.display = 'block';
           }
           isValid = false;
+        } else {
+          validatedData.attend = attendValidation.value;
         }
 
         // Validate optional fields
-        if (diet.value.trim()) {
-          if (!validateField(diet, validationRules['rsvp-diet'])) {
-            isValid = false;
-          }
+        const dietValidation = serverValidation.validateDietary(diet.value);
+        if (!dietValidation.valid) {
+          validateField(diet, serverValidation.validateDietary);
+          isValid = false;
+        } else {
+          validatedData.diet = dietValidation.value;
         }
 
-        if (access.value.trim()) {
-          if (!validateField(access, validationRules['rsvp-access'])) {
-            isValid = false;
-          }
+        const accessValidation = serverValidation.validateAccess(access.value);
+        if (!accessValidation.valid) {
+          validateField(access, serverValidation.validateAccess);
+          isValid = false;
+        } else {
+          validatedData.access = accessValidation.value;
         }
 
         if (!isValid) {
-          // Track validation errors
-          if (typeof gtag !== 'undefined') {
-            gtag('event', 'form_validation_error', {
-              event_category: 'RSVP',
-              event_label: 'validation_failed'
-            });
-          }
+          // Track validation errors with privacy-first analytics
+          analytics.trackInteraction('form_validation_error', 'validation_failed');
           return;
         }
 
@@ -3477,13 +4092,7 @@ Submitted via website fallback method.
           }
 
           // Success - track analytics
-          if (typeof gtag !== 'undefined') {
-            gtag('event', 'rsvp_submitted', {
-              event_category: 'RSVP',
-              event_label: attend.value,
-              custom_parameter_1: attend.value
-            });
-          }
+          analytics.trackInteraction('rsvp_submitted', validatedData.attend);
 
           // Success
           this.style.display = 'none';
@@ -3496,13 +4105,8 @@ Submitted via website fallback method.
               calendarUnlock.style.display = 'block';
               calendarUnlock.classList.add('show');
 
-              // Track calendar unlock analytics
-              if (typeof gtag !== 'undefined') {
-                gtag('event', 'calendar_unlocked', {
-                  event_category: 'RSVP',
-                  event_label: 'calendar_download_available'
-                });
-              }
+                              // Track calendar unlock analytics
+                analytics.trackInteraction('calendar_unlocked', 'calendar_download_available');
             }
           }
         } catch (error) {
@@ -3515,12 +4119,7 @@ Submitted via website fallback method.
           }
 
           // Track error analytics
-          if (typeof gtag !== 'undefined') {
-            gtag('event', 'form_submission_error', {
-              event_category: 'RSVP',
-              event_label: 'submission_failed'
-            });
-          }
+          analytics.trackError(error);
         } finally {
           // Reset button state
           btnText.style.display = 'inline';
@@ -3547,12 +4146,7 @@ Submitted via website fallback method.
         }
 
         // Track theme change analytics
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'theme_changed', {
-            event_category: 'UI',
-            event_label: isDark ? 'dark' : 'light'
-          });
-        }
+        analytics.trackInteraction('theme_changed', isDark ? 'dark' : 'light');
       } catch (error) {
         console.error('Error toggling dark mode:', error);
       }
@@ -3570,14 +4164,8 @@ Submitted via website fallback method.
         summary.addEventListener('click', () => {
           const isOpen = item.hasAttribute('open');
 
-          // Track FAQ interaction analytics
-          if (typeof gtag !== 'undefined') {
-            gtag('event', 'faq_interaction', {
-              event_category: 'FAQ',
-              event_label: isOpen ? 'faq_closed' : 'faq_opened',
-              custom_parameter_1: summary.textContent.trim()
-            });
-          }
+                  // Track FAQ interaction analytics
+        analytics.trackInteraction('faq_interaction', summary.textContent.trim());
         });
 
         // Add keyboard navigation
@@ -3610,13 +4198,8 @@ Submitted via website fallback method.
           button.classList.add('active');
           document.getElementById(targetTab).classList.add('active');
 
-          // Track tab switching analytics
-          if (typeof gtag !== 'undefined') {
-            gtag('event', 'tab_switched', {
-              event_category: 'Navigation',
-              event_label: targetTab
-            });
-          }
+                  // Track tab switching analytics
+        analytics.trackInteraction('tab_switched', targetTab);
         });
       });
     }
@@ -3660,19 +4243,18 @@ Submitted via website fallback method.
             behavior: 'smooth'
           });
 
-          // Track analytics
-          if (typeof gtag !== 'undefined') {
-            gtag('event', 'back_to_top_clicked', {
-              event_category: 'Navigation',
-              event_label: 'back_to_top'
-            });
-          }
+                  // Track analytics
+        analytics.trackInteraction('back_to_top_clicked', 'back_to_top');
         });
       }
     }
 
-    // Initialize back to top functionality
-    initBackToTop();
+      // Initialize back to top functionality
+  initBackToTop();
+  
+  // Initialize Advanced Features
+  initCountdownTimer();
+  initCelebrationEffects();
 
     if (elements.themeToggle) {
       elements.themeToggle.addEventListener('click', () => {
@@ -3842,7 +4424,7 @@ Submitted via website fallback method.
   </script>
     
   <script>
-  // Scroll Animation System
+  // Enhanced Scroll Animation System with Parallax
   function initializeScrollAnimations() {
     const observerOptions = {
       threshold: 0.1,
@@ -3863,10 +4445,41 @@ Submitted via website fallback method.
       });
     }, observerOptions);
 
-    // Observe all elements that should animate on scroll (excluding timeline items)
-    document.querySelectorAll('.section, .section-alt').forEach(el => {
+    // Observe all elements that should animate on scroll
+    document.querySelectorAll('.section, .section-alt, .timeline-item').forEach(el => {
       el.classList.add('animate-on-scroll');
       observer.observe(el);
+    });
+    
+    // Parallax effect
+    function updateParallax() {
+      const scrolled = window.pageYOffset;
+      document.documentElement.style.setProperty('--parallax-offset', scrolled);
+      
+      // Apply parallax to elements
+      document.querySelectorAll('.parallax-slow').forEach(el => {
+        el.style.transform = `translateY(${scrolled * 0.5}px)`;
+      });
+      
+      document.querySelectorAll('.parallax-medium').forEach(el => {
+        el.style.transform = `translateY(${scrolled * 0.3}px)`;
+      });
+      
+      document.querySelectorAll('.parallax-fast').forEach(el => {
+        el.style.transform = `translateY(${scrolled * 0.1}px)`;
+      });
+    }
+    
+    // Throttle scroll events for performance
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          updateParallax();
+          ticking = false;
+        });
+        ticking = true;
+      }
     });
   }
 
@@ -4750,18 +5363,130 @@ Submitted via website fallback method.
   });
 }); // Close the DOMContentLoaded function
 
-// Global function for A2HS dismiss (needed for onclick attribute)
-function dismissA2HS() {
-  try {
-    localStorage.setItem('hideA2HS', 'true');
-    const prompt = document.getElementById('a2hs-prompt');
-    if (prompt) {
-      prompt.style.display = 'none';
+  // Advanced Features Implementation
+  
+  // Countdown Timer
+  function initCountdownTimer() {
+    // Set the wedding date and time (December 19, 2025 at 6:30 PM)
+    const weddingDate = new Date('December 19, 2025 18:30:00').getTime();
+    
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = weddingDate - now;
+      
+      // Calculate time units
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      
+      // Get the countdown elements
+      const daysElement = document.getElementById('days');
+      const hoursElement = document.getElementById('hours');
+      const minutesElement = document.getElementById('minutes');
+      const secondsElement = document.getElementById('seconds');
+      
+      // Update the display if elements exist
+      if (daysElement) daysElement.textContent = days.toString().padStart(2, '0');
+      if (hoursElement) hoursElement.textContent = hours.toString().padStart(2, '0');
+      if (minutesElement) minutesElement.textContent = minutes.toString().padStart(2, '0');
+      if (secondsElement) secondsElement.textContent = seconds.toString().padStart(2, '0');
+      
+      // Handle countdown completion
+      if (distance < 0) {
+        const countdownTimer = document.querySelector('.countdown-timer');
+        if (countdownTimer) {
+          countdownTimer.innerHTML = '<h3 style="margin:0;font-family:\'Playfair Display\',serif;color:var(--clr-accent);">🎉 The Celebration Has Begun! 🎉</h3>';
+        }
+        return; // Stop the interval
+      }
     }
-  } catch (error) {
-    console.error('Error dismissing A2HS prompt:', error);
+    
+    // Initial update
+    updateCountdown();
+    
+    // Update every second
+    const countdownInterval = setInterval(() => {
+      updateCountdown();
+      
+      // Check if countdown is complete and clear interval
+      const now = new Date().getTime();
+      const distance = weddingDate - now;
+      if (distance < 0) {
+        clearInterval(countdownInterval);
+      }
+    }, 1000);
+    
+    // Track countdown initialization
+    console.log('Countdown timer initialized for December 19, 2025 at 6:30 PM');
   }
-}
+  
+
+  
+
+  
+  // Celebration Effects
+  function initCelebrationEffects() {
+    // Add celebration trigger button
+    const celebrationBtn = document.createElement('button');
+    celebrationBtn.className = 'celebration-trigger';
+    celebrationBtn.innerHTML = '🎉';
+    celebrationBtn.setAttribute('aria-label', 'Trigger celebration effects');
+    document.body.appendChild(celebrationBtn);
+    
+    celebrationBtn.addEventListener('click', showCelebrationEffect);
+  }
+  
+  function showCelebrationEffect() {
+    // Create confetti
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    document.body.appendChild(confetti);
+    
+    // Generate confetti pieces
+    for (let i = 0; i < 50; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = Math.random() * 100 + '%';
+      piece.style.animationDelay = Math.random() * 3 + 's';
+      piece.style.background = ['var(--clr-accent)', 'var(--clr-green)', '#FFD700', '#FF69B4'][Math.floor(Math.random() * 4)];
+      confetti.appendChild(piece);
+    }
+    
+    // Create hearts
+    for (let i = 0; i < 10; i++) {
+      setTimeout(() => {
+        const heart = document.createElement('div');
+        heart.className = 'heart-celebration';
+        heart.innerHTML = '💖';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.top = Math.random() * 100 + '%';
+        heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
+        document.body.appendChild(heart);
+        
+        setTimeout(() => heart.remove(), 2000);
+      }, i * 200);
+    }
+    
+    // Remove confetti after animation
+    setTimeout(() => confetti.remove(), 3000);
+    
+    // Track interaction
+    analytics.trackInteraction('celebration_effect', 'triggered');
+  }
+  
+  // Global function for A2HS dismiss (needed for onclick attribute)
+  function dismissA2HS() {
+    try {
+      localStorage.setItem('hideA2HS', 'true');
+      const prompt = document.getElementById('a2hs-prompt');
+      if (prompt) {
+        prompt.style.display = 'none';
+      }
+    } catch (error) {
+      console.error('Error dismissing A2HS prompt:', error);
+    }
+  }
 </script>
 
 <div id="a2hs-prompt" style="

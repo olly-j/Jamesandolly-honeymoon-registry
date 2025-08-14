@@ -1,7 +1,7 @@
 // Service Worker for James & Oliver's Wedding Site
-const CACHE_NAME = 'james-oliver-wedding-v2';
-const STATIC_CACHE = 'static-v2';
-const DYNAMIC_CACHE = 'dynamic-v2';
+const CACHE_NAME = 'james-oliver-wedding-v3';
+const STATIC_CACHE = 'static-v3';
+const DYNAMIC_CACHE = 'dynamic-v3';
 
 const urlsToCache = [
   '/',
