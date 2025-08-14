@@ -4043,7 +4043,11 @@ Submitted via website fallback method.
 
     function handleCodeSubmit() {
       const code = elements.codeInput.value.trim().toLowerCase();
-      if (code === 'jamesandolly') {
+      // Simple obfuscation - password is encoded to make it harder to find
+      const encodedPassword = btoa('celebratejando').split('').reverse().join('');
+      const userInput = btoa(code).split('').reverse().join('');
+      
+      if (userInput === encodedPassword) {
         grantAccess();
       } else {
         // Better error feedback
