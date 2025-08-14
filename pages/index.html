@@ -66,7 +66,7 @@
   </script>
   
   <!-- Security Headers -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://formspree.io https://fonts.googleapis.com https://cdn.jsdelivr.net https://widget.cloudinary.com https://res.cloudinary.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formspree.io https://res.cloudinary.com https://www.google-analytics.com; frame-src https://www.google.com https://www.paypal.com;">
+      <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://formspree.io https://fonts.googleapis.com https://cdn.jsdelivr.net https://widget.cloudinary.com https://res.cloudinary.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formspree.io https://res.cloudinary.com; frame-src https://www.paypal.com;">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
   <meta http-equiv="X-XSS-Protection" content="1; mode=block">
@@ -101,69 +101,7 @@
   <!-- DOMPurify for input sanitization -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js"></script>
   
-  <!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'GA_MEASUREMENT_ID', {
-      page_title: 'James & Oliver Wedding',
-      custom_map: {
-        'custom_parameter_1': 'rsvp_status',
-        'custom_parameter_2': 'gift_contribution'
-      }
-    });
-    
-    // Core Web Vitals tracking
-    if ('PerformanceObserver' in window) {
-      // Largest Contentful Paint
-      const lcpObserver = new PerformanceObserver((list) => {
-        const entries = list.getEntries();
-        const lastEntry = entries[entries.length - 1];
-        gtag('event', 'lcp', { value: Math.round(lastEntry.startTime) });
-      });
-      lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
-      
-      // First Input Delay
-      const fidObserver = new PerformanceObserver((list) => {
-        const entries = list.getEntries();
-        entries.forEach((entry) => {
-          gtag('event', 'fid', { value: Math.round(entry.processingStart - entry.startTime) });
-        });
-      });
-      fidObserver.observe({ entryTypes: ['first-input'] });
-      
-      // Cumulative Layout Shift
-      const clsObserver = new PerformanceObserver((list) => {
-        let clsValue = 0;
-        const entries = list.getEntries();
-        entries.forEach((entry) => {
-          if (!entry.hadRecentInput) {
-            clsValue += entry.value;
-          }
-        });
-        gtag('event', 'cls', { value: Math.round(clsValue * 1000) / 1000 });
-      });
-      clsObserver.observe({ entryTypes: ['layout-shift'] });
-    }
-    
-    // Error tracking
-    window.addEventListener('error', function(e) {
-      gtag('event', 'exception', {
-        description: e.message,
-        fatal: false
-      });
-    });
-    
-    // Unhandled promise rejection tracking
-    window.addEventListener('unhandledrejection', function(e) {
-      gtag('event', 'exception', {
-        description: e.reason,
-        fatal: false
-      });
-    });
-  </script>
+
   
   <!-- Critical CSS inline for faster rendering -->
   <style>
@@ -3054,36 +2992,7 @@
       this.trackFormError('submit', error.message);
     }
     
-    // Analytics tracking
-    trackFormStart() {
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'begin_checkout', {
-          event_category: 'rsvp',
-          event_label: 'form_started'
-        });
-      }
-    }
-    
-    trackFormSuccess(attendance) {
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'purchase', {
-          event_category: 'rsvp',
-          event_label: 'form_completed',
-          value: 1,
-          custom_parameter_1: attendance
-        });
-      }
-    }
-    
-    trackFormError(field, error) {
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'exception', {
-          event_category: 'rsvp',
-          event_label: `error_${field}`,
-          description: error
-        });
-      }
-    }
+
     
     // Alternative submission method using email
     async tryAlternativeSubmission(formData) {
@@ -3140,16 +3049,7 @@ Submitted via website fallback method.
           }
         }
         
-        // Track alternative submission
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'rsvp_alternative_submission', {
-            event_category: 'RSVP',
-            event_label: 'email_fallback'
-          });
-        }
-        
-        // Track success
-        this.trackFormSuccess(attend);
+
         
       } catch (error) {
         console.error('Alternative submission failed:', error);
@@ -3189,73 +3089,12 @@ Submitted via website fallback method.
     }
     
     // Initialize performance monitoring
-    initializePerformanceMonitoring();
     
     // Initialize error tracking
-    initializeErrorTracking();
   });
   
   // Performance monitoring
-  function initializePerformanceMonitoring() {
-    // Track page load time
-    window.addEventListener('load', function() {
-      const loadTime = performance.now();
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'timing_complete', {
-          name: 'load',
-          value: Math.round(loadTime)
-        });
-      }
-    });
-    
-    // Track resource loading
-    if ('PerformanceObserver' in window) {
-      const resourceObserver = new PerformanceObserver((list) => {
-        list.getEntries().forEach((entry) => {
-          if (entry.initiatorType === 'img' && entry.duration > 3000) {
-            gtag('event', 'slow_resource', {
-              resource_name: entry.name,
-              duration: Math.round(entry.duration)
-            });
-          }
-        });
-      });
-      resourceObserver.observe({ entryTypes: ['resource'] });
-    }
-  }
-  
-  // Error tracking
-  function initializeErrorTracking() {
-    // Track JavaScript errors
-    window.addEventListener('error', function(e) {
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'exception', {
-          description: `${e.message} at ${e.filename}:${e.lineno}`,
-          fatal: false
-        });
-      }
-    });
-    
-    // Track unhandled promise rejections
-    window.addEventListener('unhandledrejection', function(e) {
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'exception', {
-          description: e.reason,
-          fatal: false
-        });
-      }
-    });
-    
-    // Track network errors
-    window.addEventListener('offline', function() {
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'exception', {
-          description: 'User went offline',
-          fatal: false
-        });
-      }
-    });
-  }
+
   </script>
 
 
@@ -4099,11 +3938,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const url = amount ? `https://paypal.me/yourname/${amount}` : 'https://paypal.me/yourname';
         
         // Track gift click analytics
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'gift_clicked', {
-            event_category: 'Gifts',
-            event_label: giftType || 'custom',
-            custom_parameter_2: amount || 'custom'
           });
         }
         
@@ -4227,10 +4061,6 @@ document.addEventListener('DOMContentLoaded', () => {
       
       if (!isValid) {
         // Track validation errors
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'form_validation_error', {
-            event_category: 'RSVP',
-            event_label: 'validation_failed'
           });
         }
         return;
@@ -4263,10 +4093,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Success - track analytics
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'rsvp_submitted', {
-            event_category: 'RSVP',
-            event_label: attend.value,
             custom_parameter_1: attend.value
           });
         }
@@ -4283,10 +4109,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 calendarUnlock.classList.add('show');
                 
                 // Track calendar unlock analytics
-                if (typeof gtag !== 'undefined') {
-                  gtag('event', 'calendar_unlocked', {
-                    event_category: 'RSVP',
-                    event_label: 'calendar_download_available'
                   });
                 }
               }
@@ -4301,10 +4123,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         // Track error analytics
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'form_submission_error', {
-            event_category: 'RSVP',
-            event_label: 'submission_failed'
           });
         }
       } finally {
@@ -4331,10 +4149,6 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.themeToggle.textContent = isDark ? '☀️' : '🌙';
       
       // Track theme change analytics
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'theme_changed', {
-          event_category: 'UI',
-          event_label: isDark ? 'dark' : 'light'
         });
       }
     } catch (error) {
@@ -4355,10 +4169,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const isOpen = item.hasAttribute('open');
         
         // Track FAQ interaction analytics
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'faq_interaction', {
-            event_category: 'FAQ',
-            event_label: isOpen ? 'faq_closed' : 'faq_opened',
             custom_parameter_1: summary.textContent.trim()
           });
         }
@@ -4395,10 +4205,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById(targetTab).classList.add('active');
         
         // Track tab switching analytics
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'tab_switched', {
-            event_category: 'Navigation',
-            event_label: targetTab
           });
         }
       });
@@ -4445,10 +4251,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         // Track analytics
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'back_to_top_clicked', {
-            event_category: 'Navigation',
-            event_label: 'back_to_top'
           });
         }
       });
@@ -4550,9 +4352,6 @@ window.addEventListener('load', () => {
         const lastEntry = entries[entries.length - 1];
         console.log('LCP:', lastEntry.startTime);
         
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'lcp', {
-            event_category: 'Performance',
             value: Math.round(lastEntry.startTime)
           });
         }
@@ -4565,9 +4364,6 @@ window.addEventListener('load', () => {
         entries.forEach(entry => {
           console.log('FID:', entry.processingStart - entry.startTime);
           
-          if (typeof gtag !== 'undefined') {
-            gtag('event', 'fid', {
-              event_category: 'Performance',
               value: Math.round(entry.processingStart - entry.startTime)
             });
           }
@@ -4586,9 +4382,6 @@ window.addEventListener('load', () => {
         });
         console.log('CLS:', clsValue);
         
-        if (typeof gtag !== 'undefined') {
-          gtag('event', 'cls', {
-            event_category: 'Performance',
             value: Math.round(clsValue * 1000) / 1000
           });
         }
@@ -4603,10 +4396,6 @@ window.addEventListener('load', () => {
   window.addEventListener('error', (event) => {
     console.error('JavaScript error:', event.error);
     
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'exception', {
-        description: event.error?.message || 'Unknown error',
-        fatal: false
       });
     }
   });
@@ -4615,10 +4404,6 @@ window.addEventListener('load', () => {
   window.addEventListener('unhandledrejection', (event) => {
     console.error('Unhandled promise rejection:', event.reason);
     
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'exception', {
-        description: event.reason?.message || 'Unhandled promise rejection',
-        fatal: false
       });
     }
   });
