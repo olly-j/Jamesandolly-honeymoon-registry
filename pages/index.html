@@ -365,8 +365,40 @@
     .envelope-wrapper {
       height: calc(var(--env-height) + 200px);
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 40px;
+    }
+    
+    /* Envelope Instructions */
+    .envelope-instructions {
+      text-align: center;
+      animation: instructionPulse 2s ease-in-out infinite;
+    }
+    
+    .instruction-text {
+      color: rgba(255, 255, 255, 0.9);
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin: 0 0 12px 0;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    
+    .instruction-icon {
+      font-size: 1.5rem;
+      animation: instructionBounce 1.5s ease-in-out infinite;
+    }
+    
+    @keyframes instructionPulse {
+      0%, 100% { opacity: 0.8; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.02); }
+    }
+    
+    @keyframes instructionBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
 
     /* Main Envelope */
@@ -386,6 +418,11 @@
 
     #envelope:hover {
       transform: scale(1.02);
+      box-shadow: 0 8px 30px rgba(0,0,0,.3);
+    }
+    
+    #envelope:hover + .envelope-instructions .instruction-text {
+      color: rgba(255, 255, 255, 1);
     }
 
     /* Front Elements */
@@ -598,7 +635,30 @@
       opacity: 0;
       visibility: hidden;
       transition: all 0.5s ease;
-      z-index: 25;
+      z-index: 10;
+    }
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid var(--clr-accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .loading-text {
+      color: rgba(255, 255, 255, 0.9);
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin: 0;
     }
 
     .loading-animation.visible {
@@ -606,27 +666,7 @@
       visibility: visible;
     }
 
-    .loading-spinner {
-      width: 50px;
-      height: 50px;
-      border: 3px solid rgba(184, 55, 91, 0.2);
-      border-top: 3px solid var(--clr-accent);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 20px;
-    }
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .loading-text {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.1em;
-      color: var(--clr-text);
-      margin: 0;
-    }
 
     /* Accessibility */
     .sr-only {
@@ -670,12 +710,36 @@
         --env-width: 240px;
         --env-height: 150px;
       }
+      
+      .envelope-wrapper {
+        gap: 30px;
+      }
+      
+      .instruction-text {
+        font-size: 1rem;
+      }
+      
+      .instruction-icon {
+        font-size: 1.3rem;
+      }
     }
 
     @media (max-width: 480px) {
       :root {
         --env-width: 200px;
         --env-height: 130px;
+      }
+      
+      .envelope-wrapper {
+        gap: 25px;
+      }
+      
+      .instruction-text {
+        font-size: 0.9rem;
+      }
+      
+      .instruction-icon {
+        font-size: 1.2rem;
       }
     }
 
@@ -2821,6 +2885,12 @@
           An elegant wedding invitation envelope with rose-colored design. The envelope will open to reveal your invitation.
         </div>
       </div>
+      
+      <!-- Envelope Instructions -->
+      <div class="envelope-instructions">
+        <p class="instruction-text">Click or tap to open your invitation</p>
+        <div class="instruction-icon">👆</div>
+      </div>
     </div>
     
     <!-- Loading Animation -->
@@ -3874,11 +3944,96 @@ Submitted via website fallback method.
       try {
         localStorage.setItem('accessGranted', 'true');
         elements.gate.style.display = 'none';
-        elements.main.style.display = 'block';
-
+        
+        // Show envelope animation instead of going directly to main content
+        showEnvelopeAnimation();
+      } catch (error) {
+        console.error('Error granting access:', error);
+      }
+    }
+    
+    // Envelope Animation Logic
+    function showEnvelopeAnimation() {
+      const envelopeOverlay = document.getElementById('envelope-animation-overlay');
+      const envelope = document.getElementById('envelope');
+      
+      if (envelopeOverlay && envelope) {
+        // Show envelope overlay
+        envelopeOverlay.style.display = 'flex';
+        
+        // Add click event to envelope
+        envelope.addEventListener('click', handleEnvelopeClick, { once: true });
+        
+        // Add keyboard support
+        envelope.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleEnvelopeClick();
+          }
+        }, { once: true });
+        
+        // Focus envelope for accessibility
+        envelope.focus();
+      } else {
+        // Fallback: go directly to main content if envelope elements not found
+        showMainContent();
+      }
+    }
+    
+    function handleEnvelopeClick() {
+      const envelope = document.getElementById('envelope');
+      const loadingAnimation = document.getElementById('loading-animation');
+      const instructions = document.querySelector('.envelope-instructions');
+      
+      if (envelope) {
+        // Hide instructions immediately
+        if (instructions) {
+          instructions.style.opacity = '0';
+          instructions.style.transform = 'translateY(20px)';
+          setTimeout(() => {
+            instructions.style.display = 'none';
+          }, 300);
+        }
+        
+        // Open envelope
+        envelope.classList.remove('close');
+        envelope.classList.add('open');
+        
+        // Show loading animation after envelope opens
+        setTimeout(() => {
+          if (loadingAnimation) {
+            loadingAnimation.style.opacity = '1';
+            loadingAnimation.style.visibility = 'visible';
+          }
+          
+          // Transition to main content after loading
+          setTimeout(() => {
+            showMainContent();
+          }, 2000); // Show loading for 2 seconds
+        }, 1000); // Wait 1 second after envelope opens
+      }
+    }
+    
+    function showMainContent() {
+      const envelopeOverlay = document.getElementById('envelope-animation-overlay');
+      const mainContent = document.getElementById('main-content');
+      
+      // Hide envelope overlay
+      if (envelopeOverlay) {
+        envelopeOverlay.classList.add('fade-out');
+        setTimeout(() => {
+          envelopeOverlay.style.display = 'none';
+          envelopeOverlay.classList.remove('fade-out');
+        }, 800);
+      }
+      
+      // Show main content
+      if (mainContent) {
+        mainContent.style.display = 'block';
+        
         // Remove scroll lock
         document.body.classList.remove('gate-active');
-
+        
         // Initialize countdown timer after main content is shown
         setTimeout(() => {
           initCountdownTimer();
@@ -3892,15 +4047,13 @@ Submitted via website fallback method.
             initCountdownTimer();
           }
         }, 1000);
-
+        
         // Trigger animations after access is granted
         setTimeout(() => {
           document.querySelectorAll('.section, .section-alt, .timeline').forEach((el, i) => {
             el.style.animation = `fadeInUp 0.8s ease forwards ${0.5 + i * 0.2}s`;
           });
         }, 100);
-      } catch (error) {
-        console.error('Error granting access:', error);
       }
     }
 
@@ -3926,7 +4079,8 @@ Submitted via website fallback method.
 
     // Check for existing access
     if (localStorage.getItem('accessGranted') === 'true') {
-      grantAccess();
+      // Skip envelope animation for returning users
+      showMainContent();
     } else {
       // Apply scroll lock if gate is active
       applyScrollLock();
