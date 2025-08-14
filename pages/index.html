@@ -894,7 +894,7 @@
     }
 
     .shape-shifting-text:hover {
-      transform: scale(1.05);
+      /* No hover effect - just click animation */
     }
 
     /* Enhanced responsive design */
@@ -3799,13 +3799,16 @@ document.addEventListener('DOMContentLoaded', () => {
       return {
         x: x,
         y: y,
-        vx: (Math.random() - 0.5) * 4,
-        vy: (Math.random() - 0.5) * 4,
-        size: Math.random() * 3 + 1,
+        vx: (Math.random() - 0.5) * 8 - 2, // More varied velocity with slight upward bias
+        vy: (Math.random() - 0.5) * 8 - 4, // Upward explosion effect
+        size: Math.random() * 4 + 2,
         opacity: 1,
-        targetX: x,
-        targetY: y,
-        color: '#B8375B'
+        life: 1.0, // Life counter that decreases over time
+        decay: Math.random() * 0.02 + 0.015, // Random decay rate
+        rotation: Math.random() * Math.PI * 2,
+        rotationSpeed: (Math.random() - 0.5) * 0.2,
+        gravity: 0.15, // Gravity effect
+        color: `hsl(${Math.random() * 30 + 340}, 70%, 60%)` // Varied pink/rose colors
       };
     }
     
@@ -3848,37 +3851,66 @@ document.addEventListener('DOMContentLoaded', () => {
       const textPixels = getTextPixels();
       particles = textPixels.map(pixel => createTextParticle(pixel.x, pixel.y));
       
-      // Hide original text
-      textElement.style.opacity = '0';
+      // Keep original text visible but add a subtle glow effect
+      textElement.style.textShadow = '0 0 20px rgba(184, 55, 91, 0.8)';
       
       function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
-        let allReturned = true;
+        let activeParticles = 0;
         
         particles.forEach(particle => {
-          // Draw particle
-          ctx.fillStyle = `rgba(184, 55, 91, ${particle.opacity})`;
-          ctx.beginPath();
-          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-          ctx.fill();
+          // Update particle physics
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+          particle.vy += particle.gravity; // Apply gravity
+          particle.rotation += particle.rotationSpeed;
+          particle.life -= particle.decay;
+          particle.opacity = particle.life;
           
-          // Animate back to text position
-          const dx = particle.targetX - particle.x;
-          const dy = particle.targetY - particle.y;
-          
-          if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
-            particle.x += dx * 0.1;
-            particle.y += dy * 0.1;
-            allReturned = false;
+          // Only draw if particle is still alive
+          if (particle.life > 0) {
+            activeParticles++;
+            
+            // Save context for rotation
+            ctx.save();
+            ctx.translate(particle.x, particle.y);
+            ctx.rotate(particle.rotation);
+            
+            // Draw particle with varied shapes and colors
+            ctx.fillStyle = particle.color;
+            ctx.globalAlpha = particle.opacity;
+            
+            // Randomly choose between circle, square, or diamond shapes
+            const shapeType = Math.floor(Math.random() * 3);
+            if (shapeType === 0) {
+              // Circle
+              ctx.beginPath();
+              ctx.arc(0, 0, particle.size, 0, Math.PI * 2);
+              ctx.fill();
+            } else if (shapeType === 1) {
+              // Square
+              ctx.fillRect(-particle.size, -particle.size, particle.size * 2, particle.size * 2);
+            } else {
+              // Diamond
+              ctx.beginPath();
+              ctx.moveTo(0, -particle.size);
+              ctx.lineTo(particle.size, 0);
+              ctx.lineTo(0, particle.size);
+              ctx.lineTo(-particle.size, 0);
+              ctx.closePath();
+              ctx.fill();
+            }
+            
+            ctx.restore();
           }
         });
         
-        if (!allReturned) {
+        if (activeParticles > 0) {
           requestAnimationFrame(animate);
         } else {
-          // Show original text again
-          textElement.style.opacity = '1';
+          // Animation complete - remove glow effect
+          textElement.style.textShadow = '';
           isAnimating = false;
         }
       }
