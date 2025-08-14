@@ -2875,6 +2875,7 @@
                 <div class="countdown-label">Seconds</div>
               </div>
             </div>
+
           </div>
         </div>
       </header>
@@ -3753,6 +3754,88 @@ Submitted via website fallback method.
 
   <!-- Main JavaScript -->
   <script>
+  // Global countdown timer function
+  function initCountdownTimer() {
+    console.log('=== COUNTDOWN TIMER DEBUG ===');
+    
+    // Set the wedding date and time (December 19, 2025 at 6:30 PM)
+    const weddingDate = new Date('December 19, 2025 18:30:00').getTime();
+    const now = new Date().getTime();
+    const distance = weddingDate - now;
+    
+    console.log('Wedding date:', new Date(weddingDate));
+    console.log('Current date:', new Date());
+    console.log('Distance in milliseconds:', distance);
+    console.log('Distance in days:', Math.floor(distance / (1000 * 60 * 60 * 24)));
+    
+    // Check if DOM elements exist
+    const daysElement = document.getElementById('days');
+    const hoursElement = document.getElementById('hours');
+    const minutesElement = document.getElementById('minutes');
+    const secondsElement = document.getElementById('seconds');
+    
+    console.log('DOM Elements found:', {
+      days: daysElement,
+      hours: hoursElement,
+      minutes: minutesElement,
+      seconds: secondsElement
+    });
+    
+    if (!daysElement || !hoursElement || !minutesElement || !secondsElement) {
+      console.error('ERROR: Countdown elements not found!');
+      console.log('Available elements with "days" in ID:', document.querySelectorAll('[id*="days"]'));
+      console.log('Available elements with "hours" in ID:', document.querySelectorAll('[id*="hours"]'));
+      console.log('Available elements with "minutes" in ID:', document.querySelectorAll('[id*="minutes"]'));
+      console.log('Available elements with "seconds" in ID:', document.querySelectorAll('[id*="seconds"]'));
+      return;
+    }
+    
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = weddingDate - now;
+      
+      // Calculate time units
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      
+      console.log('Countdown values:', { days, hours, minutes, seconds });
+      
+      // Update the display
+      daysElement.textContent = days.toString().padStart(2, '0');
+      hoursElement.textContent = hours.toString().padStart(2, '0');
+      minutesElement.textContent = minutes.toString().padStart(2, '0');
+      secondsElement.textContent = seconds.toString().padStart(2, '0');
+      
+      // Handle countdown completion
+      if (distance < 0) {
+        const countdownTimer = document.querySelector('.countdown-timer');
+        if (countdownTimer) {
+          countdownTimer.innerHTML = '<h3 style="margin:0;font-family:\'Playfair Display\',serif;color:var(--clr-accent);">🎉 The Celebration Has Begun! 🎉</h3>';
+        }
+        return; // Stop the interval
+      }
+    }
+    
+    // Initial update
+    updateCountdown();
+    
+    // Update every second
+    const countdownInterval = setInterval(() => {
+      updateCountdown();
+      
+      // Check if countdown is complete and clear interval
+      const now = new Date().getTime();
+      const distance = weddingDate - now;
+      if (distance < 0) {
+        clearInterval(countdownInterval);
+      }
+    }, 1000);
+    
+    console.log('Countdown timer initialized successfully!');
+  }
+
   // Enhanced JavaScript with better error handling and performance
   document.addEventListener('DOMContentLoaded', () => {
     // Cache DOM elements
@@ -3795,6 +3878,20 @@ Submitted via website fallback method.
 
         // Remove scroll lock
         document.body.classList.remove('gate-active');
+
+        // Initialize countdown timer after main content is shown
+        setTimeout(() => {
+          initCountdownTimer();
+        }, 200);
+        
+        // Fallback: try again after a longer delay if needed
+        setTimeout(() => {
+          const daysElement = document.getElementById('days');
+          if (!daysElement || daysElement.textContent === '00') {
+            console.log('Retrying countdown timer initialization...');
+            initCountdownTimer();
+          }
+        }, 1000);
 
         // Trigger animations after access is granted
         setTimeout(() => {
@@ -4253,7 +4350,6 @@ Submitted via website fallback method.
   initBackToTop();
   
   // Initialize Advanced Features
-  initCountdownTimer();
   initCelebrationEffects();
 
     if (elements.themeToggle) {
@@ -5365,61 +5461,7 @@ Submitted via website fallback method.
 
   // Advanced Features Implementation
   
-  // Countdown Timer
-  function initCountdownTimer() {
-    // Set the wedding date and time (December 19, 2025 at 6:30 PM)
-    const weddingDate = new Date('December 19, 2025 18:30:00').getTime();
-    
-    function updateCountdown() {
-      const now = new Date().getTime();
-      const distance = weddingDate - now;
-      
-      // Calculate time units
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-      
-      // Get the countdown elements
-      const daysElement = document.getElementById('days');
-      const hoursElement = document.getElementById('hours');
-      const minutesElement = document.getElementById('minutes');
-      const secondsElement = document.getElementById('seconds');
-      
-      // Update the display if elements exist
-      if (daysElement) daysElement.textContent = days.toString().padStart(2, '0');
-      if (hoursElement) hoursElement.textContent = hours.toString().padStart(2, '0');
-      if (minutesElement) minutesElement.textContent = minutes.toString().padStart(2, '0');
-      if (secondsElement) secondsElement.textContent = seconds.toString().padStart(2, '0');
-      
-      // Handle countdown completion
-      if (distance < 0) {
-        const countdownTimer = document.querySelector('.countdown-timer');
-        if (countdownTimer) {
-          countdownTimer.innerHTML = '<h3 style="margin:0;font-family:\'Playfair Display\',serif;color:var(--clr-accent);">🎉 The Celebration Has Begun! 🎉</h3>';
-        }
-        return; // Stop the interval
-      }
-    }
-    
-    // Initial update
-    updateCountdown();
-    
-    // Update every second
-    const countdownInterval = setInterval(() => {
-      updateCountdown();
-      
-      // Check if countdown is complete and clear interval
-      const now = new Date().getTime();
-      const distance = weddingDate - now;
-      if (distance < 0) {
-        clearInterval(countdownInterval);
-      }
-    }, 1000);
-    
-    // Track countdown initialization
-    console.log('Countdown timer initialized for December 19, 2025 at 6:30 PM');
-  }
+
   
 
   
