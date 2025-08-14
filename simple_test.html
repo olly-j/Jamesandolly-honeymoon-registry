@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Animation Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+        }
+        
+        .hero-section {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+        
+        .timeline-section {
+            position: relative;
+            min-height: 100vh;
+            background: #fff;
+            padding: 50px 20px;
+            overflow: hidden;
+        }
+        
+        .bokeh-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+        
+        .particle-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+        
+        .shape-shifting-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        
+        .shape-shifting-text {
+            position: relative;
+            z-index: 4;
+            cursor: pointer;
+            color: white;
+            font-size: 3em;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: white;
+        }
+        
+        .timeline-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .test-info {
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section with Particles and Shape Shifting Text -->
+    <section class="hero-section">
+        <canvas id="particleCanvas" class="particle-background"></canvas>
+        <canvas id="textCanvas" class="shape-shifting-canvas"></canvas>
+        <div class="content">
+            <h1 class="shape-shifting-text" id="coupleNames">James & Oliver</h1>
+            <p>Click the text above to see the shape shifting animation!</p>
+        </div>
+    </section>
+    
+    <!-- Timeline Section with Bokeh -->
+    <section class="timeline-section">
+        <canvas id="bokehCanvas" class="bokeh-background"></canvas>
+        <div class="timeline-content">
+            <h1>The Shape of the Evening</h1>
+            <div class="test-info">
+                <h3>Animation Test Results:</h3>
+                <p><strong>Bokeh Effect:</strong> You should see floating circular gradients in the background</p>
+                <p><strong>Particle Effect:</strong> You should see small moving dots in the hero section</p>
+                <p><strong>Shape Shifting:</strong> Click "James & Oliver" to see the explosion effect</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Bokeh Background
+        function initBokehBackground() {
+            const canvas = document.getElementById('bokehCanvas');
+            if (!canvas || canvas.dataset.initialized === 'true') return;
+            
+            const ctx = canvas.getContext('2d');
+            const bokehSpots = [];
+            let animationId = null;
+            
+            function resizeCanvas() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            }
+            
+            function createBokehSpot() {
+                return {
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 30 + 10,
+                    opacity: Math.random() * 0.3 + 0.1,
+                    speed: Math.random() * 0.5 + 0.1,
+                    color: `rgba(${Math.random() * 50 + 184}, ${Math.random() * 50 + 55}, ${Math.random() * 50 + 91}, `
+                };
+            }
+            
+            function initBokeh() {
+                resizeCanvas();
+                bokehSpots.length = 0;
+                for (let i = 0; i < 15; i++) {
+                    bokehSpots.push(createBokehSpot());
+                }
+            }
+            
+            function animateBokeh() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                bokehSpots.forEach(spot => {
+                    const gradient = ctx.createRadialGradient(spot.x, spot.y, 0, spot.x, spot.y, spot.radius);
+                    gradient.addColorStop(0, spot.color + '0.8)');
+                    gradient.addColorStop(0.5, spot.color + '0.4)');
+                    gradient.addColorStop(1, spot.color + '0)');
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(spot.x, spot.y, spot.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    spot.y += spot.speed;
+                    if (spot.y > canvas.height + spot.radius) {
+                        spot.y = -spot.radius;
+                        spot.x = Math.random() * canvas.width;
+                    }
+                });
+                
+                animationId = requestAnimationFrame(animateBokeh);
+            }
+            
+            canvas.dataset.initialized = 'true';
+            initBokeh();
+            animateBokeh();
+            console.log('✅ Bokeh animation started');
+        }
+
+        // Particle Background
+        function initParticleBackground() {
+            const canvas = document.getElementById('particleCanvas');
+            if (!canvas || canvas.dataset.initialized === 'true') return;
+            
+            const ctx = canvas.getContext('2d');
+            const particles = [];
+            let animationId = null;
+            
+            function resizeCanvas() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            }
+            
+            function createParticle() {
+                return {
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    vx: (Math.random() - 0.5) * 0.5,
+                    vy: (Math.random() - 0.5) * 0.5,
+                    size: Math.random() * 2 + 1,
+                    opacity: Math.random() * 0.5 + 0.2,
+                    color: `rgba(${Math.random() * 50 + 184}, ${Math.random() * 50 + 55}, ${Math.random() * 50 + 91}, `
+                };
+            }
+            
+            function initParticles() {
+                resizeCanvas();
+                particles.length = 0;
+                for (let i = 0; i < 50; i++) {
+                    particles.push(createParticle());
+                }
+            }
+            
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(particle => {
+                    ctx.fillStyle = particle.color + particle.opacity + ')';
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+                    
+                    if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+                });
+                
+                animationId = requestAnimationFrame(animateParticles);
+            }
+            
+            canvas.dataset.initialized = 'true';
+            initParticles();
+            animateParticles();
+            console.log('✅ Particle animation started');
+        }
+
+        // Shape Shifting Text
+        function initShapeShiftingText() {
+            const canvas = document.getElementById('textCanvas');
+            const textElement = document.getElementById('coupleNames');
+            if (!canvas || !textElement || canvas.dataset.initialized === 'true') return;
+            
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+            let isAnimating = false;
+            
+            function resizeCanvas() {
+                canvas.width = canvas.offsetWidth;
+                canvas.height = canvas.offsetHeight;
+            }
+            
+            function createTextParticle(x, y) {
+                return {
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 8 - 2,
+                    vy: (Math.random() - 0.5) * 8 - 4,
+                    size: Math.random() * 4 + 2,
+                    opacity: 1,
+                    life: 1.0,
+                    decay: Math.random() * 0.02 + 0.015,
+                    rotation: Math.random() * Math.PI * 2,
+                    rotationSpeed: (Math.random() - 0.5) * 0.2,
+                    gravity: 0.15,
+                    color: `hsl(${Math.random() * 30 + 340}, 70%, 60%)`
+                };
+            }
+            
+            function getTextPixels() {
+                const rect = textElement.getBoundingClientRect();
+                const canvasRect = canvas.getBoundingClientRect();
+                
+                const tempCanvas = document.createElement('canvas');
+                const tempCtx = tempCanvas.getContext('2d');
+                tempCanvas.width = rect.width;
+                tempCanvas.height = rect.height;
+                
+                tempCtx.font = window.getComputedStyle(textElement).font;
+                tempCtx.fillStyle = '#ffffff';
+                tempCtx.fillText(textElement.textContent, 0, rect.height * 0.8);
+                
+                const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+                const pixels = [];
+                
+                for (let y = 0; y < imageData.height; y += 4) {
+                    for (let x = 0; x < imageData.width; x += 4) {
+                        const index = (y * imageData.width + x) * 4;
+                        if (imageData.data[index + 3] > 128) {
+                            pixels.push({
+                                x: x + rect.left - canvasRect.left,
+                                y: y + rect.top - canvasRect.top
+                            });
+                        }
+                    }
+                }
+                
+                return pixels;
+            }
+            
+            function animateShapeShift() {
+                if (isAnimating) return;
+                isAnimating = true;
+                
+                const textPixels = getTextPixels();
+                particles = textPixels.map(pixel => createTextParticle(pixel.x, pixel.y));
+                
+                textElement.style.textShadow = '0 0 20px rgba(255, 255, 255, 0.8)';
+                
+                function animate() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    let activeParticles = 0;
+                    
+                    particles.forEach(particle => {
+                        particle.x += particle.vx;
+                        particle.y += particle.vy;
+                        particle.vy += particle.gravity;
+                        particle.rotation += particle.rotationSpeed;
+                        particle.life -= particle.decay;
+                        particle.opacity = particle.life;
+                        
+                        if (particle.life > 0) {
+                            activeParticles++;
+                            
+                            ctx.save();
+                            ctx.translate(particle.x, particle.y);
+                            ctx.rotate(particle.rotation);
+                            
+                            ctx.fillStyle = particle.color;
+                            ctx.globalAlpha = particle.opacity;
+                            
+                            const shapeType = Math.floor(Math.random() * 3);
+                            if (shapeType === 0) {
+                                ctx.beginPath();
+                                ctx.arc(0, 0, particle.size, 0, Math.PI * 2);
+                                ctx.fill();
+                            } else if (shapeType === 1) {
+                                ctx.fillRect(-particle.size, -particle.size, particle.size * 2, particle.size * 2);
+                            } else {
+                                ctx.beginPath();
+                                ctx.moveTo(0, -particle.size);
+                                ctx.lineTo(particle.size, 0);
+                                ctx.lineTo(0, particle.size);
+                                ctx.lineTo(-particle.size, 0);
+                                ctx.closePath();
+                                ctx.fill();
+                            }
+                            
+                            ctx.restore();
+                        }
+                    });
+                    
+                    if (activeParticles > 0) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        textElement.style.textShadow = '';
+                        isAnimating = false;
+                    }
+                }
+                
+                animate();
+            }
+            
+            textElement.addEventListener('click', animateShapeShift);
+            
+            canvas.dataset.initialized = 'true';
+            resizeCanvas();
+            console.log('✅ Shape shifting text initialized - click "James & Oliver" to test');
+        }
+
+        // Initialize all animations
+        window.addEventListener('load', () => {
+            console.log('🚀 Starting animation initialization...');
+            
+            setTimeout(() => {
+                initBokehBackground();
+            }, 100);
+            
+            setTimeout(() => {
+                initParticleBackground();
+            }, 200);
+            
+            setTimeout(() => {
+                initShapeShiftingText();
+            }, 300);
+            
+            console.log('✅ All animations initialized!');
+        });
+    </script>
+</body>
+</html>

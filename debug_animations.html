@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animation Debug</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+        }
+        .debug-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .canvas-container {
+            position: relative;
+            height: 200px;
+            border: 2px solid #ccc;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        .bokeh-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.3;
+        }
+        .particle-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+        .shape-shifting-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 3;
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        .shape-shifting-text {
+            position: relative;
+            z-index: 4;
+            cursor: pointer;
+            text-align: center;
+            padding-top: 80px;
+            font-size: 1.5em;
+            color: #B8375B;
+        }
+        .content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding-top: 20px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>Animation Debug Page</h1>
+    
+    <div class="debug-section">
+        <h2>Canvas Elements Check</h2>
+        <div id="canvas-status"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>Bokeh Background Test</h2>
+        <div class="canvas-container">
+            <canvas id="bokehCanvas" class="bokeh-background"></canvas>
+            <div class="content">
+                <p>Bokeh effects should appear here</p>
+            </div>
+        </div>
+        <div id="bokeh-status"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>Particle Background Test</h2>
+        <div class="canvas-container">
+            <canvas id="particleCanvas" class="particle-background"></canvas>
+            <div class="content">
+                <p>Particles should appear here</p>
+            </div>
+        </div>
+        <div id="particle-status"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>Shape Shifting Text Test</h2>
+        <div class="canvas-container">
+            <canvas id="textCanvas" class="shape-shifting-canvas"></canvas>
+            <h1 class="shape-shifting-text" id="coupleNames">James & Oliver</h1>
+            <div class="content">
+                <p>Click "James & Oliver" above to test animation</p>
+            </div>
+        </div>
+        <div id="text-status"></div>
+    </div>
+
+    <script>
+        // Debug logging
+        function logStatus(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.innerHTML = `<div class="status ${type}">${message}</div>`;
+            }
+            console.log(`[${elementId}] ${message}`);
+        }
+
+        // Check if canvas elements exist
+        function checkCanvasElements() {
+            const bokehCanvas = document.getElementById('bokehCanvas');
+            const particleCanvas = document.getElementById('particleCanvas');
+            const textCanvas = document.getElementById('textCanvas');
+            const coupleNames = document.getElementById('coupleNames');
+            
+            let status = '';
+            if (bokehCanvas) status += '✅ Bokeh canvas found<br>';
+            else status += '❌ Bokeh canvas missing<br>';
+            
+            if (particleCanvas) status += '✅ Particle canvas found<br>';
+            else status += '❌ Particle canvas missing<br>';
+            
+            if (textCanvas) status += '✅ Text canvas found<br>';
+            else status += '❌ Text canvas missing<br>';
+            
+            if (coupleNames) status += '✅ Couple names element found<br>';
+            else status += '❌ Couple names element missing<br>';
+            
+            logStatus('canvas-status', status, 'info');
+        }
+
+        // Bokeh Background
+        function initBokehBackground() {
+            const canvas = document.getElementById('bokehCanvas');
+            if (!canvas) {
+                logStatus('bokeh-status', '❌ Bokeh canvas not found', 'error');
+                return;
+            }
+            
+            if (canvas.dataset.initialized === 'true') {
+                logStatus('bokeh-status', '⚠️ Bokeh already initialized', 'info');
+                return;
+            }
+            
+            try {
+                const ctx = canvas.getContext('2d');
+                const bokehSpots = [];
+                let animationId = null;
+                
+                function resizeCanvas() {
+                    canvas.width = canvas.offsetWidth;
+                    canvas.height = canvas.offsetHeight;
+                }
+                
+                function createBokehSpot() {
+                    return {
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        radius: Math.random() * 30 + 10,
+                        opacity: Math.random() * 0.3 + 0.1,
+                        speed: Math.random() * 0.5 + 0.1,
+                        color: `rgba(${Math.random() * 50 + 184}, ${Math.random() * 50 + 55}, ${Math.random() * 50 + 91}, `
+                    };
+                }
+                
+                function initBokeh() {
+                    resizeCanvas();
+                    bokehSpots.length = 0;
+                    for (let i = 0; i < 15; i++) {
+                        bokehSpots.push(createBokehSpot());
+                    }
+                }
+                
+                function animateBokeh() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    bokehSpots.forEach(spot => {
+                        const gradient = ctx.createRadialGradient(spot.x, spot.y, 0, spot.x, spot.y, spot.radius);
+                        gradient.addColorStop(0, spot.color + '0.8)');
+                        gradient.addColorStop(0.5, spot.color + '0.4)');
+                        gradient.addColorStop(1, spot.color + '0)');
+                        
+                        ctx.fillStyle = gradient;
+                        ctx.beginPath();
+                        ctx.arc(spot.x, spot.y, spot.radius, 0, Math.PI * 2);
+                        ctx.fill();
+                        
+                        spot.y += spot.speed;
+                        if (spot.y > canvas.height + spot.radius) {
+                            spot.y = -spot.radius;
+                            spot.x = Math.random() * canvas.width;
+                        }
+                    });
+                    
+                    animationId = requestAnimationFrame(animateBokeh);
+                }
+                
+                canvas.dataset.initialized = 'true';
+                initBokeh();
+                animateBokeh();
+                logStatus('bokeh-status', '✅ Bokeh animation started successfully', 'success');
+                
+            } catch (error) {
+                logStatus('bokeh-status', `❌ Bokeh error: ${error.message}`, 'error');
+            }
+        }
+
+        // Particle Background
+        function initParticleBackground() {
+            const canvas = document.getElementById('particleCanvas');
+            if (!canvas) {
+                logStatus('particle-status', '❌ Particle canvas not found', 'error');
+                return;
+            }
+            
+            if (canvas.dataset.initialized === 'true') {
+                logStatus('particle-status', '⚠️ Particles already initialized', 'info');
+                return;
+            }
+            
+            try {
+                const ctx = canvas.getContext('2d');
+                const particles = [];
+                let animationId = null;
+                
+                function resizeCanvas() {
+                    canvas.width = canvas.offsetWidth;
+                    canvas.height = canvas.offsetHeight;
+                }
+                
+                function createParticle() {
+                    return {
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height,
+                        vx: (Math.random() - 0.5) * 0.5,
+                        vy: (Math.random() - 0.5) * 0.5,
+                        size: Math.random() * 2 + 1,
+                        opacity: Math.random() * 0.5 + 0.2,
+                        color: `rgba(${Math.random() * 50 + 184}, ${Math.random() * 50 + 55}, ${Math.random() * 50 + 91}, `
+                    };
+                }
+                
+                function initParticles() {
+                    resizeCanvas();
+                    particles.length = 0;
+                    for (let i = 0; i < 50; i++) {
+                        particles.push(createParticle());
+                    }
+                }
+                
+                function animateParticles() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    
+                    particles.forEach(particle => {
+                        ctx.fillStyle = particle.color + particle.opacity + ')';
+                        ctx.beginPath();
+                        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                        ctx.fill();
+                        
+                        particle.x += particle.vx;
+                        particle.y += particle.vy;
+                        
+                        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
+                        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
+                    });
+                    
+                    animationId = requestAnimationFrame(animateParticles);
+                }
+                
+                canvas.dataset.initialized = 'true';
+                initParticles();
+                animateParticles();
+                logStatus('particle-status', '✅ Particle animation started successfully', 'success');
+                
+            } catch (error) {
+                logStatus('particle-status', `❌ Particle error: ${error.message}`, 'error');
+            }
+        }
+
+        // Shape Shifting Text
+        function initShapeShiftingText() {
+            const canvas = document.getElementById('textCanvas');
+            const textElement = document.getElementById('coupleNames');
+            
+            if (!canvas || !textElement) {
+                logStatus('text-status', '❌ Text canvas or element not found', 'error');
+                return;
+            }
+            
+            if (canvas.dataset.initialized === 'true') {
+                logStatus('text-status', '⚠️ Text animation already initialized', 'info');
+                return;
+            }
+            
+            try {
+                const ctx = canvas.getContext('2d');
+                let particles = [];
+                let isAnimating = false;
+                
+                function resizeCanvas() {
+                    canvas.width = canvas.offsetWidth;
+                    canvas.height = canvas.offsetHeight;
+                }
+                
+                function createTextParticle(x, y) {
+                    return {
+                        x: x,
+                        y: y,
+                        vx: (Math.random() - 0.5) * 8 - 2,
+                        vy: (Math.random() - 0.5) * 8 - 4,
+                        size: Math.random() * 4 + 2,
+                        opacity: 1,
+                        life: 1.0,
+                        decay: Math.random() * 0.02 + 0.015,
+                        rotation: Math.random() * Math.PI * 2,
+                        rotationSpeed: (Math.random() - 0.5) * 0.2,
+                        gravity: 0.15,
+                        color: `hsl(${Math.random() * 30 + 340}, 70%, 60%)`
+                    };
+                }
+                
+                function getTextPixels() {
+                    const rect = textElement.getBoundingClientRect();
+                    const canvasRect = canvas.getBoundingClientRect();
+                    
+                    const tempCanvas = document.createElement('canvas');
+                    const tempCtx = tempCanvas.getContext('2d');
+                    tempCanvas.width = rect.width;
+                    tempCanvas.height = rect.height;
+                    
+                    tempCtx.font = window.getComputedStyle(textElement).font;
+                    tempCtx.fillStyle = '#B8375B';
+                    tempCtx.fillText(textElement.textContent, 0, rect.height * 0.8);
+                    
+                    const imageData = tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height);
+                    const pixels = [];
+                    
+                    for (let y = 0; y < imageData.height; y += 4) {
+                        for (let x = 0; x < imageData.width; x += 4) {
+                            const index = (y * imageData.width + x) * 4;
+                            if (imageData.data[index + 3] > 128) {
+                                pixels.push({
+                                    x: x + rect.left - canvasRect.left,
+                                    y: y + rect.top - canvasRect.top
+                                });
+                            }
+                        }
+                    }
+                    
+                    return pixels;
+                }
+                
+                function animateShapeShift() {
+                    if (isAnimating) return;
+                    isAnimating = true;
+                    
+                    const textPixels = getTextPixels();
+                    particles = textPixels.map(pixel => createTextParticle(pixel.x, pixel.y));
+                    
+                    textElement.style.textShadow = '0 0 20px rgba(184, 55, 91, 0.8)';
+                    
+                    function animate() {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        
+                        let activeParticles = 0;
+                        
+                        particles.forEach(particle => {
+                            particle.x += particle.vx;
+                            particle.y += particle.vy;
+                            particle.vy += particle.gravity;
+                            particle.rotation += particle.rotationSpeed;
+                            particle.life -= particle.decay;
+                            particle.opacity = particle.life;
+                            
+                            if (particle.life > 0) {
+                                activeParticles++;
+                                
+                                ctx.save();
+                                ctx.translate(particle.x, particle.y);
+                                ctx.rotate(particle.rotation);
+                                
+                                ctx.fillStyle = particle.color;
+                                ctx.globalAlpha = particle.opacity;
+                                
+                                const shapeType = Math.floor(Math.random() * 3);
+                                if (shapeType === 0) {
+                                    ctx.beginPath();
+                                    ctx.arc(0, 0, particle.size, 0, Math.PI * 2);
+                                    ctx.fill();
+                                } else if (shapeType === 1) {
+                                    ctx.fillRect(-particle.size, -particle.size, particle.size * 2, particle.size * 2);
+                                } else {
+                                    ctx.beginPath();
+                                    ctx.moveTo(0, -particle.size);
+                                    ctx.lineTo(particle.size, 0);
+                                    ctx.lineTo(0, particle.size);
+                                    ctx.lineTo(-particle.size, 0);
+                                    ctx.closePath();
+                                    ctx.fill();
+                                }
+                                
+                                ctx.restore();
+                            }
+                        });
+                        
+                        if (activeParticles > 0) {
+                            requestAnimationFrame(animate);
+                        } else {
+                            textElement.style.textShadow = '';
+                            isAnimating = false;
+                        }
+                    }
+                    
+                    animate();
+                }
+                
+                textElement.addEventListener('click', animateShapeShift);
+                
+                canvas.dataset.initialized = 'true';
+                resizeCanvas();
+                logStatus('text-status', '✅ Text animation initialized - click "James & Oliver" to test', 'success');
+                
+            } catch (error) {
+                logStatus('text-status', `❌ Text animation error: ${error.message}`, 'error');
+            }
+        }
+
+        // Initialize everything
+        window.addEventListener('load', () => {
+            console.log('Starting animation debug...');
+            checkCanvasElements();
+            
+            setTimeout(() => {
+                initBokehBackground();
+            }, 100);
+            
+            setTimeout(() => {
+                initParticleBackground();
+            }, 200);
+            
+            setTimeout(() => {
+                initShapeShiftingText();
+            }, 300);
+            
+            console.log('Animation debug complete!');
+        });
+    </script>
+</body>
+</html>

@@ -821,83 +821,7 @@
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     }
 
-    /* Bokeh Background */
-    .bokeh-background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      pointer-events: none;
-      opacity: 0.3;
-    }
 
-    /* Ensure timeline content is above bokeh */
-    .timeline > *:not(.bokeh-background) {
-      position: relative;
-      z-index: 2;
-    }
-
-    /* Particle Background */
-    .particle-background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      pointer-events: none;
-      opacity: 0.4;
-    }
-
-    /* Ensure hero content is above particles */
-    .hero-section, .section {
-      position: relative;
-      z-index: 2;
-    }
-
-    /* Liquid Lights Background */
-    .liquid-lights-background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 1;
-      pointer-events: none;
-      opacity: 0.3;
-    }
-
-    /* Ensure dress code content is above liquid lights */
-    .dress-code-textbox {
-      position: relative;
-      z-index: 2;
-    }
-
-    /* Shape Shifting Text Canvas */
-    .shape-shifting-canvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 3;
-      pointer-events: none;
-      opacity: 0.8;
-    }
-
-    /* Shape shifting text styling */
-    .shape-shifting-text {
-      position: relative;
-      z-index: 4;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .shape-shifting-text:hover {
-      /* No hover effect - just click animation */
-    }
 
     /* Enhanced responsive design */
     @media (max-width: 768px) {
@@ -2386,8 +2310,7 @@
   <div id="main-content" style="display:none;">
     <!-- Hero Section -->
     <section id="home" class="section-alt" style="position: relative;">
-      <canvas id="particleCanvas" class="particle-background"></canvas>
-      <canvas id="textCanvas" class="shape-shifting-canvas"></canvas>
+
       <header class="hero-section">
         <div class="hero-content">
           <h1 class="shape-shifting-text" id="coupleNames">James & Oliver</h1>
@@ -2415,7 +2338,7 @@
 
       <!-- Tiled Background Timeline -->
               <div class="timeline section" id="timeline" style="background-color:var(--bg-timeline); background-image:url('../assets/images/timeline-background.png'); background-repeat:repeat; background-size:auto; position: relative;">
-        <canvas id="bokehCanvas" class="bokeh-background"></canvas>
+
         <div style="text-align:center;margin:0px 0;">
           <img src="../assets/images/dividers/london.png" alt="London Divider" style="max-width:100%;height:auto;" loading="lazy">
 </div>
@@ -2490,7 +2413,7 @@
   class="section-alt dress-code-hero"
   style="position: relative;"
 >
-  <canvas id="liquidLightsCanvas" class="liquid-lights-background"></canvas>
+
   <div class="dress-code-textbox">
     <h2>Refined Celebration Wear</h2>
     <p>
@@ -3993,90 +3916,18 @@ Submitted via website fallback method.
     }
   }
 
-  // Canvas Animation System
-  function initializeCanvasAnimations() {
-    // Bokeh Background Animation
-    initBokehBackground();
-    
-    // Particle Background Animation
-    initParticleBackground();
-    
-    // Liquid Lights Animation
-    initLiquidLights();
-    
-    // Shape Shifting Text Animation
-    initShapeShiftingText();
-  }
 
-  // Bokeh Background
-  function initBokehBackground() {
-    const canvas = document.getElementById('bokehCanvas');
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    const bokehSpots = [];
-    
-    function resizeCanvas() {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-    }
-    
-    function createBokehSpot() {
-      return {
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 30 + 10,
-        opacity: Math.random() * 0.3 + 0.1,
-        speed: Math.random() * 0.5 + 0.1,
-        color: `rgba(${Math.random() * 50 + 184}, ${Math.random() * 50 + 55}, ${Math.random() * 50 + 91}, `
-      };
-    }
-    
-    function initBokeh() {
-      resizeCanvas();
-      for (let i = 0; i < 15; i++) {
-        bokehSpots.push(createBokehSpot());
-      }
-    }
-    
-    function animateBokeh() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      bokehSpots.forEach(spot => {
-        // Create gradient for bokeh effect
-        const gradient = ctx.createRadialGradient(spot.x, spot.y, 0, spot.x, spot.y, spot.radius);
-        gradient.addColorStop(0, spot.color + '0.8)');
-        gradient.addColorStop(0.5, spot.color + '0.4)');
-        gradient.addColorStop(1, spot.color + '0)');
-        
-        ctx.fillStyle = gradient;
-        ctx.beginPath();
-        ctx.arc(spot.x, spot.y, spot.radius, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Gentle movement
-        spot.y += spot.speed;
-        if (spot.y > canvas.height + spot.radius) {
-          spot.y = -spot.radius;
-          spot.x = Math.random() * canvas.width;
-        }
-      });
-      
-      requestAnimationFrame(animateBokeh);
-    }
-    
-    initBokeh();
-    animateBokeh();
-    window.addEventListener('resize', initBokeh);
-  }
+
+
 
   // Particle Background
   function initParticleBackground() {
     const canvas = document.getElementById('particleCanvas');
-    if (!canvas) return;
+    if (!canvas || canvas.dataset.initialized === 'true') return;
     
     const ctx = canvas.getContext('2d');
     const particles = [];
+    let animationId = null;
     
     function resizeCanvas() {
       canvas.width = canvas.offsetWidth;
@@ -4097,6 +3948,7 @@ Submitted via website fallback method.
     
     function initParticles() {
       resizeCanvas();
+      particles.length = 0; // Clear existing particles
       for (let i = 0; i < 50; i++) {
         particles.push(createParticle());
       }
@@ -4120,21 +3972,36 @@ Submitted via website fallback method.
         if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
       });
       
-      requestAnimationFrame(animateParticles);
+      animationId = requestAnimationFrame(animateParticles);
     }
     
+    // Debounced resize handler
+    let resizeTimeout;
+    function handleResize() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+        }
+        initParticles();
+        animateParticles();
+      }, 100);
+    }
+    
+    canvas.dataset.initialized = 'true';
     initParticles();
     animateParticles();
-    window.addEventListener('resize', initParticles);
+    window.addEventListener('resize', handleResize);
   }
 
   // Liquid Lights
   function initLiquidLights() {
     const canvas = document.getElementById('liquidLightsCanvas');
-    if (!canvas) return;
+    if (!canvas || canvas.dataset.initialized === 'true') return;
     
     const ctx = canvas.getContext('2d');
     const lights = [];
+    let animationId = null;
     
     function resizeCanvas() {
       canvas.width = canvas.offsetWidth;
@@ -4154,7 +4021,8 @@ Submitted via website fallback method.
     
     function initLights() {
       resizeCanvas();
-      for (let i = 0;  i < 8; i++) {
+      lights.length = 0; // Clear existing lights
+      for (let i = 0; i < 8; i++) {
         lights.push(createLight());
       }
     }
@@ -4186,19 +4054,33 @@ Submitted via website fallback method.
         if (light.y > canvas.height) light.y = 0;
       });
       
-      requestAnimationFrame(animateLights);
+      animationId = requestAnimationFrame(animateLights);
     }
     
+    // Debounced resize handler
+    let resizeTimeout;
+    function handleResize() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        if (animationId) {
+          cancelAnimationFrame(animationId);
+        }
+        initLights();
+        animateLights();
+      }, 100);
+    }
+    
+    canvas.dataset.initialized = 'true';
     initLights();
     animateLights();
-    window.addEventListener('resize', initLights);
+    window.addEventListener('resize', handleResize);
   }
 
   // Shape Shifting Text
   function initShapeShiftingText() {
     const canvas = document.getElementById('textCanvas');
     const textElement = document.getElementById('coupleNames');
-    if (!canvas || !textElement) return;
+    if (!canvas || !textElement || canvas.dataset.initialized === 'true') return;
     
     const ctx = canvas.getContext('2d');
     let particles = [];
@@ -4335,6 +4217,7 @@ Submitted via website fallback method.
     // Add click event to trigger shape shifting
     textElement.addEventListener('click', animateShapeShift);
     
+    canvas.dataset.initialized = 'true';
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
   }
@@ -4404,8 +4287,7 @@ Submitted via website fallback method.
   // Initialize performance optimizations
   initializePerformanceOptimizations();
   
-  // Initialize canvas animations
-  initializeCanvasAnimations();
+
 
   // Gift Progress with error handling
   try {
@@ -4651,6 +4533,10 @@ Submitted via website fallback method.
       additionalElements.themeToggle.textContent = isDark ? '☀️' : '🌙';
       
       // Track theme change analytics
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'theme_change', {
+          event_category: 'UI',
+          event_label: isDark ? 'dark' : 'light'
         });
       }
     } catch (error) {
@@ -4671,6 +4557,10 @@ Submitted via website fallback method.
         const isOpen = item.hasAttribute('open');
         
         // Track FAQ interaction analytics
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'faq_interaction', {
+            event_category: 'FAQ',
+            event_label: summary.textContent.trim(),
             custom_parameter_1: summary.textContent.trim()
           });
         }
@@ -4707,6 +4597,10 @@ Submitted via website fallback method.
         document.getElementById(targetTab).classList.add('active');
         
         // Track tab switching analytics
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'tab_switch', {
+            event_category: 'Navigation',
+            event_label: targetTab
           });
         }
       });
@@ -4753,6 +4647,10 @@ Submitted via website fallback method.
         });
         
         // Track analytics
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'back_to_top', {
+            event_category: 'Navigation',
+            event_label: 'back_to_top_click'
           });
         }
       });
@@ -4795,17 +4693,64 @@ Submitted via website fallback method.
 
     sections.forEach(section => observer.observe(section));
   }
-});
+  // iOS Home Screen Prompt
+  function isiOS() {
+    return /iPhone|iPad|iPod/i.test(navigator.userAgent) && !window.MSStream;
+  }
 
-// iOS Home Screen Prompt
-function isiOS() {
-  return /iPhone|iPad|iPod/i.test(navigator.userAgent) && !window.MSStream;
-}
+  function isInStandaloneMode() {
+    return ('standalone' in navigator) && navigator.standalone;
+  }
 
-function isInStandaloneMode() {
-  return ('standalone' in navigator) && navigator.standalone;
-}
+  function dismissA2HS() {
+    try {
+      localStorage.setItem('hideA2HS', 'true');
+      const prompt = document.getElementById('a2hs-prompt');
+      if (prompt) {
+        prompt.style.display = 'none';
+      }
+    } catch (error) {
+      console.error('Error dismissing A2HS prompt:', error);
+    }
+  }
 
+  // Show A2HS prompt for iOS users
+  if (isiOS() && !isInStandaloneMode() && !localStorage.getItem('hideA2HS')) {
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const prompt = document.getElementById('a2hs-prompt');
+        if (prompt) {
+          prompt.style.display = 'block';
+        }
+      }, 3000);
+    });
+  }
+
+  // Service Worker registration for PWA functionality
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('../sw.js')
+        .then(registration => {
+          console.log('SW registered: ', registration);
+        })
+        .catch(registrationError => {
+          console.log('SW registration failed: ', registrationError);
+        });
+    });
+  }
+
+  // Basic error tracking
+  window.addEventListener('error', (event) => {
+    console.error('JavaScript error:', event.error);
+  });
+
+  // Unhandled promise rejections
+  window.addEventListener('unhandledrejection', (event) => {
+    console.error('Unhandled promise rejection:', event.reason);
+  });
+}); // Close the DOMContentLoaded function
+
+// Global function for A2HS dismiss (needed for onclick attribute)
 function dismissA2HS() {
   try {
     localStorage.setItem('hideA2HS', 'true');
@@ -4817,41 +4762,6 @@ function dismissA2HS() {
     console.error('Error dismissing A2HS prompt:', error);
   }
 }
-
-// Show A2HS prompt for iOS users
-if (isiOS() && !isInStandaloneMode() && !localStorage.getItem('hideA2HS')) {
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      const prompt = document.getElementById('a2hs-prompt');
-      if (prompt) {
-        prompt.style.display = 'block';
-      }
-    }, 3000);
-  });
-}
-
-// Service Worker registration for PWA functionality
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('../sw.js')
-      .then(registration => {
-        console.log('SW registered: ', registration);
-      })
-      .catch(registrationError => {
-        console.log('SW registration failed: ', registrationError);
-      });
-  });
-}
-
-// Basic error tracking
-window.addEventListener('error', (event) => {
-  console.error('JavaScript error:', event.error);
-});
-
-// Unhandled promise rejections
-window.addEventListener('unhandledrejection', (event) => {
-  console.error('Unhandled promise rejection:', event.reason);
-});
 </script>
 
 <div id="a2hs-prompt" style="
