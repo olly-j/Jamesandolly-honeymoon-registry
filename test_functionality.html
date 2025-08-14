@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Functionality Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f0f0f0;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>JavaScript Functionality Test</h1>
+        
+        <div class="test-result info">
+            <strong>Test Instructions:</strong>
+            <ol>
+                <li>Click "Test Main Site" to open the wedding site</li>
+                <li>Enter "jamesandolly" in the password field</li>
+                <li>Test the following functionality after access is granted:</li>
+                <ul>
+                    <li>Navigation links work</li>
+                    <li>Dark mode toggle works</li>
+                    <li>FAQ accordions work</li>
+                    <li>Tab navigation works</li>
+                    <li>RSVP form validation works</li>
+                    <li>Gift buttons work</li>
+                    <li>Back to top button works</li>
+                </ul>
+            </ol>
+        </div>
+
+        <div class="test-section">
+            <h3>Password System Test</h3>
+            <button class="test-button" onclick="testPasswordSystem()">Test Main Site</button>
+            <button class="test-button" onclick="clearAccess()">Clear Access (Reset)</button>
+        </div>
+
+        <div class="test-section">
+            <h3>Server Status</h3>
+            <div id="server-status">Checking server status...</div>
+        </div>
+
+        <div class="test-section">
+            <h3>JavaScript Console Check</h3>
+            <button class="test-button" onclick="checkConsole()">Check for JavaScript Errors</button>
+            <div id="console-status"></div>
+        </div>
+        
+        <div id="test-results"></div>
+    </div>
+
+    <script>
+        function testPasswordSystem() {
+            // Open the main site in a new window
+            window.open('http://localhost:8003/pages/index.html', '_blank');
+            
+            const results = document.getElementById('test-results');
+            results.innerHTML = `
+                <div class="test-result info">
+                    <strong>Test Started:</strong> The main site should have opened in a new window.<br>
+                    <strong>Expected Behavior:</strong>
+                    <ul>
+                        <li>Password gate should be visible</li>
+                        <li>Enter "jamesandolly" and click Enter</li>
+                        <li>Main content should appear</li>
+                        <li>All navigation and functionality should work</li>
+                    </ul>
+                </div>
+            `;
+        }
+
+        function clearAccess() {
+            // Clear localStorage to reset access
+            if (typeof(Storage) !== "undefined") {
+                localStorage.removeItem('accessGranted');
+                localStorage.removeItem('darkMode');
+                localStorage.removeItem('hideA2HS');
+            }
+            
+            const results = document.getElementById('test-results');
+            results.innerHTML = `
+                <div class="test-result success">
+                    <strong>Access Cleared:</strong> All stored access has been reset.<br>
+                    The password gate should now appear when you visit the site.
+                </div>
+            `;
+        }
+
+        function checkConsole() {
+            const consoleStatus = document.getElementById('console-status');
+            consoleStatus.innerHTML = `
+                <div class="test-result info">
+                    <strong>Console Check:</strong> Please open the browser's developer tools (F12) and check the Console tab for any JavaScript errors.<br>
+                    <strong>Expected:</strong> No red error messages in the console.
+                </div>
+            `;
+        }
+
+        // Check if the server is running
+        fetch('http://localhost:8003/pages/index.html')
+            .then(response => {
+                if (response.ok) {
+                    document.getElementById('server-status').innerHTML = `
+                        <div class="test-result success">
+                            <strong>Server Status:</strong> ✅ Server is running on port 8003
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                document.getElementById('server-status').innerHTML = `
+                    <div class="test-result error">
+                        <strong>Server Error:</strong> ❌ Server is not running on port 8003<br>
+                        Please start the server with: python3 -m http.server 8003
+                    </div>
+                `;
+            });
+
+        // Test for common JavaScript issues
+        window.addEventListener('load', function() {
+            console.log('Functionality test page loaded successfully');
+            
+            // Test if basic JavaScript is working
+            try {
+                const testElement = document.createElement('div');
+                testElement.style.display = 'none';
+                document.body.appendChild(testElement);
+                document.body.removeChild(testElement);
+                console.log('Basic DOM manipulation working');
+            } catch (error) {
+                console.error('Basic DOM manipulation failed:', error);
+            }
+        });
+    </script>
+</body>
+</html>
