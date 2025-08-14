@@ -101,6 +101,70 @@
   <!-- DOMPurify for input sanitization -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js"></script>
   
+  <!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_MEASUREMENT_ID', {
+      page_title: 'James & Oliver Wedding',
+      custom_map: {
+        'custom_parameter_1': 'rsvp_status',
+        'custom_parameter_2': 'gift_contribution'
+      }
+    });
+    
+    // Core Web Vitals tracking
+    if ('PerformanceObserver' in window) {
+      // Largest Contentful Paint
+      const lcpObserver = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        const lastEntry = entries[entries.length - 1];
+        gtag('event', 'lcp', { value: Math.round(lastEntry.startTime) });
+      });
+      lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+      
+      // First Input Delay
+      const fidObserver = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        entries.forEach((entry) => {
+          gtag('event', 'fid', { value: Math.round(entry.processingStart - entry.startTime) });
+        });
+      });
+      fidObserver.observe({ entryTypes: ['first-input'] });
+      
+      // Cumulative Layout Shift
+      const clsObserver = new PerformanceObserver((list) => {
+        let clsValue = 0;
+        const entries = list.getEntries();
+        entries.forEach((entry) => {
+          if (!entry.hadRecentInput) {
+            clsValue += entry.value;
+          }
+        });
+        gtag('event', 'cls', { value: Math.round(clsValue * 1000) / 1000 });
+      });
+      clsObserver.observe({ entryTypes: ['layout-shift'] });
+    }
+    
+    // Error tracking
+    window.addEventListener('error', function(e) {
+      gtag('event', 'exception', {
+        description: e.message,
+        fatal: false
+      });
+    });
+    
+    // Unhandled promise rejection tracking
+    window.addEventListener('unhandledrejection', function(e) {
+      gtag('event', 'exception', {
+        description: e.reason,
+        fatal: false
+      });
+    });
+  </script>
+  
 
   
   <!-- Critical CSS inline for faster rendering -->
@@ -2319,10 +2383,7 @@
   </nav>
 
   <!-- Main Content -->
- <div id="main-content" style="display:none;">
-
-</div>
-
+  <div id="main-content" style="display:none;">
     <!-- Hero Section -->
     <section id="home" class="section-alt" style="position: relative;">
       <canvas id="particleCanvas" class="particle-background"></canvas>
@@ -3244,7 +3305,6 @@ document.addEventListener('DOMContentLoaded', () => {
     codeSubmit: document.getElementById('code-submit'),
     codeInput: document.getElementById('code-input'),
     gate: document.getElementById('gate-overlay'),
-    envelopeAnimation: document.getElementById('envelope-animation-overlay'),
     main: document.getElementById('main-content'),
     rsvpForm: document.getElementById('rsvp-form'),
     thankMsg: document.getElementById('rsvp-confirmation'),
@@ -3260,89 +3320,614 @@ document.addEventListener('DOMContentLoaded', () => {
   function grantAccess() {
     try {
       localStorage.setItem('accessGranted', 'true');
-      
-      // Hide gate and show envelope animation
       elements.gate.style.display = 'none';
-      elements.envelopeAnimation.style.display = 'flex';
-      
+      elements.main.style.display = 'block';
+
       // Remove scroll lock
       document.body.classList.remove('gate-active');
-      
-      // Start the envelope animation sequence
-      startEnvelopeAnimation();
+
+      // Trigger animations after access is granted
+      setTimeout(() => {
+        document.querySelectorAll('.section, .section-alt, .timeline').forEach((el, i) => {
+          el.style.animation = `fadeInUp 0.8s ease forwards ${0.5 + i * 0.2}s`;
+        });
+      }, 100);
     } catch (error) {
       console.error('Error granting access:', error);
     }
   }
 
-  // Envelope Animation Sequence
-  function startEnvelopeAnimation() {
-    const envelope = document.getElementById('envelope');
-    const loadingAnimation = document.getElementById('loading-animation');
-    const envelopeAnimation = elements.envelopeAnimation;
-    
-    // Initialize audio context for sound effects
-    let audioContext = null;
-    try {
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    } catch (e) {
-      console.log('Audio not supported');
-    }
-    
-    // Helper function to play sound effects
-    function playSound(frequency, duration, type = 'sine') {
-      if (!audioContext) return;
-      
-      try {
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-        oscillator.type = type;
-        
-        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + duration);
-      } catch (error) {
-        // Audio playback failed, continue without sound
-      }
-    }
-    
-    // Step 1: Open the envelope (immediate)
-    envelope.classList.remove('close');
-    envelope.classList.add('open');
-    playSound(800, 0.3, 'triangle'); // Envelope opening sound
-    
-    // Step 2: Show loading animation after envelope opens
-    setTimeout(() => {
-      loadingAnimation.classList.add('visible');
-    }, 2000);
-    
-    // Step 3: Hide loading and reveal main content
-    setTimeout(() => {
-      loadingAnimation.classList.remove('visible');
-      playSound(1200, 0.4, 'sine'); // Success sound
-      
-      // Fade out envelope animation
-      envelopeAnimation.classList.add('fade-out');
-      
-      // Show main content after fade
-      setTimeout(() => {
-        envelopeAnimation.style.display = 'none';
-        elements.main.style.display = 'block';
-        
-        // Trigger page animations
-        document.querySelectorAll('.section, .section-alt, .timeline').forEach((el, i) => {
-          el.style.animation = `fadeInUp 0.8s ease forwards ${0.5 + i * 0.2}s`;
-        });
-      }, 800);
-    }, 5000);
+  // Apply scroll lock when gate is active
+  function applyScrollLock() {
+    document.body.classList.add('gate-active');
   }
+
+  function handleCodeSubmit() {
+    const code = elements.codeInput.value.trim().toLowerCase();
+    if (code === 'jamesandolly') {
+      grantAccess();
+    } else {
+      // Better error feedback
+      elements.codeInput.style.borderColor = '#ff4444';
+      elements.codeInput.placeholder = 'Incorrect code, try again';
+      setTimeout(() => {
+        elements.codeInput.style.borderColor = '#ddd';
+        elements.codeInput.placeholder = 'Access Code';
+      }, 2000);
+    }
+  }
+
+  // Check for existing access
+  if (localStorage.getItem('accessGranted') === 'true') {
+    grantAccess();
+  } else {
+    // Apply scroll lock if gate is active
+    applyScrollLock();
+  }
+
+  // Event listeners
+  elements.codeSubmit.addEventListener('click', handleCodeSubmit);
+  elements.codeInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleCodeSubmit();
+    }
+  });
+
+  // Focus input on load
+  elements.codeInput.focus();
+
+  // Gift Progress with error handling
+  try {
+    const total = 3500, goal = 20000;
+    const pct = Math.min((total / goal) * 100, 100);
+    if (elements.giftProgressBar) {
+      elements.giftProgressBar.style.width = pct + '%';
+    }
+    if (elements.giftProgressText) {
+      elements.giftProgressText.textContent = `£${total} of £${goal} goal reached`;
+    }
+  } catch (error) {
+    console.error('Error updating gift progress:', error);
+  }
+
+  // Enhanced Gift Contribution Logic with analytics
+  document.querySelectorAll('.btn-gift').forEach(btn => {
+    btn.addEventListener('click', () => {
+      try {
+        const card = btn.closest('.card');
+        const amount = card?.getAttribute('data-amount');
+        const giftType = card?.getAttribute('data-id');
+        const url = amount ? `https://paypal.me/yourname/${amount}` : 'https://paypal.me/yourname';
+
+        // Track gift click analytics
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'gift_clicked', {
+            event_category: 'Gifts',
+            event_label: giftType || 'custom',
+            custom_parameter_2: amount || 'custom'
+          });
+        }
+
+        window.open(url, '_blank');
+        if (elements.thankyouModal) {
+          elements.thankyouModal.style.display = 'flex';
+        }
+      } catch (error) {
+        console.error('Error handling gift contribution:', error);
+      }
+    });
+  });
+
+  // Enhanced RSVP Form with comprehensive validation and analytics
+  if (elements.rsvpForm && elements.thankMsg) {
+    const form = elements.rsvpForm;
+
+    // Real-time validation
+    const validateField = (field, rules) => {
+      const value = field.value.trim();
+      const errorElement = document.getElementById(field.id + '-error') || field.parentNode.querySelector('.error-message');
+
+      // Clear previous errors
+      if (errorElement) {
+        errorElement.textContent = '';
+        errorElement.style.display = 'none';
+      }
+      field.classList.remove('field-error');
+
+      // Apply validation rules
+      for (const rule of rules) {
+        if (!rule.test(value)) {
+          field.classList.add('field-error');
+          if (errorElement) {
+            errorElement.textContent = rule.message;
+            errorElement.style.display = 'block';
+          }
+          return false;
+        }
+      }
+      return true;
+    };
+
+    // Validation rules
+    const validationRules = {
+      'rsvp-name': [
+        { test: (value) => value.length >= 2, message: 'Name must be at least 2 characters' },
+        { test: (value) => /^[A-Za-z\s\-']{2,100}$/.test(value), message: 'Name contains invalid characters' }
+      ],
+      'rsvp-diet': [
+        { test: (value) => value.length <= 200, message: 'Dietary needs must be under 200 characters' }
+      ],
+      'rsvp-access': [
+        { test: (value) => value.length <= 200, message: 'Accessibility notes must be under 200 characters' }
+      ]
+    };
+
+    // Add real-time validation listeners
+    Object.keys(validationRules).forEach(fieldId => {
+      const field = document.getElementById(fieldId);
+      if (field) {
+        field.addEventListener('blur', () => validateField(field, validationRules[fieldId]));
+        field.addEventListener('input', () => {
+          if (field.classList.contains('field-error')) {
+            validateField(field, validationRules[fieldId]);
+          }
+        });
+      }
+    });
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const submitBtn = this.querySelector('button[type="submit"]');
+      const btnText = submitBtn.querySelector('.btn-text');
+      const btnLoading = submitBtn.querySelector('.btn-loading');
+      const submitError = document.getElementById('submit-error');
+
+      // Clear previous errors
+      this.querySelectorAll('.error-message').forEach(el => {
+        el.textContent = '';
+        el.style.display = 'none';
+      });
+      this.querySelectorAll('.field-error').forEach(el => el.classList.remove('field-error'));
+
+      // Validate all fields
+      const name = this.querySelector('#rsvp-name');
+      const attend = this.querySelector('input[name="attend"]:checked');
+      const diet = this.querySelector('#rsvp-diet');
+      const access = this.querySelector('#rsvp-access');
+
+      let isValid = true;
+
+      // Validate name
+      if (!validateField(name, validationRules['rsvp-name'])) {
+        isValid = false;
+      }
+
+      // Validate attendance
+      if (!attend) {
+        const attendError = document.getElementById('attend-error');
+        if (attendError) {
+          attendError.textContent = 'Please select whether you will attend';
+          attendError.style.display = 'block';
+        }
+        isValid = false;
+      }
+
+      // Validate optional fields
+      if (diet.value.trim()) {
+        if (!validateField(diet, validationRules['rsvp-diet'])) {
+          isValid = false;
+        }
+      }
+
+      if (access.value.trim()) {
+        if (!validateField(access, validationRules['rsvp-access'])) {
+          isValid = false;
+        }
+      }
+
+      if (!isValid) {
+        // Track validation errors
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'form_validation_error', {
+            event_category: 'RSVP',
+            event_label: 'validation_failed'
+          });
+        }
+        return;
+      }
+
+      try {
+        // Show loading state
+        btnText.style.display = 'none';
+        btnLoading.style.display = 'inline';
+        submitBtn.disabled = true;
+
+        // Sanitize inputs
+        const formData = new FormData(this);
+        const sanitizedData = new FormData();
+
+        for (const [key, value] of formData.entries()) {
+          if (key !== '_gotcha') { // Skip honeypot
+            sanitizedData.append(key, DOMPurify.sanitize(value.toString().trim()));
+          }
+        }
+
+        const response = await fetch(this.action, {
+          method: this.method,
+          body: sanitizedData,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        // Success - track analytics
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'rsvp_submitted', {
+            event_category: 'RSVP',
+            event_label: attend.value,
+            custom_parameter_1: attend.value
+          });
+        }
+
+        // Success
+        this.style.display = 'none';
+        elements.thankMsg.style.display = 'block';
+
+        // Show calendar link if they said Yes
+        if (attend.value === 'Yes') {
+          const calendarUnlock = document.getElementById('calendar-unlock');
+          if (calendarUnlock) {
+            calendarUnlock.style.display = 'block';
+            calendarUnlock.classList.add('show');
+
+            // Track calendar unlock analytics
+            if (typeof gtag !== 'undefined') {
+              gtag('event', 'calendar_unlocked', {
+                event_category: 'RSVP',
+                event_label: 'calendar_download_available'
+              });
+            }
+          }
+        }
+      } catch (error) {
+        console.error('RSVP submission error:', error);
+
+        // Show user-friendly error
+        if (submitError) {
+          submitError.textContent = 'Sorry, there was a problem submitting your RSVP. Please try again or email us directly.';
+          submitError.style.display = 'block';
+        }
+
+        // Track error analytics
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'form_submission_error', {
+            event_category: 'RSVP',
+            event_label: 'submission_failed'
+          });
+        }
+      } finally {
+        // Reset button state
+        btnText.style.display = 'inline';
+        btnLoading.style.display = 'none';
+        submitBtn.disabled = false;
+      }
+    });
+  }
+
+  // Modal close handler
+  if (elements.thankyouClose) {
+    elements.thankyouClose.addEventListener('click', () => {
+      elements.thankyouModal.style.display = 'none';
+    });
+  }
+
+  // Enhanced Dark mode toggle with analytics
+  function applyDarkMode(isDark) {
+    try {
+      document.body.classList.toggle('dark-mode', isDark);
+      localStorage.setItem('darkMode', isDark);
+      elements.themeToggle.textContent = isDark ? '☀️' : '🌙';
+
+      // Track theme change analytics
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'theme_changed', {
+          event_category: 'UI',
+          event_label: isDark ? 'dark' : 'light'
+        });
+      }
+    } catch (error) {
+      console.error('Error toggling dark mode:', error);
+    }
+  }
+
+  // FAQ Section Enhancement
+  function initFAQ() {
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    faqItems.forEach(item => {
+      const summary = item.querySelector('summary');
+      const details = item.querySelector('details');
+
+      // Add click tracking
+      summary.addEventListener('click', () => {
+        const isOpen = item.hasAttribute('open');
+
+        // Track FAQ interaction analytics
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'faq_interaction', {
+            event_category: 'FAQ',
+            event_label: isOpen ? 'faq_closed' : 'faq_opened',
+            custom_parameter_1: summary.textContent.trim()
+          });
+        }
+      });
+
+      // Add keyboard navigation
+      summary.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          summary.click();
+        }
+      });
+    });
+  }
+
+  // Initialize FAQ functionality
+  initFAQ();
+
+  // Tab Navigation Functionality
+  function initTabNavigation() {
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const targetTab = button.getAttribute('data-tab');
+
+        // Remove active class from all buttons and contents
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        // Add active class to clicked button and corresponding content
+        button.classList.add('active');
+        document.getElementById(targetTab).classList.add('active');
+
+        // Track tab switching analytics
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'tab_switched', {
+            event_category: 'Navigation',
+            event_label: targetTab
+          });
+        }
+      });
+    });
+  }
+
+  // Initialize tab navigation
+  initTabNavigation();
+
+  // Timeline Animation Setup
+  function initTimelineAnimations() {
+    const timelineItems = document.querySelectorAll('.timeline-item');
+
+    timelineItems.forEach((item, index) => {
+      // Add staggered animation delay
+      item.style.animationDelay = `${1.2 + (index * 0.1)}s`;
+    });
+  }
+
+  // Initialize timeline animations
+  initTimelineAnimations();
+
+  // Back to Top Button Functionality
+  function initBackToTop() {
+    const backToTopBtn = document.getElementById('back-to-top');
+
+    if (backToTopBtn) {
+      // Show/hide button based on scroll position
+      window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+          backToTopBtn.style.opacity = '1';
+          backToTopBtn.style.visibility = 'visible';
+        } else {
+          backToTopBtn.style.opacity = '0';
+          backToTopBtn.style.visibility = 'hidden';
+        }
+      });
+
+      // Smooth scroll to top when clicked
+      backToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+
+        // Track analytics
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'back_to_top_clicked', {
+            event_category: 'Navigation',
+            event_label: 'back_to_top'
+          });
+        }
+      });
+    }
+  }
+
+  // Initialize back to top functionality
+  initBackToTop();
+
+  if (elements.themeToggle) {
+    elements.themeToggle.addEventListener('click', () => {
+      const isDark = !document.body.classList.contains('dark-mode');
+      applyDarkMode(isDark);
+    });
+
+    // Initialize dark mode
+    applyDarkMode(localStorage.getItem('darkMode') === 'true');
+  }
+
+  // Intersection Observer for nav highlighting
+  const navLinks = document.querySelectorAll('.site-nav a[href^="#"]');
+  const sections = Array.from(navLinks)
+    .map(link => document.querySelector(link.getAttribute('href')))
+    .filter(Boolean);
+
+  if (sections.length > 0) {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        const id = entry.target.id;
+        const navLink = document.querySelector(`.site-nav a[href="#${id}"]`);
+        if (entry.isIntersecting && navLink) {
+          navLinks.forEach(link => link.classList.remove('active'));
+          navLink.classList.add('active');
+        }
+      });
+    }, {
+      threshold: 0.6,
+      rootMargin: '-10% 0px -10% 0px'
+    });
+
+    sections.forEach(section => observer.observe(section));
+  }
+});
+
+// iOS Home Screen Prompt
+function isiOS() {
+  return /iPhone|iPad|iPod/i.test(navigator.userAgent) && !window.MSStream;
+}
+
+function isInStandaloneMode() {
+  return ('standalone' in navigator) && navigator.standalone;
+}
+
+function dismissA2HS() {
+  try {
+    localStorage.setItem('hideA2HS', 'true');
+    const prompt = document.getElementById('a2hs-prompt');
+    if (prompt) {
+      prompt.style.display = 'none';
+    }
+  } catch (error) {
+    console.error('Error dismissing A2HS prompt:', error);
+  }
+}
+
+// Show A2HS prompt for iOS users
+if (isiOS() && !isInStandaloneMode() && !localStorage.getItem('hideA2HS')) {
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const prompt = document.getElementById('a2hs-prompt');
+      if (prompt) {
+        prompt.style.display = 'block';
+      }
+    }, 3000);
+  });
+}
+
+// Service Worker registration for PWA functionality
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(registration => {
+        console.log('SW registered: ', registration);
+      })
+      .catch(registrationError => {
+        console.log('SW registration failed: ', registrationError);
+      });
+  });
+}
+
+// Performance monitoring
+window.addEventListener('load', () => {
+  // Measure Core Web Vitals
+  if ('PerformanceObserver' in window) {
+    try {
+      // Largest Contentful Paint
+      const lcpObserver = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        const lastEntry = entries[entries.length - 1];
+        console.log('LCP:', lastEntry.startTime);
+
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'lcp', {
+            event_category: 'Performance',
+            value: Math.round(lastEntry.startTime)
+          });
+        }
+      });
+      lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+
+      // First Input Delay
+      const fidObserver = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        entries.forEach(entry => {
+          console.log('FID:', entry.processingStart - entry.startTime);
+
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'fid', {
+              event_category: 'Performance',
+              value: Math.round(entry.processingStart - entry.startTime)
+            });
+          }
+        });
+      });
+      fidObserver.observe({ entryTypes: ['first-input'] });
+
+      // Cumulative Layout Shift
+      const clsObserver = new PerformanceObserver((list) => {
+        let clsValue = 0;
+        const entries = list.getEntries();
+        entries.forEach(entry => {
+          if (!entry.hadRecentInput) {
+            clsValue += entry.value;
+          }
+        });
+        console.log('CLS:', clsValue);
+
+        if (typeof gtag !== 'undefined') {
+          gtag('event', 'cls', {
+            event_category: 'Performance',
+            value: Math.round(clsValue * 1000) / 1000
+          });
+        }
+      });
+      clsObserver.observe({ entryTypes: ['layout-shift'] });
+    } catch (error) {
+      console.error('Performance monitoring error:', error);
+    }
+  }
+
+  // Error tracking
+  window.addEventListener('error', (event) => {
+    console.error('JavaScript error:', event.error);
+
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'exception', {
+        description: event.error?.message || 'Unknown error',
+        fatal: false
+      });
+    }
+  });
+
+  // Unhandled promise rejections
+  window.addEventListener('unhandledrejection', (event) => {
+    console.error('Unhandled promise rejection:', event.reason);
+
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'exception', {
+        description: event.reason?.message || 'Unhandled promise rejection',
+        fatal: false
+      });
+    }
+  });
+});
+</script>
+    
+
 
   // Scroll Animation System
   function initializeScrollAnimations() {
@@ -3807,13 +4392,18 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Event listeners
-  elements.codeSubmit.addEventListener('click', handleCodeSubmit);
-  elements.codeInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleCodeSubmit();
-    }
-  });
+  if (elements.codeSubmit) {
+    elements.codeSubmit.addEventListener('click', handleCodeSubmit);
+  }
+  
+  if (elements.codeInput) {
+    elements.codeInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleCodeSubmit();
+      }
+    });
+  }
 
   // Focus input on load
   elements.codeInput.focus();
@@ -3831,33 +4421,25 @@ document.addEventListener('DOMContentLoaded', () => {
   try {
     const total = 3500, goal = 20000;
     const pct = Math.min((total / goal) * 100, 100);
-    if (elements.giftProgressBar) {
-      elements.giftProgressBar.style.width = pct + '%';
+    if (additionalElements.giftProgressBar) {
+      additionalElements.giftProgressBar.style.width = pct + '%';
     }
-    if (elements.giftProgressText) {
-      elements.giftProgressText.textContent = `£${total} of £${goal} goal reached`;
+    if (additionalElements.giftProgressText) {
+      additionalElements.giftProgressText.textContent = `£${total} of £${goal} goal reached`;
     }
   } catch (error) {
     console.error('Error updating gift progress:', error);
   }
 
-  // Enhanced Gift Contribution Logic with analytics
+  // Gift Contribution Logic
   document.querySelectorAll('.btn-gift').forEach(btn => {
     btn.addEventListener('click', () => {
       try {
         const card = btn.closest('.card');
         const amount = card?.getAttribute('data-amount');
-        const giftType = card?.getAttribute('data-id');
         const url = amount ? `https://paypal.me/yourname/${amount}` : 'https://paypal.me/yourname';
         
-        // Track gift click analytics
-          });
-        }
-        
         window.open(url, '_blank');
-        if (elements.thankyouModal) {
-          elements.thankyouModal.style.display = 'flex';
-        }
       } catch (error) {
         console.error('Error handling gift contribution:', error);
       }
@@ -3865,8 +4447,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Enhanced RSVP Form with comprehensive validation and analytics
-  if (elements.rsvpForm && elements.thankMsg) {
-    const form = elements.rsvpForm;
+  if (additionalElements.rsvpForm && additionalElements.thankMsg) {
+    const form = additionalElements.rsvpForm;
     
     // Real-time validation
     const validateField = (field, rules) => {
@@ -4012,7 +4594,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Success
         this.style.display = 'none';
-        elements.thankMsg.style.display = 'block';
+        additionalElements.thankMsg.style.display = 'block';
         
                     // Show calendar link if they said Yes
             if (attend.value === 'Yes') {
@@ -4048,9 +4630,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Modal close handler
-  if (elements.thankyouClose) {
-    elements.thankyouClose.addEventListener('click', () => {
-      elements.thankyouModal.style.display = 'none';
+  if (additionalElements.thankyouClose) {
+    additionalElements.thankyouClose.addEventListener('click', () => {
+              additionalElements.thankyouModal.style.display = 'none';
     });
   }
 
@@ -4059,7 +4641,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       document.body.classList.toggle('dark-mode', isDark);
       localStorage.setItem('darkMode', isDark);
-      elements.themeToggle.textContent = isDark ? '☀️' : '🌙';
+      additionalElements.themeToggle.textContent = isDark ? '☀️' : '🌙';
       
       // Track theme change analytics
         });
@@ -4173,8 +4755,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initialize back to top functionality
   initBackToTop();
 
-  if (elements.themeToggle) {
-    elements.themeToggle.addEventListener('click', () => {
+  if (additionalElements.themeToggle) {
+    additionalElements.themeToggle.addEventListener('click', () => {
       const isDark = !document.body.classList.contains('dark-mode');
       applyDarkMode(isDark);
     });
@@ -4254,72 +4836,14 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-// Performance monitoring
-window.addEventListener('load', () => {
-  // Measure Core Web Vitals
-  if ('PerformanceObserver' in window) {
-    try {
-      // Largest Contentful Paint
-      const lcpObserver = new PerformanceObserver((list) => {
-        const entries = list.getEntries();
-        const lastEntry = entries[entries.length - 1];
-        console.log('LCP:', lastEntry.startTime);
-        
-            value: Math.round(lastEntry.startTime)
-          });
-        }
-      });
-      lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
-      
-      // First Input Delay
-      const fidObserver = new PerformanceObserver((list) => {
-        const entries = list.getEntries();
-        entries.forEach(entry => {
-          console.log('FID:', entry.processingStart - entry.startTime);
-          
-              value: Math.round(entry.processingStart - entry.startTime)
-            });
-          }
-        });
-      });
-      fidObserver.observe({ entryTypes: ['first-input'] });
-      
-      // Cumulative Layout Shift
-      const clsObserver = new PerformanceObserver((list) => {
-        let clsValue = 0;
-        const entries = list.getEntries();
-        entries.forEach(entry => {
-          if (!entry.hadRecentInput) {
-            clsValue += entry.value;
-          }
-        });
-        console.log('CLS:', clsValue);
-        
-            value: Math.round(clsValue * 1000) / 1000
-          });
-        }
-      });
-      clsObserver.observe({ entryTypes: ['layout-shift'] });
-    } catch (error) {
-      console.error('Performance monitoring error:', error);
-    }
-  }
-  
-  // Error tracking
-  window.addEventListener('error', (event) => {
-    console.error('JavaScript error:', event.error);
-    
-      });
-    }
-  });
-  
-  // Unhandled promise rejections
-  window.addEventListener('unhandledrejection', (event) => {
-    console.error('Unhandled promise rejection:', event.reason);
-    
-      });
-    }
-  });
+// Basic error tracking
+window.addEventListener('error', (event) => {
+  console.error('JavaScript error:', event.error);
+});
+
+// Unhandled promise rejections
+window.addEventListener('unhandledrejection', (event) => {
+  console.error('Unhandled promise rejection:', event.reason);
 });
 </script>
 
