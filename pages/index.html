@@ -173,7 +173,7 @@
       --bg-timeline: #E6E1D9;
       --clr-deep-green: #778053;
       --clr-link: var(--clr-accent);
-      --nav-height: 50px;
+      --nav-height: 40px;
       
       /* Design tokens for consistency */
       --space-xs: 0.5rem;
@@ -212,39 +212,46 @@
     html { scroll-behavior: smooth; }
     [id] { scroll-margin-top: calc(var(--nav-height) + 10px); }
 
-    /* Enhanced Mobile Navigation */
+    /* Enhanced Mobile Navigation - Optimized for iOS */
     .site-nav {
       position: sticky;
       top: 0;
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(20px);
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      padding: 12px 16px;
+      padding: 8px 12px;
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
       z-index: 500;
       transition: all 0.3s ease;
       box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+      align-items: center;
+      justify-content: center;
     }
     
     /* Mobile navigation improvements */
     @media (max-width: 768px) {
       .site-nav {
-        padding: 8px 12px;
-        gap: 6px;
+        padding: 6px 8px;
+        gap: 4px;
         justify-content: center;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
       }
       
       .site-nav a, .site-nav button {
-        font-size: 14px;
-        padding: 10px 12px;
-        min-height: 44px;
-        min-width: 44px;
-        border-radius: 10px;
+        font-size: 13px;
+        padding: 8px 10px;
+        min-height: 36px;
+        min-width: auto;
+        border-radius: 8px;
         background: rgba(255, 255, 255, 0.8);
         backdrop-filter: blur(10px);
         border: 1px solid rgba(0, 0, 0, 0.1);
+        white-space: nowrap;
+        flex-shrink: 0;
       }
       
       .site-nav a:hover, .site-nav button:hover {
@@ -253,19 +260,41 @@
       }
     }
     
-    /* Mobile hamburger menu for very small screens */
-    @media (max-width: 480px) {
+    /* iOS-specific navigation optimizations */
+    @supports (-webkit-touch-callout: none) {
       .site-nav {
-        flex-direction: column;
-        align-items: center;
-        padding: 16px;
+        padding: 6px 8px;
       }
       
       .site-nav a, .site-nav button {
-        width: 100%;
-        max-width: 200px;
-        justify-content: center;
-        margin: 4px 0;
+        min-height: 32px;
+        padding: 6px 8px;
+        font-size: 12px;
+      }
+    }
+    
+    /* Very small screens - horizontal scroll instead of vertical stack */
+    @media (max-width: 480px) {
+      .site-nav {
+        padding: 4px 6px;
+        gap: 3px;
+        justify-content: flex-start;
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      
+      .site-nav::-webkit-scrollbar {
+        display: none;
+      }
+      
+      .site-nav a, .site-nav button {
+        font-size: 11px;
+        padding: 6px 8px;
+        min-height: 32px;
+        min-width: auto;
+        margin: 0;
+        flex-shrink: 0;
       }
     }
     
@@ -717,6 +746,18 @@
       .envelope-animation-container {
         -webkit-transform: translateZ(0);
         transform: translateZ(0);
+      }
+      
+      /* Enhanced iOS navigation */
+      .site-nav {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        will-change: transform;
+      }
+      
+      .site-nav a, .site-nav button {
+        -webkit-tap-highlight-color: transparent;
+        touch-action: manipulation;
       }
       
       /* Fix iOS animation issues */
@@ -1473,15 +1514,7 @@
     
     /* Small mobile devices */
     @media (max-width: 480px) {
-      .site-nav {
-        padding: 6px;
-        gap: 6px;
-      }
-      
-      .site-nav a, .site-nav button {
-        font-size: 0.8em;
-        padding: 6px 8px;
-      }
+      /* Navigation styles now handled in main nav section */
       
       .hero-content h1 {
         font-size: 2.5em;
