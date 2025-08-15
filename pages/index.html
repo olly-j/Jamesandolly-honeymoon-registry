@@ -866,6 +866,13 @@
         font-size: 0.8em !important;
       }
       
+      /* Hide countdown on iOS portrait orientation */
+      @media (orientation: portrait) {
+        .countdown-timer {
+          display: none !important;
+        }
+      }
+      
       /* Very small iOS screens */
       @media (max-width: 375px) {
         .hero-section {
