@@ -1320,6 +1320,63 @@
         padding: 0 10px !important;
       }
     }
+    
+    /* iOS-specific timeline restructuring for vertical flow */
+    @supports (-webkit-touch-callout: none) {
+      @media (max-width: 768px) {
+        .timeline-item {
+          flex-direction: column !important;
+          text-align: center !important;
+          align-items: center !important;
+          margin: 0 !important;
+          padding: 16px 20px !important;
+        }
+        
+        .timeline-item .icon-container {
+          order: 1 !important;
+          margin: 0 0 12px 0 !important;
+          width: 100% !important;
+          max-width: 100px !important;
+        }
+        
+        .timeline-item .icon-container .icon {
+          width: 80px !important;
+          height: 80px !important;
+          margin: 0 auto !important;
+        }
+        
+        .timeline-item .details {
+          order: 2 !important;
+          text-align: center !important;
+          padding: 0 !important;
+          margin: 0 0 8px 0 !important;
+          width: 100% !important;
+        }
+        
+        .timeline-item .timeline-arrow {
+          order: 3 !important;
+          margin: 8px 0 0 0 !important;
+          width: 100% !important;
+          text-align: center !important;
+        }
+        
+        .timeline-item .timeline-arrow img {
+          width: 60px !important;
+          height: auto !important;
+          margin: 0 auto !important;
+        }
+        
+        /* Hide the last arrow on mobile iOS */
+        .timeline-item:last-child .timeline-arrow {
+          display: none !important;
+        }
+        
+        /* Hide the mobile-only arrow since we're restructuring */
+        .timeline-item .timeline-arrow.mobile-only {
+          display: none !important;
+        }
+      }
+    }
 
 
 
