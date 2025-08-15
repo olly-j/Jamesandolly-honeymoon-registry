@@ -1777,6 +1777,17 @@
       to { opacity: 1; transform: translateY(-50%) scale(1); }
     }
     
+    @keyframes slideUp {
+      from { 
+        transform: translateY(100%);
+        opacity: 0;
+      }
+      to { 
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    
     .field input.valid {
       border-color: var(--clr-green);
     }
@@ -5721,34 +5732,13 @@ Submitted via website fallback method.
   }
   // iOS Home Screen Prompt - Improved for better iOS compatibility
   function isiOS() {
-    return /iPhone|iPad|iPod/i.test(navigator.userAgent) && !window.MSStream;
+    // More comprehensive iOS detection
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    return /iPad|iPhone|iPod/.test(userAgent) && !window.MSStream;
   }
 
   function isInStandaloneMode() {
     return ('standalone' in navigator) && navigator.standalone;
-  }
-
-  function dismissA2HS() {
-    try {
-      localStorage.setItem('hideA2HS', 'true');
-      const prompt = document.getElementById('a2hs-prompt');
-      if (prompt) {
-        prompt.style.display = 'none';
-      }
-    } catch (error) {
-      console.error('Error dismissing A2HS prompt:', error);
-    }
-  }
-
-  // Show A2HS prompt for iOS users - with better timing and error handling
-  if (isiOS() && !isInStandaloneMode() && !localStorage.getItem('hideA2HS')) {
-    // Wait for DOM to be fully ready
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', showA2HSPrompt);
-    } else {
-      // DOM is already ready, show after a delay
-      setTimeout(showA2HSPrompt, 5000);
-    }
   }
 
   function showA2HSPrompt() {
@@ -5758,12 +5748,61 @@ Submitted via website fallback method.
         // Ensure the page is fully loaded before showing prompt
         setTimeout(() => {
           prompt.style.display = 'block';
+          console.log('A2HS prompt shown successfully');
         }, 1000);
+      } else {
+        console.log('A2HS prompt element not found or body not ready');
       }
     } catch (error) {
       console.error('Error showing A2HS prompt:', error);
     }
   }
+
+  function dismissA2HS() {
+    try {
+      localStorage.setItem('hideA2HS', 'true');
+      const prompt = document.getElementById('a2hs-prompt');
+      if (prompt) {
+        prompt.style.display = 'none';
+        console.log('A2HS prompt dismissed');
+      }
+    } catch (error) {
+      console.error('Error dismissing A2HS prompt:', error);
+    }
+  }
+
+  // Initialize A2HS prompt logic
+  function initA2HS() {
+    console.log('Initializing A2HS...');
+    console.log('iOS detected:', isiOS());
+    console.log('Standalone mode:', isInStandaloneMode());
+    console.log('Hide A2HS stored:', localStorage.getItem('hideA2HS'));
+    
+    if (isiOS() && !isInStandaloneMode() && !localStorage.getItem('hideA2HS')) {
+      console.log('A2HS conditions met - will show prompt');
+      // Show prompt after a delay to ensure page is fully loaded
+      setTimeout(showA2HSPrompt, 5000);
+    } else {
+      console.log('A2HS conditions not met');
+    }
+  }
+
+  // Initialize A2HS after DOM is ready
+  initA2HS();
+  
+  // Fallback: Also try to show A2HS prompt on window load
+  window.addEventListener('load', () => {
+    // Check again after page is fully loaded
+    if (isiOS() && !isInStandaloneMode() && !localStorage.getItem('hideA2HS')) {
+      const prompt = document.getElementById('a2hs-prompt');
+      if (prompt && prompt.style.display === 'none') {
+        console.log('A2HS fallback: showing prompt on window load');
+        setTimeout(() => {
+          prompt.style.display = 'block';
+        }, 2000);
+      }
+    }
+  });
 
   // Service Worker registration for PWA functionality
   if ('serviceWorker' in navigator) {
