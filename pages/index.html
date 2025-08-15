@@ -66,7 +66,7 @@
   </script>
   
   <!-- Security Headers -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://formspree.io https://fonts.googleapis.com https://cdn.jsdelivr.net https://widget.cloudinary.com https://res.cloudinary.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formspree.io https://res.cloudinary.com; frame-src https://www.paypal.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://formspree.io https://fonts.googleapis.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://formspree.io; frame-src https://www.paypal.com; object-src 'none'; base-uri 'self'; form-action https://formspree.io;">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
   <meta http-equiv="X-XSS-Protection" content="1; mode=block">
@@ -80,10 +80,6 @@
   <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js" as="script">
   
   <!-- Preload critical fonts with display=swap -->
-  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtXK-F2qC0s.woff2" as="font" type="font/woff2" crossorigin>
-  
-  <!-- Preload critical fonts -->
   <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtXK-F2qC0s.woff2" as="font" type="font/woff2" crossorigin>
   
@@ -392,13 +388,41 @@
       animation: instructionPulse 2s ease-in-out infinite;
     }
     
+    .instruction-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin: 0;
+      font-family: inherit;
+      transition: all 0.3s ease;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .instruction-button:hover {
+      transform: scale(1.05);
+    }
+    
+    .instruction-button:focus {
+      outline: 2px solid var(--clr-accent);
+      outline-offset: 4px;
+    }
+    
     .instruction-text {
-      color: rgba(255, 255, 255, 0.9);
+      color: var(--clr-text);
       font-family: 'Inter', sans-serif;
       font-size: 1.1rem;
-      font-weight: 500;
+      font-weight: 600;
       margin: 0 0 12px 0;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.95);
+      padding: 8px 16px;
+      border-radius: 8px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      cursor: pointer;
     }
     
     .instruction-icon {
@@ -436,8 +460,12 @@
       box-shadow: 0 8px 30px rgba(0,0,0,.3);
     }
     
-    #envelope:hover + .envelope-instructions .instruction-text {
-      color: rgba(255, 255, 255, 1);
+    #envelope:hover + .envelope-instructions .instruction-text,
+    .instruction-button:hover .instruction-text {
+      color: var(--clr-accent);
+      background: rgba(255, 255, 255, 1);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     /* Front Elements */
@@ -785,6 +813,8 @@
       
       .instruction-text {
         font-size: 1rem;
+        padding: 6px 12px;
+        background: rgba(255, 255, 255, 0.98);
       }
       
       .instruction-icon {
@@ -804,6 +834,8 @@
       
       .instruction-text {
         font-size: 0.9rem;
+        padding: 4px 10px;
+        background: rgba(255, 255, 255, 0.98);
       }
       
       .instruction-icon {
@@ -1592,6 +1624,39 @@
       border-color: #e74c3c;
       background: rgba(231, 76, 60, 0.05);
       animation: shake 0.5s var(--ease-bounce);
+    }
+    
+    .field input.valid,
+    .field.field-success input {
+      border-color: var(--clr-green);
+      background: rgba(157, 167, 157, 0.05);
+    }
+    
+    .field.field-success {
+      position: relative;
+    }
+    
+    .field.field-success::after {
+      content: '✓';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--clr-green);
+      font-weight: bold;
+      font-size: 16px;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-50%) scale(0.8); }
+      to { opacity: 1; transform: translateY(-50%) scale(1); }
     }
     
     .field input.valid {
@@ -2938,8 +3003,9 @@
       
       <!-- Envelope Instructions -->
       <div class="envelope-instructions">
-        <p class="instruction-text">Click or tap to open your invitation</p>
-        <div class="instruction-icon">👆</div>
+        <button class="instruction-button" onclick="handleEnvelopeClick()" aria-label="Open invitation envelope">
+          <p class="instruction-text">Click or tap to open your invitation</p>
+        </button>
       </div>
     </div>
     
@@ -5172,10 +5238,11 @@ Submitted via website fallback method.
   if (additionalElements.rsvpForm && additionalElements.thankMsg) {
     const form = additionalElements.rsvpForm;
     
-    // Real-time validation
+    // Enhanced real-time validation with sanitization and better UX
     const validateField = (field, rules) => {
-      const value = field.value.trim();
+      const value = DOMPurify.sanitize(field.value.trim());
       const errorElement = document.getElementById(field.id + '-error') || field.parentNode.querySelector('.error-message');
+      const fieldContainer = field.closest('.field');
       
       // Clear previous errors
       if (errorElement) {
@@ -5183,17 +5250,33 @@ Submitted via website fallback method.
         errorElement.style.display = 'none';
       }
       field.classList.remove('field-error');
+      if (fieldContainer) {
+        fieldContainer.classList.remove('field-error');
+      }
       
       // Apply validation rules
       for (const rule of rules) {
         if (!rule.test(value)) {
           field.classList.add('field-error');
+          if (fieldContainer) {
+            fieldContainer.classList.add('field-error');
+          }
           if (errorElement) {
             errorElement.textContent = rule.message;
             errorElement.style.display = 'block';
+            // Add subtle animation for better UX
+            errorElement.style.animation = 'shake 0.5s ease-in-out';
           }
           return false;
         }
+      }
+      
+      // Success state
+      if (fieldContainer) {
+        fieldContainer.classList.add('field-success');
+        setTimeout(() => {
+          fieldContainer.classList.remove('field-success');
+        }, 2000);
       }
       return true;
     };
@@ -5577,15 +5660,64 @@ Submitted via website fallback method.
     });
   }
 
-  // Basic error tracking
+  // Enhanced error tracking with analytics
   window.addEventListener('error', (event) => {
     console.error('JavaScript error:', event.error);
+    analytics.trackError({
+      message: event.message,
+      filename: event.filename,
+      lineno: event.lineno,
+      colno: event.colno,
+      error: event.error?.stack
+    });
   });
 
   // Unhandled promise rejections
   window.addEventListener('unhandledrejection', (event) => {
     console.error('Unhandled promise rejection:', event.reason);
+    analytics.trackError({
+      message: 'Unhandled promise rejection',
+      reason: event.reason?.toString(),
+      stack: event.reason?.stack
+    });
   });
+
+  // Performance monitoring
+  if ('PerformanceObserver' in window) {
+    try {
+      // Largest Contentful Paint
+      const lcpObserver = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        const lastEntry = entries[entries.length - 1];
+        analytics.trackInteraction('performance', `lcp:${Math.round(lastEntry.startTime)}`);
+      });
+      lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+
+      // First Input Delay
+      const fidObserver = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        entries.forEach(entry => {
+          analytics.trackInteraction('performance', `fid:${Math.round(entry.processingStart - entry.startTime)}`);
+        });
+      });
+      fidObserver.observe({ entryTypes: ['first-input'] });
+
+      // Cumulative Layout Shift
+      const clsObserver = new PerformanceObserver((list) => {
+        let clsValue = 0;
+        const entries = list.getEntries();
+        entries.forEach(entry => {
+          if (!entry.hadRecentInput) {
+            clsValue += entry.value;
+          }
+        });
+        analytics.trackInteraction('performance', `cls:${clsValue.toFixed(3)}`);
+      });
+      clsObserver.observe({ entryTypes: ['layout-shift'] });
+    } catch (error) {
+      console.warn('Performance monitoring not supported:', error);
+    }
+  }
 }); // Close the DOMContentLoaded function
 
   // Advanced Features Implementation
