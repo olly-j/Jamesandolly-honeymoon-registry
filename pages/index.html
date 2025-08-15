@@ -237,6 +237,8 @@
       box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
       align-items: center;
       justify-content: center;
+      /* Ensure consistent height for spacing calculations */
+      min-height: 50px;
     }
     
     /* Mobile navigation improvements */
@@ -820,6 +822,62 @@
         padding-top: max(6px, env(safe-area-inset-top));
       }
       
+      /* iOS-specific hero section adjustments */
+      .hero-section {
+        padding-top: calc(20px + env(safe-area-inset-top) + 60px);
+        min-height: calc(60vh - env(safe-area-inset-top) - 60px);
+      }
+      
+      .hero-content {
+        margin-top: 20px;
+        max-width: 90vw;
+      }
+      
+      /* iOS-specific countdown adjustments */
+      .countdown-timer {
+        margin-top: 16px !important;
+        padding: 16px !important;
+      }
+      
+      .countdown-grid {
+        gap: 12px !important;
+        max-width: 350px !important;
+      }
+      
+      .countdown-number {
+        font-size: 1.8em !important;
+      }
+      
+      .countdown-label {
+        font-size: 0.8em !important;
+      }
+      
+      /* Very small iOS screens */
+      @media (max-width: 375px) {
+        .hero-section {
+          padding-top: calc(15px + env(safe-area-inset-top) + 50px);
+          min-height: calc(50vh - env(safe-area-inset-top) - 50px);
+        }
+        
+        .countdown-timer {
+          margin-top: 12px !important;
+          padding: 12px !important;
+        }
+        
+        .countdown-grid {
+          gap: 8px !important;
+          max-width: 300px !important;
+        }
+        
+        .countdown-number {
+          font-size: 1.5em !important;
+        }
+        
+        .countdown-label {
+          font-size: 0.7em !important;
+        }
+      }
+      
       .site-nav a, .site-nav button {
         -webkit-tap-highlight-color: transparent;
         touch-action: manipulation;
@@ -965,6 +1023,8 @@
       justify-content: center;
       position: relative;
       background-attachment: fixed;
+      /* Add top padding to account for navigation and iOS Safari menu */
+      padding-top: 20px;
     }
     
     /* Responsive hero images */
@@ -1002,6 +1062,25 @@
       border-radius: 12px;
       backdrop-filter: blur(10px);
       animation: fadeInUp 1s forwards;
+    }
+    
+    /* Mobile hero content adjustments */
+    @media (max-width: 768px) {
+      .hero-content {
+        padding: 20px;
+        margin: 10px;
+        max-width: calc(100vw - 20px);
+      }
+      
+      .hero-content h1 {
+        font-size: clamp(2em, 4vw, 2.5em);
+        margin-bottom: 8px;
+      }
+      
+      .hero-content p {
+        font-size: clamp(0.9em, 2vw, 1em);
+        margin: 8px 0;
+      }
     }
 
     .hero-content h1 {
