@@ -342,6 +342,44 @@
       color: var(--clr-text);
       border-bottom: 2px solid var(--clr-deep-green);
     }
+    
+    /* Envelope button in navigation */
+    .nav-envelope-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+      color: #555;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      min-width: 44px;
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .nav-envelope-btn:hover {
+      color: var(--clr-accent);
+      background: rgba(184, 55, 91, 0.1);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(184, 55, 91, 0.2);
+    }
+    
+    .nav-envelope-btn:active {
+      transform: translateY(0);
+    }
+    
+    .nav-envelope-btn svg {
+      width: 24px;
+      height: 24px;
+      transition: transform 0.3s ease;
+    }
+    
+    .nav-envelope-btn:hover svg {
+      transform: scale(1.1);
+    }
 
     /* Dark mode overrides */
 
@@ -738,7 +776,178 @@
       visibility: visible;
     }
 
+    /* Invitation Reveal Popup - Letter-Pop Design */
+    .invitation-reveal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.8);
+      transition: all 1s ease;
+      z-index: 10;
+      display: none;
+      -webkit-font-smoothing: antialiased;
+    }
+    
+    .invitation-reveal.visible {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    
+    /* Names - James / Oliver */
+    .invitation-reveal h1 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      font-size: 2.5rem;
+      line-height: 1.2;
+      color: #C9486A;
+      margin: 0 0 4px 0;
+      text-transform: capitalize;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Second name (Oliver) - 12px margin bottom */
+    .invitation-reveal h1:nth-of-type(2) {
+      margin: 0 0 12px 0;
+    }
+    
+    /* Ampersand */
+    .invitation-reveal h2 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      font-size: 2.0rem;
+      line-height: 1.2;
+      color: #C9486A;
+      margin: 0 0 4px 0;
+    }
+    
+    /* Subheaders - "warmly invite..." */
+    .invitation-reveal p {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #3D4739;
+      margin: 0 0 10px 0;
+    }
+    
+    /* Venue - "at Luca" */
+    .invitation-reveal .venue p:first-child {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      font-size: 1.2rem;
+      line-height: 1.4;
+      color: #778053;
+      margin: 0 0 4px 0;
+      text-transform: capitalize;
+    }
+    
+    /* Address */
+    .invitation-reveal .venue p:not(:first-child) {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      color: #3D4739;
+      margin: 0 0 2px 0;
+      text-transform: capitalize;
+    }
+    
+    /* Venue block - group "at Luca" with address */
+    .invitation-reveal .venue {
+      margin: 0 0 12px 0;
+    }
+    
+    /* Date */
+    .invitation-reveal .date p:first-child {
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      font-size: 1.15rem;
+      line-height: 1.4;
+      color: #778053;
+      margin: 0 0 2px 0;
+      text-transform: capitalize;
+    }
+    
+    /* Time */
+    .invitation-reveal .date p:last-child {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      color: #3D4739;
+      margin: 0 0 12px 0;
+    }
+    
+    /* Date block - group date and time together */
+    .invitation-reveal .date {
+      margin: 0 0 12px 0;
+    }
+    
+    /* Description lines */
+    .invitation-reveal .description p {
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: #3D4739;
+      margin: 0 0 24px 0;
+    }
+    
+    /* CTA Button */
+    .view-details-button {
+      background: #C9486A;
+      color: #FFFFFF;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 1.05rem;
+      line-height: 1.4;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-transform: capitalize;
+    }
+    
+    .view-details-button:hover {
+      background: #B03D5A;
+    }
 
+    /* Sparkle Effect */
+    .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--clr-accent);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: sparkle 0.8s ease-in-out forwards;
+    }
+
+    @keyframes sparkle {
+      0% {
+        opacity: 0;
+        transform: scale(0) rotate(0deg);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1) rotate(180deg);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0) rotate(360deg);
+      }
+    }
 
     /* Accessibility */
     .sr-only {
@@ -3217,6 +3426,69 @@
         padding: 14px 16px;
       }
       
+      /* Invitation reveal mobile improvements */
+      .invitation-reveal {
+        padding: 30px 20px;
+      }
+      
+      .invitation-reveal h1 {
+        font-size: 2rem;
+        margin: 0 0 4px 0;
+        letter-spacing: 0.5px;
+      }
+      
+      .invitation-reveal h1:nth-of-type(2) {
+        margin: 0 0 12px 0;
+      }
+      
+      .invitation-reveal h2 {
+        font-size: 1.6rem;
+        margin: 0 0 4px 0;
+      }
+      
+      .invitation-reveal p {
+        font-size: 1rem;
+        margin: 0 0 10px 0;
+      }
+      
+      .invitation-reveal .venue p:first-child {
+        font-size: 1.1rem;
+        margin: 0 0 4px 0;
+      }
+      
+      .invitation-reveal .venue p:not(:first-child) {
+        font-size: 0.9rem;
+        margin: 0 0 2px 0;
+      }
+      
+      .invitation-reveal .venue {
+        margin: 0 0 12px 0;
+      }
+      
+      .invitation-reveal .date p:first-child {
+        font-size: 1.1rem;
+        margin: 0 0 2px 0;
+      }
+      
+      .invitation-reveal .date p:last-child {
+        font-size: 0.9rem;
+        margin: 0 0 12px 0;
+      }
+      
+      .invitation-reveal .date {
+        margin: 0 0 12px 0;
+      }
+      
+      .invitation-reveal .description p {
+        font-size: 0.9rem;
+        margin: 0 0 24px 0;
+      }
+      
+      .view-details-button {
+        padding: 12px 24px;
+        font-size: 1rem;
+      }
+      
       /* Navigation improvements */
       .site-nav {
         flex-wrap: wrap;
@@ -3283,10 +3555,82 @@
         padding: 5px 6px;
       }
       
+      .nav-envelope-btn {
+        padding: 4px;
+      }
+      
+      .nav-envelope-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+      
       /* Tab navigation for very small screens */
       .tab-button {
         padding: 8px 12px;
         font-size: 0.85em;
+      }
+      
+      /* Invitation reveal for very small screens */
+      .invitation-reveal {
+        padding: 25px 15px;
+      }
+      
+      .invitation-reveal h1 {
+        font-size: 1.8rem;
+        margin: 0 0 4px 0;
+        letter-spacing: 0.5px;
+      }
+      
+      .invitation-reveal h1:nth-of-type(2) {
+        margin: 0 0 12px 0;
+      }
+      
+      .invitation-reveal h2 {
+        font-size: 1.4rem;
+        margin: 0 0 4px 0;
+      }
+      
+      .invitation-reveal p {
+        font-size: 0.95rem;
+        margin: 0 0 10px 0;
+      }
+      
+      .invitation-reveal .venue p:first-child {
+        font-size: 1rem;
+        margin: 0 0 4px 0;
+      }
+      
+      .invitation-reveal .venue p:not(:first-child) {
+        font-size: 0.85rem;
+        margin: 0 0 2px 0;
+      }
+      
+      .invitation-reveal .venue {
+        margin: 0 0 12px 0;
+      }
+      
+      .invitation-reveal .date p:first-child {
+        font-size: 1rem;
+        margin: 0 0 2px 0;
+      }
+      
+      .invitation-reveal .date p:last-child {
+        font-size: 0.85rem;
+        margin: 0 0 12px 0;
+      }
+      
+      .invitation-reveal .date {
+        margin: 0 0 12px 0;
+      }
+      
+      .invitation-reveal .description p {
+        font-size: 0.85rem;
+        margin: 0 0 24px 0;
+      }
+      
+      .view-details-button {
+        padding: 10px 20px;
+        font-size: 0.95rem;
       }
     }
   </style>
@@ -3337,8 +3681,36 @@
       <div class="loading-spinner"></div>
       <p class="loading-text">Preparing your invitation...</p>
     </div>
+    
+    <!-- Invitation Reveal Popup -->
+    <div id="invitation-reveal" class="invitation-reveal">
+      <h1>James & Oliver</h1>
+      <p>warmly invite you to join them </br>
+      for an evening celebration of their marriage</p>
+      <div class="venue">
+        <p>at Luca</p>
+        <p>88 St John Street</p>
+        <p>Clerkenwell, London EC1M 4EH</p>
+      </div>
+      <div class="date">
+        <p>Friday 19 December 2025</p>
+        <p>from 6.30 pm until late</p>
+      </div>
+      <div class="description">
+        <p>An intimate dinner and celebration with our favourite people in one of London's most beautiful spaces.</p>
+      </div>
+      <button id="view-details-button" class="view-details-button">
+        View the Details
+      </button>
+    </div>
   </div>
     <nav class="site-nav" role="navigation" aria-label="Main navigation">
+    <!-- Envelope icon to return to invitation experience -->
+    <button id="return-to-envelope" class="nav-envelope-btn" aria-label="Return to invitation envelope experience">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 8L10.89 13.26C11.2187 13.4793 11.6049 13.5963 12 13.5963C12.3951 13.5963 12.7813 13.4793 13.11 13.26L21 8M5 19H19C20.1046 19 21 18.1046 21 17V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V17C3 18.1046 3.89543 19 5 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
     <!-- Anchor links for on-page scroll -->
     <a href="#invite" aria-label="Go to invitation section">Invite</a>
     <a href="#timeline" aria-label="Go to timeline section">Timeline</a>
@@ -3551,7 +3923,7 @@
       <li>
         <strong>Contact:</strong>
         Questions or last-minute changes? Drop us a note at 
-        <a href="mailto:jamesandolly@googlemail.com">jamesandolly@googlemail.com</a>
+        <a href="mailto:invite@jamesandoliver.com">invite@jamesandoliver.com</a>
       </li>
     </ul>
   </div>
@@ -4037,7 +4409,7 @@
       // Show user-friendly error message
       const submitError = document.getElementById('submit-error');
       if (submitError) {
-        submitError.textContent = 'Sorry, there was a problem submitting your RSVP. Please try again or email us directly at jamesandolly@googlemail.com';
+        submitError.textContent = 'Sorry, there was a problem submitting your RSVP. Please try again or email us directly at invite@jamesandoliver.com';
         submitError.style.display = 'block';
       }
       
@@ -4068,7 +4440,7 @@ Submitted via website fallback method.
         `.trim();
         
         // Try to open email client with pre-filled data
-        const mailtoLink = `mailto:jamesandolly@googlemail.com?subject=RSVP from ${encodeURIComponent(name)}&body=${encodeURIComponent(emailBody)}`;
+        const mailtoLink = `mailto:invite@jamesandoliver.com?subject=RSVP from ${encodeURIComponent(name)}&body=${encodeURIComponent(emailBody)}`;
         
         // Show user-friendly message with success indication
         const submitError = document.getElementById('submit-error');
@@ -4239,7 +4611,7 @@ Submitted via website fallback method.
 
     <!-- Footer -->
     <footer style="text-align:center;padding:40px;background:var(--clr-text);color:var(--bg-default);font-size:0.95em;">
-      We're so glad you'll be with us. If you have any questions,<br> email us at <a href="mailto:jamesandolly@googlemail.com" style="color:var(--bg-default);text-decoration:underline;">jamesandolly@googlemail.com</a> or call <a href="https://www.youtube.com/shorts/Ay8lynMZ4mE?themeRefresh=1" target="_blank" style="color:var(--bg-default);text-decoration:underline;">0800-you-know-our-number</a>.<br><br>
+      We're so glad you'll be with us. If you have any questions,<br> email us at <a href="mailto:invite@jamesandoliver.com" style="color:var(--bg-default);text-decoration:underline;">invite@jamesandoliver.com</a> or call <a href="https://www.youtube.com/shorts/Ay8lynMZ4mE?themeRefresh=1" target="_blank" style="color:var(--bg-default);text-decoration:underline;">0800-you-know-our-number</a>.<br><br>
       This night is about great food, glowing glasses, and being present.<br>
       <div style="margin:0px 0;">
           <img src="../assets/images/flourishes/lightGreen-coupe.png" alt="Toasting Glasses"
@@ -4375,6 +4747,80 @@ Submitted via website fallback method.
         element.style.boxSizing = 'border-box';
       });
     }
+    
+    // Envelope button functionality
+    const returnToEnvelopeBtn = document.getElementById('return-to-envelope');
+    if (returnToEnvelopeBtn) {
+      returnToEnvelopeBtn.addEventListener('click', returnToEnvelopeExperience);
+    }
+    
+    function returnToEnvelopeExperience() {
+      // Hide main content
+      const mainContent = document.getElementById('main-content');
+      if (mainContent) {
+        mainContent.style.display = 'none';
+      }
+      
+      // Show envelope animation overlay
+      const envelopeOverlay = document.getElementById('envelope-animation-overlay');
+      if (envelopeOverlay) {
+        envelopeOverlay.style.display = 'flex';
+        envelopeOverlay.classList.remove('fade-out');
+        
+        // Reset envelope state
+        const envelope = document.getElementById('envelope');
+        if (envelope) {
+          envelope.classList.remove('open');
+          envelope.classList.add('close');
+        }
+        
+        // Reset invitation reveal
+        const invitationReveal = document.getElementById('invitation-reveal');
+        if (invitationReveal) {
+          invitationReveal.classList.remove('visible');
+          invitationReveal.style.display = 'none';
+        }
+        
+        // Reset loading animation
+        const loadingAnimation = document.getElementById('loading-animation');
+        if (loadingAnimation) {
+          loadingAnimation.classList.remove('visible');
+        }
+        
+        // Show instructions again
+        const instructions = document.querySelector('.envelope-instructions');
+        if (instructions) {
+          instructions.style.display = 'block';
+          instructions.style.opacity = '1';
+          instructions.style.transform = 'translateY(0)';
+        }
+        
+        // Add scroll lock
+        document.body.classList.add('gate-active');
+        
+        // Re-add click event to envelope
+        const envelopeElement = document.getElementById('envelope');
+        if (envelopeElement) {
+          // Remove any existing listeners
+          envelopeElement.removeEventListener('click', handleEnvelopeClick);
+          envelopeElement.removeEventListener('keydown', handleEnvelopeKeydown);
+          
+          // Add new listeners
+          envelopeElement.addEventListener('click', handleEnvelopeClick, { once: true });
+          envelopeElement.addEventListener('keydown', handleEnvelopeKeydown, { once: true });
+          
+          // Focus envelope for accessibility
+          envelopeElement.focus();
+        }
+      }
+    }
+    
+    function handleEnvelopeKeydown(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        handleEnvelopeClick();
+      }
+    }
 
     // Access Gate Logic with better UX
     function grantAccess() {
@@ -4421,6 +4867,7 @@ Submitted via website fallback method.
       const envelope = document.getElementById('envelope');
       const loadingAnimation = document.getElementById('loading-animation');
       const instructions = document.querySelector('.envelope-instructions');
+      const invitationReveal = document.getElementById('invitation-reveal');
       
       if (envelope) {
         // Hide instructions immediately
@@ -4443,11 +4890,57 @@ Submitted via website fallback method.
             loadingAnimation.style.visibility = 'visible';
           }
           
-          // Transition to main content after loading
+          // Show invitation reveal after loading
           setTimeout(() => {
-            showMainContent();
+            if (loadingAnimation) {
+              loadingAnimation.style.opacity = '0';
+              loadingAnimation.style.visibility = 'hidden';
+            }
+            showInvitationReveal();
           }, 2000); // Show loading for 2 seconds
         }, 1000); // Wait 1 second after envelope opens
+      }
+    }
+    
+    function showInvitationReveal() {
+      const invitationReveal = document.getElementById('invitation-reveal');
+      const envelopeContainer = document.getElementById('envelope-animation-overlay');
+      
+      if (invitationReveal) {
+        // Create sparkle effects
+        createSparkles();
+        
+        // Show invitation reveal
+        invitationReveal.style.display = 'block';
+        setTimeout(() => {
+          invitationReveal.classList.add('visible');
+        }, 100);
+        
+        // Add event listener to the view details button
+        const viewDetailsButton = document.getElementById('view-details-button');
+        if (viewDetailsButton) {
+          viewDetailsButton.addEventListener('click', showMainContent, { once: true });
+        }
+      }
+    }
+    
+    function createSparkles() {
+      const envelopeContainer = document.getElementById('envelope-animation-overlay');
+      
+      // Create 5 sparkles around the invitation
+      for (let i = 0; i < 5; i++) {
+        setTimeout(() => {
+          const sparkle = document.createElement('div');
+          sparkle.className = 'sparkle';
+          sparkle.style.left = Math.random() * 100 + '%';
+          sparkle.style.top = Math.random() * 100 + '%';
+          envelopeContainer.appendChild(sparkle);
+          
+          // Remove sparkle after animation
+          setTimeout(() => {
+            sparkle.remove();
+          }, 800);
+        }, i * 100);
       }
     }
     

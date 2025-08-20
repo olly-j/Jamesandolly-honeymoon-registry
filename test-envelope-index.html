@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  
+  <!-- iOS-specific meta tags for better PWA experience -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="James & Oliver">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="description" content="Join James & Oliver for their wedding celebration on December 19, 2025 at Luca Restaurant, London. RSVP and gift registry included.">
+  <meta name="theme-color" content="#F9F7F3">
+  <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, nocache">
+  <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  <meta name="bingbot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+  
+  <!-- Open Graph Meta Tags for Social Sharing -->
+  <meta property="og:title" content="James & Oliver's Wedding Celebration">
+  <meta property="og:description" content="Join us for our celebration on December 19, 2025 at Luca Restaurant, London">
+  <meta property="og:image" content="https://yoursite.com/images/hero-bg.jpg">
+  <meta property="og:url" content="https://yoursite.com">
+  <meta property="og:type" content="website">
+  
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="James & Oliver's Wedding Celebration">
+  <meta name="twitter:description" content="Join us for our celebration on December 19, 2025">
+  <meta name="twitter:image" content="https://yoursite.com/images/hero-bg.jpg">
+
+  <title>James & Oliver's Wedding Celebration | December 19, 2025</title>
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" as="style">
+  <link rel="preload" href="assets/images/hero-bg.jpg" as="image" type="image/jpeg" fetchpriority="high">
+  <link rel="preload" href="assets/images/favicon.png" as="image" type="image/png">
+  
+  <!-- Preload critical fonts -->
+  <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtXK-F2qC0s.woff2" as="font" type="font/woff2" crossorigin>
+  
+  <!-- DNS prefetch for external resources -->
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <link rel="dns-prefetch" href="//formspree.io">
+  <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+  
+  <!-- Preconnect to critical domains -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://formspree.io">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet">
+  
+  <!-- Font display optimization -->
+  <style>
+    @font-face {
+      font-family: 'Inter';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2') format('woff2');
+    }
+    @font-face {
+      font-family: 'Playfair Display';
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+      src: url('https://fonts.gstatic.com/s/playfairdisplay/v30/nuFvD-vYSZviVYUb_rj3ij__anPXJzDwcbmjWBN2PKdFvXDXbtXK-F2qC0s.woff2') format('woff2');
+    }
+  </style>
+  <link rel="icon" href="assets/images/favicon.png" type="image/png">
+  <link rel="manifest" href="manifest.json">
+  
+  <!-- iOS-specific icons and meta tags -->
+  <link rel="apple-touch-icon" href="assets/images/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="assets/images/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="167x167" href="assets/images/apple-touch-icon.png">
+  
+  <!-- DOMPurify for input sanitization -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js"></script>
+  
+  <!-- GSAP for smooth animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  
+  <!-- Critical CSS inline for faster rendering -->
+  <style>
+    /* Critical CSS for above-the-fold content */
+    :root {
+      --bg-default: #F9F7F3;
+      --bg-alt: #FFFFFF;
+      --clr-text: #3D4739;
+      --clr-accent: #A02D4A;
+      --clr-green: #9DA79D;
+      --bg-timeline: #E6E1D9;
+      --clr-deep-green: #778053;
+      --clr-link: var(--clr-accent);
+      --nav-height: 40px;
+      
+      /* Design tokens for consistency */
+      --space-xs: 0.5rem;
+      --space-sm: 1rem;
+      --space-md: 1.5rem;
+      --space-lg: 2rem;
+      --space-xl: 3rem;
+      
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      
+      --duration-fast: 150ms;
+      --duration-normal: 300ms;
+      --duration-slow: 500ms;
+      
+      --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+      --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    /* Base styles */
+    * { box-sizing: border-box; }
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Inter', sans-serif; 
+      background: var(--bg-default); 
+      color: var(--clr-text); 
+      overflow-x: hidden;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    /* Smooth scrolling */
+    html { scroll-behavior: smooth; }
+    [id] { scroll-margin-top: calc(var(--nav-height) + 10px); }
+
+    /* ===== ENVELOPE ENTRY EXPERIENCE ===== */
+    
+    /* Envelope Entry Container */
+    .envelope-entry-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(135deg, var(--bg-default) 0%, var(--bg-timeline) 100%);
+      background-image: url('assets/images/backgrounds/paper.png');
+      background-size: 200px;
+      background-repeat: repeat;
+      background-blend-mode: overlay;
+      background-opacity: 0.1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 3000;
+      overflow: hidden;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    .envelope-entry-container.fade-out {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    /* Envelope Variables */
+    :root {
+      --color-env: var(--clr-accent);
+      --color-env2: #8b2540;
+      --color-flap: #6d1e32;
+      --color-bg: var(--bg-default);
+      --color-heart: var(--clr-accent);
+      --env-border-radius: 8px;
+      --env-width: 320px;
+      --env-height: 200px;
+      --heart-width: 60px;
+    }
+
+    /* Envelope Wrapper */
+    .envelope-wrapper {
+      height: calc(var(--env-height) + 250px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 50px;
+    }
+    
+    /* Password Input Section */
+    .password-section {
+      text-align: center;
+      animation: passwordPulse 2s ease-in-out infinite;
+      opacity: 1;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    
+    .password-section.hidden {
+      opacity: 0;
+      transform: translateY(-20px);
+      pointer-events: none;
+    }
+    
+    .password-label {
+      color: var(--clr-text);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      margin: 0 0 20px 0;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);
+    }
+    
+    .password-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+    }
+    
+    .password-input {
+      width: 280px;
+      padding: 15px 20px;
+      border: 2px solid rgba(157, 167, 157, 0.3);
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-family: 'Inter', sans-serif;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      text-align: center;
+    }
+    
+    .password-input:focus {
+      outline: none;
+      border-color: var(--clr-accent);
+      box-shadow: 0 6px 20px rgba(160, 45, 74, 0.2);
+      transform: translateY(-2px);
+    }
+    
+    .password-input.error {
+      border-color: #e74c3c;
+      animation: shake 0.5s ease-in-out;
+    }
+    
+    .password-button {
+      background: var(--clr-accent);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(160, 45, 74, 0.3);
+    }
+    
+    .password-button:hover {
+      background: var(--clr-deep-green);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(160, 45, 74, 0.4);
+    }
+    
+    .password-button:active {
+      transform: translateY(0);
+    }
+    
+    .password-error {
+      color: #e74c3c;
+      font-size: 0.9rem;
+      margin-top: 10px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .password-error.show {
+      opacity: 1;
+    }
+    
+    @keyframes passwordPulse {
+      0%, 100% { opacity: 0.9; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.02); }
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    /* Main Envelope */
+    #envelope {
+      position: relative;
+      width: var(--env-width);
+      height: var(--env-height);
+      border-bottom-left-radius: var(--env-border-radius);
+      border-bottom-right-radius: var(--env-border-radius);
+      margin-left: auto;
+      margin-right: auto;
+      background-color: var(--color-flap);
+      box-shadow: 0 8px 30px rgba(0,0,0,.3);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+      opacity: 0;
+      transform: scale(0.8);
+    }
+
+    #envelope.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    #envelope:hover {
+      transform: scale(1.05);
+      box-shadow: 0 12px 40px rgba(0,0,0,.4);
+    }
+
+    /* Front Elements */
+    .front { 
+      position: absolute;
+      width: 0;
+      height: 0;
+      z-index: 3;
+    }
+
+    .flap {
+      border-left: calc(var(--env-width) / 2) solid transparent;
+      border-right: calc(var(--env-width) / 2) solid transparent;
+      border-bottom: calc(var(--env-height) / 2 - 10px) solid transparent;
+      border-top: calc(var(--env-height) / 2 + 10px) solid var(--color-flap);
+      transform-origin: top;
+      pointer-events: none;
+    }
+
+    .pocket {
+      border-left: calc(var(--env-width) / 2) solid var(--color-env);
+      border-right: calc(var(--env-width) / 2) solid var(--color-env);
+      border-bottom: calc(var(--env-height) / 2) solid var(--color-env2);
+      border-top: calc(var(--env-height) / 2) solid transparent;
+      border-bottom-left-radius: var(--env-border-radius);
+      border-bottom-right-radius: var(--env-border-radius);
+    }
+
+    /* Letter */
+    .letter {
+      position: relative;
+      background-color: #fff;
+      width: 90%;
+      margin-left: auto;
+      margin-right: auto;
+      height: 90%;
+      top: 5%;
+      border-radius: var(--env-border-radius);
+      box-shadow: 0 4px 20px rgba(0,0,0,.15);
+    }
+
+    .letter:after {
+      content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-image: 
+        linear-gradient(180deg, 
+        rgba(255,255,255,0.00) 25%, 
+        rgba(215,227,239,0.70) 55%, 
+        rgba(215,227,239,1.00) 100%);
+    }
+
+    /* Letter Content Lines */
+    .words {
+      position: absolute;
+      left: 10%;
+      width: 80%;
+      height: 14%;
+      background-color: #EEEFF0;
+    }
+
+    .words.line1 {
+      top: 15%;
+      width: 20%;
+      height: 7%;
+    }
+
+    .words.line2 {
+      top: 30%;
+    }
+
+    .words.line3 {
+      top: 50%;
+    }
+
+    .words.line4 {
+      top: 70%;
+    }
+
+    /* Hearts */
+    .hearts {
+      position: absolute;
+      top: calc(var(--env-height) / 2);
+      left: 0;
+      right: 0;
+      z-index: 2;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: 0;
+      right: 10%;
+      pointer-events: none;
+    }
+
+    .heart:before,
+    .heart:after {
+      position: absolute;
+      content: "";
+      left: var(--heart-width);
+      top: 0;
+      width: var(--heart-width);
+      height: calc(var(--heart-width) * 1.6);
+      background: var(--color-heart);
+      border-radius: var(--heart-width) var(--heart-width) 0 0;
+      transform: rotate(-45deg);
+      transform-origin: 0 100%;
+      pointer-events: none;
+    }
+
+    .heart:after {
+      left: 0;
+      transform: rotate(45deg);
+      transform-origin: 100% 100%;
+    }
+
+    /* Heart Animations */
+    .close .heart {
+      opacity: 0;
+      animation: none;
+    }
+
+    .a1 {
+      left: 20%;
+      transform: scale(0.6);
+      opacity: 1;
+      animation: 
+        slideUp 4s linear 1, 
+        sideSway 2s ease-in-out 4 alternate;
+      animation-fill-mode: forwards;
+      animation-delay: .7s;
+    }
+
+    .a2 {
+      left: 55%;
+      transform: scale(1);
+      opacity: 1;
+      animation: 
+        slideUp 5s linear 1, 
+        sideSway 4s ease-in-out 2 alternate;
+      animation-fill-mode: forwards;
+      animation-delay: .7s;
+    }
+
+    .a3 {
+      left: 10%;
+      transform: scale(0.8);
+      opacity: 1;
+      animation: 
+        slideUp 7s linear 1, 
+        sideSway 2s ease-in-out 6 alternate;
+      animation-fill-mode: forwards;
+      animation-delay: .7s;
+    }
+
+    /* Envelope States */
+    .open .flap {
+      transform: rotateX(180deg);
+      transition: transform .6s ease, z-index .8s;
+      z-index: 1;
+    }
+
+    .close .flap {
+      transform: rotateX(0deg);
+      transition: transform .6s .8s ease, z-index 1.2s;
+      z-index: 5;
+    }
+
+    .close .letter {
+      transform: translateY(0px); 
+      transition: transform .6s ease, z-index 1.2s;
+      z-index: 1;
+    }
+
+    .open .letter {
+      transform: translateY(calc(-1 * var(--env-height) / 3));
+      transition: transform .6s .8s ease, z-index .8s;
+      z-index: 2;
+    }
+
+    /* Heart Animation Keyframes */
+    @keyframes slideUp { 
+      0% { 
+        top: 0;
+      }
+      100% { 
+        top: -600px;
+      }
+    }
+
+    @keyframes sideSway { 
+      0% { 
+        margin-left: 0px;
+      }
+      100% { 
+        margin-left: 50px;
+      }
+    }
+
+    /* Invitation Reveal */
+    .invitation-reveal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 500px;
+      width: 90%;
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.8);
+      transition: all 1s ease;
+      z-index: 10;
+    }
+    
+    .invitation-reveal.visible {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    
+    .invitation-reveal h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      color: var(--clr-accent);
+      margin: 0 0 10px 0;
+      line-height: 1.2;
+    }
+    
+    .invitation-reveal h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--clr-deep-green);
+      margin: 0 0 20px 0;
+      font-weight: 600;
+    }
+    
+    .invitation-reveal p {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      color: var(--clr-text);
+      margin: 15px 0;
+      line-height: 1.6;
+    }
+    
+    .invitation-reveal .venue {
+      font-weight: 600;
+      color: var(--clr-accent);
+    }
+    
+    .invitation-reveal .date {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--clr-deep-green);
+      margin: 20px 0;
+    }
+    
+    .invitation-reveal .description {
+      font-style: italic;
+      color: #666;
+      margin: 20px 0;
+    }
+    
+    .continue-button {
+      background: var(--clr-accent);
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+      box-shadow: 0 4px 15px rgba(160, 45, 74, 0.3);
+    }
+    
+    .continue-button:hover {
+      background: var(--clr-deep-green);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(160, 45, 74, 0.4);
+    }
+    
+    .continue-button:active {
+      transform: translateY(0);
+    }
+
+    /* Sparkle Effect */
+    .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: var(--clr-accent);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: sparkle 0.8s ease-in-out forwards;
+    }
+
+    @keyframes sparkle {
+      0% {
+        opacity: 0;
+        transform: scale(0) rotate(0deg);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1) rotate(180deg);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0) rotate(360deg);
+      }
+    }
+
+    /* Loading Animation */
+    .loading-animation {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.5s ease;
+      z-index: 10;
+    }
+    
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid var(--clr-accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .loading-text {
+      color: rgba(255, 255, 255, 0.9);
+      font-family: 'Inter', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    .loading-animation.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Accessibility */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Focus indicators for keyboard navigation */
+    #envelope:focus {
+      outline: 2px solid var(--clr-accent);
+      outline-offset: 4px;
+      border-radius: var(--env-border-radius);
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      
+      .animate-on-scroll {
+        opacity: 1;
+        transform: none;
+      }
+    }
+    
+    /* iOS-specific fixes */
+    @supports (-webkit-touch-callout: none) {
+      body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        padding-left: env(safe-area-inset-left);
+        padding-right: env(safe-area-inset-right);
+      }
+      
+      input[type="text"] {
+        font-size: 16px !important;
+        -webkit-appearance: none;
+        border-radius: 0;
+      }
+      
+      .envelope-entry-container {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+      }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      :root {
+        --env-width: 280px;
+        --env-height: 180px;
+      }
+      
+      .envelope-wrapper {
+        gap: 40px;
+      }
+      
+      .password-label {
+        font-size: 1.2rem;
+      }
+      
+      .password-input {
+        width: 250px;
+        padding: 12px 16px;
+        font-size: 1rem;
+      }
+      
+      .invitation-reveal {
+        padding: 30px 20px;
+      }
+      
+      .invitation-reveal h1 {
+        font-size: 2rem;
+      }
+      
+      .invitation-reveal h2 {
+        font-size: 1.5rem;
+      }
+      
+      .invitation-reveal p {
+        font-size: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      :root {
+        --env-width: 240px;
+        --env-height: 150px;
+      }
+      
+      .envelope-wrapper {
+        gap: 30px;
+      }
+      
+      .password-label {
+        font-size: 1.1rem;
+      }
+      
+      .password-input {
+        width: 220px;
+        padding: 10px 14px;
+        font-size: 0.95rem;
+      }
+      
+      .invitation-reveal {
+        padding: 25px 15px;
+      }
+      
+      .invitation-reveal h1 {
+        font-size: 1.8rem;
+      }
+      
+      .invitation-reveal h2 {
+        font-size: 1.3rem;
+      }
+      
+      .invitation-reveal p {
+        font-size: 0.95rem;
+      }
+    }
+
+         /* Scroll lock when envelope is active */
+     body.envelope-active {
+       overflow: hidden;
+       touch-action: none;
+       -webkit-overflow-scrolling: touch;
+     }
+
+     /* ===== MAIN CONTENT STYLES ===== */
+     
+     /* Navigation */
+     .site-nav {
+       position: sticky;
+       top: 0;
+       background: rgba(255, 255, 255, 0.95);
+       backdrop-filter: blur(20px);
+       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+       padding: 8px 12px;
+       display: flex;
+       flex-wrap: wrap;
+       gap: 6px;
+       z-index: 500;
+       transition: all 0.3s ease;
+       box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+       align-items: center;
+       justify-content: center;
+       min-height: 50px;
+     }
+     
+     .site-nav a {
+       font-family: 'Playfair Display', serif;
+       color: #555;
+       text-decoration: none;
+       padding: 6px 8px;
+       transition: color 0.2s ease;
+       border-radius: 8px;
+       min-height: 44px;
+       min-width: 44px;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+     }
+     
+     .site-nav a:hover {
+       color: var(--clr-accent);
+       background: rgba(184, 55, 91, 0.1);
+       transform: translateY(-1px);
+     }
+     
+     .site-nav a.active {
+       color: var(--clr-text);
+       border-bottom: 2px solid var(--clr-deep-green);
+     }
+
+     /* Hero Section */
+     .hero-section {
+       height: 60vh;
+       background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('assets/images/hero-bg.jpg') center/cover no-repeat;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       position: relative;
+       background-attachment: fixed;
+       padding-top: 20px;
+     }
+     
+     .hero-content {
+       text-align: center;
+       background: rgba(249,247,243,0.9);
+       padding: 30px;
+       border-radius: 12px;
+       backdrop-filter: blur(10px);
+       animation: fadeInUp 1s forwards;
+     }
+     
+     .hero-content h1 {
+       margin: 0;
+       font-family: 'Playfair Display', serif;
+       font-size: clamp(2.5em, 5vw, 3.5em);
+       color: var(--clr-green);
+       background: linear-gradient(135deg, var(--clr-green), var(--clr-accent));
+       -webkit-background-clip: text;
+       -webkit-text-fill-color: transparent;
+       background-clip: text;
+       animation: kineticGlow 3s ease-in-out infinite;
+     }
+     
+     .hero-content p {
+       margin: 10px 0 0;
+       font-size: clamp(1em, 2.5vw, 1.2em);
+       color: #333;
+       font-weight: 500;
+     }
+
+     /* Section layouts */
+     .section, .section-alt { 
+       padding: 40px 20px; 
+       background: var(--bg-default); 
+       opacity: 0;
+       animation: fadeInUp 0.8s ease forwards;
+     }
+     
+     .section-alt { 
+       background: var(--bg-alt); 
+     }
+
+     /* Countdown Timer */
+     .countdown-timer {
+       background: rgba(255, 255, 255, 0.1);
+       backdrop-filter: blur(10px);
+       border: 1px solid rgba(255, 255, 255, 0.2);
+       border-radius: 16px;
+       padding: 24px;
+       margin: 24px auto;
+       max-width: 500px;
+       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+     }
+     
+     .countdown-grid {
+       display: grid;
+       grid-template-columns: repeat(4, 1fr);
+       gap: 16px;
+       max-width: 400px;
+       margin: 0 auto;
+     }
+     
+     .countdown-item {
+       text-align: center;
+       padding: 16px 8px;
+       background: rgba(255, 255, 255, 0.9);
+       border-radius: 12px;
+       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+       transition: transform 0.3s ease;
+     }
+     
+     .countdown-item:hover {
+       transform: translateY(-2px);
+     }
+     
+     .countdown-number {
+       font-size: 2rem;
+       font-weight: bold;
+       color: var(--clr-accent);
+       font-family: 'Playfair Display', serif;
+       line-height: 1;
+       margin-bottom: 4px;
+       animation: countdownPulse 2s ease-in-out infinite;
+     }
+     
+     .countdown-label {
+       font-size: 0.875rem;
+       color: #666;
+       font-weight: 500;
+       text-transform: uppercase;
+       letter-spacing: 0.5px;
+     }
+
+     /* Glass card effect */
+     .glass-card {
+       background: rgba(255, 255, 255, 0.1);
+       backdrop-filter: blur(10px);
+       border: 1px solid rgba(255, 255, 255, 0.2);
+       border-radius: 15px;
+       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+     }
+
+     /* Gradient background */
+     .gradient-bg {
+       background: linear-gradient(135deg, 
+         rgba(249, 247, 243, 0.9) 0%, 
+         rgba(230, 225, 217, 0.9) 50%, 
+         rgba(249, 247, 243, 0.9) 100%);
+       backdrop-filter: blur(10px);
+     }
+
+     /* Fluid typography */
+     .fluid-text {
+       font-size: clamp(1rem, 2.5vw, 1.5rem);
+       line-height: clamp(1.4, 2vw, 1.6);
+     }
+     
+     .fluid-heading {
+       font-size: clamp(2rem, 5vw, 3.5rem);
+       line-height: clamp(1.2, 3vw, 1.3);
+     }
+
+     /* Kinetic text effect */
+     .kinetic-text {
+       background: linear-gradient(135deg, var(--clr-accent), var(--clr-green));
+       -webkit-background-clip: text;
+       -webkit-text-fill-color: transparent;
+       background-clip: text;
+       animation: kineticGlow 3s ease-in-out infinite;
+     }
+     
+     @keyframes kineticGlow {
+       0%, 100% {
+         filter: brightness(1) hue-rotate(0deg);
+       }
+       50% {
+         filter: brightness(1.2) hue-rotate(5deg);
+       }
+     }
+
+     /* Animations */
+     @keyframes fadeInUp { 
+       from { 
+         opacity: 0; 
+         transform: translateY(30px);
+       } 
+       to { 
+         opacity: 1; 
+         transform: translateY(0);
+       } 
+     }
+     
+     @keyframes countdownPulse {
+       0% { transform: scale(1); }
+       50% { transform: scale(1.05); }
+       100% { transform: scale(1); }
+     }
+
+     /* Responsive design */
+     @media (max-width: 768px) {
+       .hero-section {
+         background-attachment: scroll;
+         height: 50vh;
+       }
+       
+       .hero-content {
+         padding: 20px;
+         margin: 10px;
+         max-width: calc(100vw - 20px);
+       }
+       
+       .countdown-grid {
+         grid-template-columns: repeat(2, 1fr) !important;
+         gap: 12px !important;
+       }
+       
+       .countdown-number {
+         font-size: 1.5rem;
+       }
+       
+       .countdown-label {
+         font-size: 0.8rem;
+       }
+       
+       .site-nav {
+         padding: 6px 8px;
+         gap: 4px;
+         justify-content: center;
+         flex-wrap: nowrap;
+         overflow-x: auto;
+         -webkit-overflow-scrolling: touch;
+       }
+       
+       .site-nav a {
+         font-size: 13px;
+         padding: 8px 10px;
+         white-space: nowrap;
+         flex-shrink: 0;
+       }
+     }
+   </style>
+ </head>
+<body class="envelope-active">
+  <!-- Envelope Entry Experience -->
+  <div id="envelope-entry-container" class="envelope-entry-container">
+    <div class="envelope-wrapper">
+      <!-- Password Section -->
+      <div id="password-section" class="password-section">
+        <h2 class="password-label">Enter password to open invitation</h2>
+        <div class="password-input-group">
+          <input 
+            type="text" 
+            id="password-input" 
+            class="password-input" 
+            placeholder="Password"
+            autocapitalize="off"
+            autocorrect="off"
+            spellcheck="false"
+            aria-label="Enter password to open invitation"
+          >
+          <button id="password-button" class="password-button">
+            Open Invitation
+          </button>
+          <div id="password-error" class="password-error">
+            Incorrect password, please try again
+          </div>
+        </div>
+      </div>
+      
+      <!-- Envelope -->
+      <div id="envelope" class="close" role="button" tabindex="0" aria-label="Wedding invitation envelope" aria-describedby="envelope-description">
+        <div class="front flap" aria-hidden="true"></div>
+        <div class="front pocket" aria-hidden="true"></div>
+        <div class="letter" aria-hidden="true">
+          <div class="words line1" aria-hidden="true"></div>
+          <div class="words line2" aria-hidden="true"></div>
+          <div class="words line3" aria-hidden="true"></div>
+          <div class="words line4" aria-hidden="true"></div>
+        </div>
+        <div class="hearts" aria-hidden="true">
+          <div class="heart a1" aria-hidden="true"></div>
+          <div class="heart a2" aria-hidden="true"></div>
+          <div class="heart a3" aria-hidden="true"></div>
+        </div>
+        <div id="envelope-description" class="sr-only">
+          An elegant wedding invitation envelope with rose-colored design. The envelope will open to reveal your invitation.
+        </div>
+      </div>
+      
+      <!-- Invitation Reveal -->
+      <div id="invitation-reveal" class="invitation-reveal">
+        <h1>James</h1>
+        <h2>&</h2>
+        <h1>Oliver</h1>
+        <p>warmly invite you to join them</p>
+        <p>for an evening celebration of their marriage</p>
+        <div class="venue">
+          <p>at Luca</p>
+          <p>88 St John Street</p>
+          <p>Clerkenwell, London EC1M 4EH</p>
+        </div>
+        <div class="date">
+          <p>Friday 19 December 2025</p>
+          <p>from 6.30 pm until late</p>
+        </div>
+        <div class="description">
+          <p>An intimate dinner and celebration with our favourite people</p>
+          <p>in one of London's most beautiful spaces.</p>
+        </div>
+        <button id="continue-button" class="continue-button">
+          Continue
+        </button>
+      </div>
+    </div>
+    
+    <!-- Loading Animation -->
+    <div class="loading-animation" id="loading-animation">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Preparing your invitation...</p>
+    </div>
+  </div>
+
+  <!-- Main Content (Hidden initially) -->
+  <div id="main-content" style="display:none;">
+    <!-- Navigation -->
+    <nav class="site-nav" role="navigation" aria-label="Main navigation">
+      <a href="#invite" aria-label="Go to invitation section">Invite</a>
+      <a href="#timeline" aria-label="Go to timeline section">Timeline</a>
+      <a href="#dress-code" aria-label="Go to dress code section">Dress Code</a>
+      <a href="#info" aria-label="Go to information section">Info & FAQ</a>
+      <a href="#rsvp" aria-label="Go to RSVP section">RSVP</a>
+      <a href="photos.html" aria-label="View photo gallery">Photos</a>
+      <a href="gifts.html" aria-label="View gift registry">Gifts</a>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="section-alt">
+      <header class="hero-section">
+        <div class="hero-content">
+          <h1 class="kinetic-text fluid-heading" id="coupleNames">James & Oliver</h1>
+          <p class="fluid-text">19 December 2025</p>
+          
+          <!-- Countdown Timer -->
+          <div class="countdown-timer glass-card">
+            <h3>Counting Down to Our Celebration</h3>
+            <div class="countdown-grid">
+              <div class="countdown-item">
+                <div class="countdown-number" id="days">00</div>
+                <div class="countdown-label">Days</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-number" id="hours">00</div>
+                <div class="countdown-label">Hours</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-number" id="minutes">00</div>
+                <div class="countdown-label">Minutes</div>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-number" id="seconds">00</div>
+                <div class="countdown-label">Seconds</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="section gradient-bg" id="invite">
+        <p class="fluid-text">James & Oliver warmly invite you</p>
+        <p>
+          To an evening celebration of their marriage<br><br>
+          <strong>Friday, 19 December 2025<br>
+          From 6:30 PM until late<br>
+          <span class="hero-address"><a href="https://maps.app.goo.gl/Zggn3QHdpq2Qa5L39" target="_blank">Luca Restaurant<br>88 St John Street, Clerkenwell, London EC1M 4EH</a></span></strong><br><br>
+          An intimate dinner and celebration with our favourite people.<br>
+          We're so glad to celebrate together in this beautiful space.
+        </p>
+      </div>
+    </section>
+
+    <!-- Placeholder for rest of content -->
+    <div style="padding: 100px 20px; text-align: center; background: var(--bg-default);">
+      <h2 style="font-family: 'Playfair Display', serif; color: var(--clr-accent);">Welcome to the Celebration!</h2>
+      <p style="color: var(--clr-text); font-size: 1.1rem; margin: 20px 0;">
+        The rest of the website content would appear here.<br>
+        This is a test version focusing on the envelope entry experience.
+      </p>
+      <p style="color: #666; font-style: italic;">
+        The envelope animation has successfully revealed the invitation and transitioned to the main site.
+      </p>
+    </div>
+  </div>
+
+  <!-- Main JavaScript -->
+  <script>
+    // Envelope Entry Experience JavaScript
+    class EnvelopeEntryExperience {
+      constructor() {
+        this.passwordInput = document.getElementById('password-input');
+        this.passwordButton = document.getElementById('password-button');
+        this.passwordSection = document.getElementById('password-section');
+        this.passwordError = document.getElementById('password-error');
+        this.envelope = document.getElementById('envelope');
+        this.invitationReveal = document.getElementById('invitation-reveal');
+        this.loadingAnimation = document.getElementById('loading-animation');
+        this.continueButton = document.getElementById('continue-button');
+        this.mainContent = document.getElementById('main-content');
+        this.envelopeContainer = document.getElementById('envelope-entry-container');
+        
+        this.correctPassword = 'celebratejando';
+        this.isAnimating = false;
+        
+        this.init();
+      }
+      
+      init() {
+        this.bindEvents();
+        this.checkReturningUser();
+      }
+      
+      bindEvents() {
+        // Password input events
+        this.passwordInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            this.validatePassword();
+          }
+        });
+        
+        this.passwordButton.addEventListener('click', () => {
+          this.validatePassword();
+        });
+        
+        // Continue button event
+        this.continueButton.addEventListener('click', () => {
+          this.transitionToMainSite();
+        });
+        
+        // Focus password input on load
+        this.passwordInput.focus();
+      }
+      
+      checkReturningUser() {
+        if (localStorage.getItem('accessGranted') === 'true') {
+          // Skip envelope animation for returning users
+          this.transitionToMainSite();
+        }
+      }
+      
+      validatePassword() {
+        const input = this.passwordInput.value.trim().toLowerCase();
+        
+        if (input === this.correctPassword) {
+          this.hidePasswordSection();
+          this.showEnvelope();
+          this.animateEnvelopeOpening();
+        } else {
+          this.showPasswordError();
+          this.shakeEnvelope();
+        }
+      }
+      
+      hidePasswordSection() {
+        this.passwordSection.classList.add('hidden');
+      }
+      
+      showEnvelope() {
+        // Show envelope with animation
+        gsap.to(this.envelope, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.8,
+          ease: "back.out(1.7)",
+          onComplete: () => {
+            this.envelope.classList.add('visible');
+          }
+        });
+      }
+      
+      animateEnvelopeOpening() {
+        if (this.isAnimating) return;
+        this.isAnimating = true;
+        
+        // Open envelope
+        setTimeout(() => {
+          this.envelope.classList.remove('close');
+          this.envelope.classList.add('open');
+        }, 500);
+        
+        // Show loading animation
+        setTimeout(() => {
+          this.loadingAnimation.classList.add('visible');
+        }, 1500);
+        
+        // Show invitation reveal
+        setTimeout(() => {
+          this.loadingAnimation.classList.remove('visible');
+          this.showInvitationReveal();
+        }, 3000);
+      }
+      
+      showInvitationReveal() {
+        // Create sparkle effect
+        this.createSparkles();
+        
+        // Show invitation with animation
+        gsap.to(this.invitationReveal, {
+          opacity: 1,
+          scale: 1,
+          duration: 1,
+          ease: "back.out(1.7)",
+          onComplete: () => {
+            this.invitationReveal.classList.add('visible');
+            this.isAnimating = false;
+          }
+        });
+      }
+      
+      createSparkles() {
+        // Create 5 sparkles around the invitation
+        for (let i = 0; i < 5; i++) {
+          setTimeout(() => {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.top = Math.random() * 100 + '%';
+            this.envelopeContainer.appendChild(sparkle);
+            
+            // Remove sparkle after animation
+            setTimeout(() => {
+              sparkle.remove();
+            }, 800);
+          }, i * 100);
+        }
+      }
+      
+      showPasswordError() {
+        this.passwordInput.classList.add('error');
+        this.passwordError.classList.add('show');
+        
+        setTimeout(() => {
+          this.passwordInput.classList.remove('error');
+          this.passwordError.classList.remove('show');
+        }, 2000);
+      }
+      
+      shakeEnvelope() {
+        if (this.envelope.classList.contains('visible')) {
+          gsap.to(this.envelope, {
+            x: -10,
+            duration: 0.1,
+            repeat: 5,
+            yoyo: true,
+            ease: "power2.inOut"
+          });
+        }
+      }
+      
+      transitionToMainSite() {
+        // Set access granted flag
+        localStorage.setItem('accessGranted', 'true');
+        
+        // Fade out envelope container
+        gsap.to(this.envelopeContainer, {
+          opacity: 0,
+          duration: 0.8,
+          ease: "power2.inOut",
+          onComplete: () => {
+            this.envelopeContainer.style.display = 'none';
+            this.showMainContent();
+          }
+        });
+      }
+      
+      showMainContent() {
+        // Remove scroll lock
+        document.body.classList.remove('envelope-active');
+        
+        // Show main content
+        this.mainContent.style.display = 'block';
+        
+        // Animate main content entrance
+        gsap.fromTo(this.mainContent, {
+          opacity: 0,
+          y: 50
+        }, {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          ease: "power2.out"
+        });
+        
+        // Initialize countdown timer
+        this.initCountdownTimer();
+      }
+      
+      initCountdownTimer() {
+        const weddingDate = new Date('December 19, 2025 18:30:00').getTime();
+        
+        function updateCountdown() {
+          const now = new Date().getTime();
+          const distance = weddingDate - now;
+          
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+          
+          document.getElementById('days').textContent = days.toString().padStart(2, '0');
+          document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+          document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+          document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+          
+          if (distance < 0) {
+            const countdownTimer = document.querySelector('.countdown-timer');
+            if (countdownTimer) {
+              countdownTimer.innerHTML = '<h3>🎉 The Celebration Has Begun! 🎉</h3>';
+            }
+            return;
+          }
+        }
+        
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+      }
+    }
+    
+    // Initialize envelope experience when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      new EnvelopeEntryExperience();
+    });
+  </script>
+</body>
+</html>
