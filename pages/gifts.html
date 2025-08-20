@@ -312,16 +312,16 @@
     <div class="gift-options">
       <h3>Suggested Contribution Amounts</h3>
       <div class="amount-grid">
-        <button class="amount-option" data-amount="25" onclick="selectAmount(25)">
-          <span class="amount">£25</span>
-          <span class="description">A lovely dinner</span>
-        </button>
-        <button class="amount-option selected" data-amount="50" onclick="selectAmount(50)">
-          <span class="amount">£50</span>
-          <span class="description">A special experience</span>
-        </button>
         <button class="amount-option" data-amount="100" onclick="selectAmount(100)">
           <span class="amount">£100</span>
+          <span class="description">A lovely dinner</span>
+        </button>
+        <button class="amount-option selected" data-amount="200" onclick="selectAmount(200)">
+          <span class="amount">£200</span>
+          <span class="description">A special experience</span>
+        </button>
+        <button class="amount-option" data-amount="300" onclick="selectAmount(300)">
+          <span class="amount">£300</span>
           <span class="description">A memorable adventure</span>
         </button>
         <div class="amount-option custom" id="custom-option">
@@ -366,7 +366,7 @@
   
   <script>
     // Gift amount selection functionality
-    let selectedAmount = 50;
+    let selectedAmount = 200;
     
     function selectAmount(amount) {
       selectedAmount = amount;
