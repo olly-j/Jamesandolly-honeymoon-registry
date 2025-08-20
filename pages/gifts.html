@@ -203,30 +203,27 @@
     
     .amount-option.custom {
       border-style: dashed;
+      cursor: pointer;
     }
     
-    #custom-amount {
-      text-align: center;
+    .amount-option.custom:hover {
+      border-color: var(--clr-green);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
     
-    #custom-amount label {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: 600;
-    }
-    
-    #custom-amount-input {
-      width: 120px;
-      padding: 8px 12px;
-      border: 2px solid #e0e0e0;
-      border-radius: 6px;
-      text-align: center;
-      font-size: 1rem;
-    }
-    
-    #custom-amount-input:focus {
+    .amount-option.custom.selected {
       border-color: var(--clr-accent);
-      outline: none;
+      background: rgba(185, 55, 91, 0.05);
+    }
+    
+    .custom-input {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
     }
     
     /* Footer styling */
@@ -305,8 +302,7 @@
   <div class="section">
   <p>After 16 years together — and 7 years engaged — it's safe to say there's nothing traditional about this celebration. So, we're skipping the traditional gift list too.</p>
   <p>If you were thinking of giving something, we'd be truly grateful for a contribution to our honeymoon fund. It'll help us plan a few days of sunshine, rest, and a very overdue toast.</p>
-  <p>We’re not doing a traditional registry, but we’ve set up a fund to help us build memories on our honeymoon.</p>
-  <p>There’s no expectation at all, but if you’d like to contribute, you can do so below.</p>
+
 
     <div class="divider">
       <img src="../assets/images/dividers/wave.png" alt="Wave Divider" loading="lazy" />
@@ -328,25 +324,26 @@
           <span class="amount">£100</span>
           <span class="description">A memorable adventure</span>
         </button>
-        <button class="amount-option custom" onclick="showCustomAmount()">
-          <span class="amount">Custom</span>
-          <span class="description">Your choice</span>
-        </button>
+        <div class="amount-option custom" id="custom-option">
+          <div class="custom-content" id="custom-content">
+            <span class="amount">Custom</span>
+            <span class="description">Your choice</span>
+          </div>
+          <div class="custom-input" id="custom-input" style="display: none;">
+            <input type="number" id="custom-amount-input" min="1" max="1000" placeholder="£" style="width: 100px; text-align: center; border: none; background: transparent; font-size: 1.2rem; font-weight: 600; color: var(--clr-text); outline: none;">
+          </div>
+        </div>
+        <div id="custom-hint" style="display: none; text-align: center; margin-top: 8px; font-size: 0.875rem; color: #666;">
+          Press Enter to confirm
+        </div>
+        </div>
       </div>
       
-      <div id="custom-amount" style="display: none; margin-top: 20px;">
-        <label for="custom-amount-input">Enter amount (£):</label>
-        <input type="number" id="custom-amount-input" min="1" max="1000" placeholder="Enter amount">
-      </div>
+
     </div>
     
     <div style="text-align: center; margin-top: 30px;">
-      <form id="gift-form" action="https://www.paypal.com/donate" method="post" target="_blank" style="display: inline-block;">
-        <input type="hidden" name="hosted_button_id" value="K6FMQWUHHCQ6E" />
-        <input type="hidden" name="currency_code" value="GBP" />
-        <input type="hidden" name="amount" id="gift-amount" value="50" />
-        <input type="submit" value="Give a Honeymoon Gift" class="gift-button" id="gift-submit" />
-      </form>
+      <button id="gift-submit" class="gift-button" onclick="submitGift()">Give a Honeymoon Gift</button>
     </div>
 <div class="divider mirrored">
   <img src="../assets/images/dividers/wave.png" alt="Wave Divider" loading="lazy" />
@@ -384,14 +381,17 @@
         selectedOption.classList.add('selected');
       }
       
-      // Update form
-      document.getElementById('gift-amount').value = amount;
+      // Update selected amount (form element removed for PayPal.me)
       
       // Hide custom amount input
-      document.getElementById('custom-amount').style.display = 'none';
+      document.getElementById('custom-content').style.display = 'flex';
+      document.getElementById('custom-input').style.display = 'none';
+      document.getElementById('custom-hint').style.display = 'none';
+      document.getElementById('custom-option').classList.remove('selected');
       
       // Track selection
       if (typeof gtag !== 'undefined') {
+        gtag('event', 'gift_amount_selected', {
           event_category: 'gift',
           event_label: `amount_${amount}`,
           value: amount
@@ -405,39 +405,69 @@
         option.classList.remove('selected');
       });
       
-      // Show custom input
-      document.getElementById('custom-amount').style.display = 'block';
+      // Select the custom option
+      document.getElementById('custom-option').classList.add('selected');
+      
+      // Show custom input inside the button
+      document.getElementById('custom-content').style.display = 'none';
+      document.getElementById('custom-input').style.display = 'flex';
+      document.getElementById('custom-hint').style.display = 'block';
       document.getElementById('custom-amount-input').focus();
       
       // Track custom selection
       if (typeof gtag !== 'undefined') {
+        gtag('event', 'gift_custom_amount', {
           event_category: 'gift',
           event_label: 'custom_amount'
         });
       }
     }
     
+    // Add click handler for custom option
+    document.getElementById('custom-option').addEventListener('click', function() {
+      showCustomAmount();
+    });
+    
     // Handle custom amount input
     document.getElementById('custom-amount-input').addEventListener('input', function(e) {
       const amount = parseInt(e.target.value);
       if (amount > 0) {
         selectedAmount = amount;
-        document.getElementById('gift-amount').value = amount;
       }
     });
     
-    // Track gift form submission
-    document.getElementById('gift-form').addEventListener('submit', function(e) {
+    // Handle Enter key press in custom input
+    document.getElementById('custom-amount-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const amount = parseInt(e.target.value);
+        if (amount > 0) {
+          selectedAmount = amount;
+          // Optionally auto-submit or just confirm the selection
+          e.target.blur(); // Remove focus
+        }
+      }
+    });
+    
+    // Submit gift function for PayPal.me
+    function submitGift() {
+      const url = selectedAmount > 0 ? `https://paypal.me/ollyjeffers/${selectedAmount}` : 'https://paypal.me/ollyjeffers';
+      
+      // Track gift submission
       if (typeof gtag !== 'undefined') {
+        gtag('event', 'gift_submitted', {
           event_category: 'gift',
           event_label: 'gift_submitted',
           value: selectedAmount
         });
       }
-    });
+      
+      // Open PayPal.me in new tab
+      window.open(url, '_blank');
+    }
     
     // Track page view
     if (typeof gtag !== 'undefined') {
+      gtag('event', 'page_view', {
         page_title: 'Gift Registry',
         page_location: window.location.href
       });
