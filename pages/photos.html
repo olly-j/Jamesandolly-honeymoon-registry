@@ -339,6 +339,16 @@
 
   <!-- Cloudinary Upload Widget -->
   <script src="https://widget.cloudinary.com/v2.0/global/all.js" onerror="console.error('Cloudinary widget script failed to load')"></script>
+  <script>
+    // Check if Cloudinary script loaded successfully
+    window.addEventListener('load', function() {
+      if (typeof cloudinary === 'undefined') {
+        console.error('Cloudinary script failed to load on window load');
+      } else {
+        console.log('Cloudinary script loaded successfully');
+      }
+    });
+  </script>
 </head>
 <body>
 
@@ -393,6 +403,13 @@
     const CLOUD_NAME    = 'dh8f8hnhe';
     const UPLOAD_PRESET = 'guest_upload';
     const TAG_NAME      = 'gallery';
+    
+    // Debug Cloudinary configuration
+    console.log('Cloudinary Configuration:', {
+      cloudName: CLOUD_NAME,
+      uploadPreset: UPLOAD_PRESET,
+      tagName: TAG_NAME
+    });
 
     document.addEventListener('DOMContentLoaded', () => {
       // Lightweight access gate using the same code as the main invitation page
@@ -616,12 +633,26 @@
       // custom in-page Cloudinary upload widget
       let widget = null;
       
+      // Debug Cloudinary loading
+      console.log('Checking Cloudinary availability...');
+      console.log('cloudinary object:', typeof cloudinary);
+      console.log('cloudinary.createUploadWidget:', typeof cloudinary?.createUploadWidget);
+      
       // Check if Cloudinary is loaded
       if (typeof cloudinary === 'undefined') {
         console.error('Cloudinary widget script not loaded');
         showToast('Upload functionality not available. Please refresh the page.');
+      } else if (typeof cloudinary.createUploadWidget !== 'function') {
+        console.error('Cloudinary createUploadWidget function not available');
+        showToast('Upload widget not properly loaded. Please refresh the page.');
       } else {
         try {
+          console.log('Creating Cloudinary widget with config:', {
+            cloudName: CLOUD_NAME,
+            uploadPreset: UPLOAD_PRESET,
+            tags: [TAG_NAME]
+          });
+          
           widget = cloudinary.createUploadWidget({
           cloudName: CLOUD_NAME,
           uploadPreset: UPLOAD_PRESET,
@@ -694,7 +725,48 @@
                   widget.open();
                 } else {
                   console.error('Widget not initialized');
-                  showToast('Upload widget not available. Please refresh the page.');
+                  
+                  // Try to reload Cloudinary script and recreate widget
+                  if (typeof cloudinary === 'undefined') {
+                    console.log('Attempting to reload Cloudinary script...');
+                    const script = document.createElement('script');
+                    script.src = 'https://widget.cloudinary.com/v2.0/global/all.js';
+                    script.onload = () => {
+                      console.log('Cloudinary script reloaded, attempting to create widget...');
+                      try {
+                        widget = cloudinary.createUploadWidget({
+                          cloudName: CLOUD_NAME,
+                          uploadPreset: UPLOAD_PRESET,
+                          tags: [TAG_NAME],
+                          sources: ['local', 'camera'],
+                          showAdvancedOptions: false,
+                          multiple: true,
+                          cropping: false,
+                          showPoweredBy: false
+                        }, (err, result) => {
+                          if (!err && result.event === 'success') {
+                            seen.add(result.info.asset_id);
+                            renderImage(result.info, true);
+                            showToast('Photo uploaded successfully!');
+                          } else if (err) {
+                            console.error('Upload error:', err);
+                            showToast('Upload failed. Please try again.');
+                          }
+                        });
+                        widget.open();
+                      } catch (error) {
+                        console.error('Failed to create widget after reload:', error);
+                        showToast('Upload widget not available. Please refresh the page.');
+                      }
+                    };
+                    script.onerror = () => {
+                      console.error('Failed to reload Cloudinary script');
+                      showToast('Upload widget not available. Please refresh the page.');
+                    };
+                    document.head.appendChild(script);
+                  } else {
+                    showToast('Upload widget not available. Please refresh the page.');
+                  }
                 }
               }, false);
     });

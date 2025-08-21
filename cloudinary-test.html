@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cloudinary Test</title>
+</head>
+<body>
+    <h1>Cloudinary Configuration Test</h1>
+    <button id="test-btn">Test Cloudinary Widget</button>
+    <div id="status"></div>
+
+    <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
+    <script>
+        const CLOUD_NAME = 'dh8f8hnhe';
+        const UPLOAD_PRESET = 'guest_upload';
+        
+        function updateStatus(message, isError = false) {
+            const status = document.getElementById('status');
+            status.innerHTML += `<p style="color: ${isError ? 'red' : 'green'}">${message}</p>`;
+        }
+        
+        document.getElementById('test-btn').addEventListener('click', function() {
+            updateStatus('Testing Cloudinary configuration...');
+            
+            // Check if Cloudinary is loaded
+            if (typeof cloudinary === 'undefined') {
+                updateStatus('❌ Cloudinary script not loaded', true);
+                return;
+            }
+            
+            updateStatus('✅ Cloudinary script loaded');
+            
+            // Check if createUploadWidget function exists
+            if (typeof cloudinary.createUploadWidget !== 'function') {
+                updateStatus('❌ createUploadWidget function not available', true);
+                return;
+            }
+            
+            updateStatus('✅ createUploadWidget function available');
+            
+            // Try to create widget
+            try {
+                const widget = cloudinary.createUploadWidget({
+                    cloudName: CLOUD_NAME,
+                    uploadPreset: UPLOAD_PRESET,
+                    sources: ['local'],
+                    multiple: false
+                }, (error, result) => {
+                    if (error) {
+                        updateStatus(`❌ Widget callback error: ${error.message}`, true);
+                    } else if (result.event === 'success') {
+                        updateStatus('✅ Upload successful!');
+                    }
+                });
+                
+                updateStatus('✅ Widget created successfully');
+                widget.open();
+                
+            } catch (error) {
+                updateStatus(`❌ Failed to create widget: ${error.message}`, true);
+            }
+        });
+    </script>
+</body>
+</html>
