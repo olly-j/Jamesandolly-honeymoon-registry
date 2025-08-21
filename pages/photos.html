@@ -340,6 +340,18 @@
   <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/autoplay/lg-autoplay.umd.min.js" onerror="console.error('LightGallery autoplay plugin failed to load')"></script>
   <script>const lgAutoplay = window.lgAutoplay;</script>
 
+  <!-- Cloudinary Widget Ready Check -->
+  <script>
+    // Ensure Cloudinary is loaded before proceeding
+    function waitForCloudinary(callback) {
+      if (typeof cloudinary !== 'undefined' && typeof cloudinary.createUploadWidget === 'function') {
+        callback();
+      } else {
+        setTimeout(() => waitForCloudinary(callback), 100);
+      }
+    }
+  </script>
+
 
 </head>
 <body>
@@ -613,62 +625,59 @@
         return;
       }
       
-      uploadBtn.addEventListener('click', function() {
-        alert('Button clicked!'); // Simple test to see if click is registered
-        console.log('Upload button clicked');
-        console.log('cloudinary object:', typeof cloudinary);
-        console.log('cloudinary.createUploadWidget:', typeof cloudinary?.createUploadWidget);
+      // Use the working pattern from test files with proper Cloudinary readiness check
+      waitForCloudinary(() => {
+        console.log('Cloudinary is ready, setting up upload button...');
         
-        // Check if Cloudinary is loaded
-        if (typeof cloudinary === 'undefined') {
-          alert('Cloudinary script not loaded!');
-          return;
-        }
-        
-        if (typeof cloudinary.createUploadWidget !== 'function') {
-          alert('Cloudinary createUploadWidget function not available!');
-          return;
-        }
-        
-        // Check if createUploadWidget function exists
-        if (typeof cloudinary.createUploadWidget !== 'function') {
-          console.error('createUploadWidget function not available');
-          showToast('Upload widget not properly loaded. Please refresh the page.');
-          return;
-        }
-        
-        // Create widget on-demand (same as working test)
-        try {
-          const widget = cloudinary.createUploadWidget({
-            cloudName: CLOUD_NAME,
-            uploadPreset: UPLOAD_PRESET,
-            tags: [TAG_NAME],
-            sources: ['local', 'camera'],
-            multiple: true,
-            showAdvancedOptions: false,
-            cropping: false,
-            showPoweredBy: false
-          }, (error, result) => {
-            if (error) {
-              console.error('Upload error:', error);
-              showToast('Upload failed. Please try again.');
-            } else if (result.event === 'success') {
-              seen.add(result.info.asset_id);
-              renderImage(result.info, true);
-              showToast('Photo uploaded successfully!');
-              
-                           // Track successful upload analytics
-             console.log('Photo uploaded successfully');
-            }
-          });
+        uploadBtn.addEventListener('click', function() {
+          console.log('Upload button clicked');
+          console.log('cloudinary object:', typeof cloudinary);
+          console.log('cloudinary.createUploadWidget:', typeof cloudinary?.createUploadWidget);
           
-          console.log('Widget created successfully, opening...');
-          widget.open();
+          // Double-check Cloudinary availability
+          if (typeof cloudinary === 'undefined') {
+            showToast('Cloudinary script not loaded. Please refresh the page.');
+            return;
+          }
           
-        } catch (error) {
-          console.error('Failed to create widget:', error);
-          showToast('Upload widget failed to initialize. Please try again.');
-        }
+          if (typeof cloudinary.createUploadWidget !== 'function') {
+            showToast('Upload widget not available. Please refresh the page.');
+            return;
+          }
+          
+          // Create widget on-demand (same as working test)
+          try {
+            const widget = cloudinary.createUploadWidget({
+              cloudName: CLOUD_NAME,
+              uploadPreset: UPLOAD_PRESET,
+              tags: [TAG_NAME],
+              sources: ['local', 'camera'],
+              multiple: true,
+              showAdvancedOptions: false,
+              cropping: false,
+              showPoweredBy: false
+            }, (error, result) => {
+              if (error) {
+                console.error('Upload error:', error);
+                showToast('Upload failed. Please try again.');
+              } else if (result.event === 'success') {
+                seen.add(result.info.asset_id);
+                renderImage(result.info, true);
+                showToast('Photo uploaded successfully!');
+                console.log('Photo uploaded successfully');
+              }
+            });
+            
+            console.log('Widget created successfully, opening...');
+            widget.open();
+            
+          } catch (error) {
+            console.error('Failed to create widget:', error);
+            showToast('Upload widget failed to initialize. Please try again.');
+          }
+        });
+        
+        console.log('Upload button handler set up successfully');
       });
     });
   </script>
