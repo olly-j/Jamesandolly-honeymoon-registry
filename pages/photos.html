@@ -418,7 +418,7 @@
 
       function hideGate() {
         if (gate) {
-          gate.hidden = true;
+          gate.remove(); // Completely remove from DOM instead of just hiding
           document.body.classList.remove('gate-active');
         }
       }
@@ -627,6 +627,38 @@
           return;
         }
         
+        // Set up MutationObserver to detect widget iframe creation
+        const observer = new MutationObserver((mutations) => {
+          mutations.forEach((mutation) => {
+            mutation.addedNodes.forEach((node) => {
+              if (node.nodeType === Node.ELEMENT_NODE) {
+                // Check for Cloudinary widget iframes
+                if (node.tagName === 'IFRAME' || 
+                    (node.classList && node.classList.contains('cloudinary-widget')) ||
+                    (node.id && node.id.includes('cloudinary')) ||
+                    (node.querySelector && node.querySelector('iframe'))) {
+                  console.log('Cloudinary widget iframe detected:', node);
+                  // Ensure it's visible and not suppressed
+                  if (node.style) {
+                    node.style.zIndex = '99999';
+                    node.style.position = 'fixed';
+                    node.style.display = 'block';
+                    node.style.visibility = 'visible';
+                  }
+                }
+              }
+            });
+          });
+        });
+        
+        // Start observing DOM changes
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true,
+          attributes: true,
+          attributeFilter: ['style', 'class']
+        });
+        
         // Create widget on-demand (same as working test)
         try {
           const widget = cloudinary.createUploadWidget({
@@ -642,20 +674,26 @@
             if (error) {
               console.error('Upload error:', error);
               showToast('Upload failed. Please try again.');
+              observer.disconnect();
             } else if (result.event === 'success') {
               seen.add(result.info.asset_id);
               renderImage(result.info, true);
               showToast('Photo uploaded successfully!');
               console.log('Photo uploaded successfully');
+              observer.disconnect();
             }
           });
           
           console.log('Widget created successfully, opening...');
           widget.open();
           
+          // Stop observing after 5 seconds to prevent memory leaks
+          setTimeout(() => observer.disconnect(), 5000);
+          
         } catch (error) {
           console.error('Failed to create widget:', error);
           showToast('Upload widget failed to initialize. Please try again.');
+          observer.disconnect();
         }
       });
     });
