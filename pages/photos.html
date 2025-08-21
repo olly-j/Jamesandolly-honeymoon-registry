@@ -9,7 +9,7 @@
 
   
   <!-- Security Headers -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://widget.cloudinary.com https://res.cloudinary.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://res.cloudinary.com https://www.google-analytics.com; frame-src 'self' https://widget.cloudinary.com https://upload-widget.cloudinary.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://widget.cloudinary.com https://res.cloudinary.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://res.cloudinary.com https://www.google-analytics.com; frame-src 'self' https://widget.cloudinary.com https://upload-widget.cloudinary.com https://*.cloudinary.com; child-src 'self' https://widget.cloudinary.com https://upload-widget.cloudinary.com https://*.cloudinary.com;">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
   <meta http-equiv="X-XSS-Protection" content="1; mode=block">
@@ -340,18 +340,6 @@
   <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/autoplay/lg-autoplay.umd.min.js" onerror="console.error('LightGallery autoplay plugin failed to load')"></script>
   <script>const lgAutoplay = window.lgAutoplay;</script>
 
-  <!-- Cloudinary Widget Ready Check -->
-  <script>
-    // Ensure Cloudinary is loaded before proceeding
-    function waitForCloudinary(callback) {
-      if (typeof cloudinary !== 'undefined' && typeof cloudinary.createUploadWidget === 'function') {
-        callback();
-      } else {
-        setTimeout(() => waitForCloudinary(callback), 100);
-      }
-    }
-  </script>
-
 
 </head>
 <body>
@@ -625,59 +613,51 @@
         return;
       }
       
-      // Use the working pattern from test files with proper Cloudinary readiness check
-      waitForCloudinary(() => {
-        console.log('Cloudinary is ready, setting up upload button...');
+      uploadBtn.addEventListener('click', function() {
+        console.log('Upload button clicked');
+        console.log('cloudinary object:', typeof cloudinary);
+        console.log('cloudinary.createUploadWidget:', typeof cloudinary?.createUploadWidget);
         
-        uploadBtn.addEventListener('click', function() {
-          console.log('Upload button clicked');
-          console.log('cloudinary object:', typeof cloudinary);
-          console.log('cloudinary.createUploadWidget:', typeof cloudinary?.createUploadWidget);
-          
-          // Double-check Cloudinary availability
-          if (typeof cloudinary === 'undefined') {
-            showToast('Cloudinary script not loaded. Please refresh the page.');
-            return;
-          }
-          
-          if (typeof cloudinary.createUploadWidget !== 'function') {
-            showToast('Upload widget not available. Please refresh the page.');
-            return;
-          }
-          
-          // Create widget on-demand (same as working test)
-          try {
-            const widget = cloudinary.createUploadWidget({
-              cloudName: CLOUD_NAME,
-              uploadPreset: UPLOAD_PRESET,
-              tags: [TAG_NAME],
-              sources: ['local', 'camera'],
-              multiple: true,
-              showAdvancedOptions: false,
-              cropping: false,
-              showPoweredBy: false
-            }, (error, result) => {
-              if (error) {
-                console.error('Upload error:', error);
-                showToast('Upload failed. Please try again.');
-              } else if (result.event === 'success') {
-                seen.add(result.info.asset_id);
-                renderImage(result.info, true);
-                showToast('Photo uploaded successfully!');
-                console.log('Photo uploaded successfully');
-              }
-            });
-            
-            console.log('Widget created successfully, opening...');
-            widget.open();
-            
-          } catch (error) {
-            console.error('Failed to create widget:', error);
-            showToast('Upload widget failed to initialize. Please try again.');
-          }
-        });
+        if (typeof cloudinary === 'undefined') {
+          showToast('Cloudinary script not loaded. Please refresh the page.');
+          return;
+        }
         
-        console.log('Upload button handler set up successfully');
+        if (typeof cloudinary.createUploadWidget !== 'function') {
+          showToast('Upload widget not available. Please refresh the page.');
+          return;
+        }
+        
+        // Create widget on-demand (same as working test)
+        try {
+          const widget = cloudinary.createUploadWidget({
+            cloudName: CLOUD_NAME,
+            uploadPreset: UPLOAD_PRESET,
+            tags: [TAG_NAME],
+            sources: ['local', 'camera'],
+            multiple: true,
+            showAdvancedOptions: false,
+            cropping: false,
+            showPoweredBy: false
+          }, (error, result) => {
+            if (error) {
+              console.error('Upload error:', error);
+              showToast('Upload failed. Please try again.');
+            } else if (result.event === 'success') {
+              seen.add(result.info.asset_id);
+              renderImage(result.info, true);
+              showToast('Photo uploaded successfully!');
+              console.log('Photo uploaded successfully');
+            }
+          });
+          
+          console.log('Widget created successfully, opening...');
+          widget.open();
+          
+        } catch (error) {
+          console.error('Failed to create widget:', error);
+          showToast('Upload widget failed to initialize. Please try again.');
+        }
       });
     });
   </script>
