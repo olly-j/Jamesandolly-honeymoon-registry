@@ -23,8 +23,8 @@
   />
   <link rel="icon" href="../assets/images/favicon.png" type="image/png" />
   
-  <!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+  <!-- Google Analytics - Disabled for now to prevent errors -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
@@ -36,7 +36,7 @@
         'custom_parameter_2': 'gallery_view'
       }
     });
-  </script>
+  </script> -->
 
   <!-- LightGallery CSS -->
   <link
@@ -398,7 +398,9 @@
     
 
 
+    console.log('DOMContentLoaded event fired');
     document.addEventListener('DOMContentLoaded', () => {
+      console.log('DOMContentLoaded callback executing');
       // Lightweight access gate using the same code as the main invitation page
       const gate = document.getElementById('access-gate');
       const input = document.getElementById('gate-input');
@@ -522,12 +524,7 @@
         img.onload  = () => {
           img.classList.remove('skeleton');
           // Track image load analytics
-          if (typeof gtag !== 'undefined') {
-            gtag('event', 'image_loaded', {
-              event_category: 'Gallery',
-              event_label: 'photo_viewed'
-            });
-          }
+          console.log('Image loaded successfully');
         };
         link.appendChild(img);
         wrapper.appendChild(link);
@@ -606,7 +603,16 @@
       }, 30000);
 
       // Cloudinary upload widget - EXACT SAME PATTERN AS WORKING TEST
-      document.getElementById('upload-btn').addEventListener('click', function() {
+      const uploadBtn = document.getElementById('upload-btn');
+      console.log('Upload button element:', uploadBtn);
+      
+      if (!uploadBtn) {
+        console.error('Upload button not found!');
+        return;
+      }
+      
+      uploadBtn.addEventListener('click', function() {
+        alert('Button clicked!'); // Simple test to see if click is registered
         console.log('Upload button clicked');
         console.log('cloudinary object:', typeof cloudinary);
         console.log('cloudinary.createUploadWidget:', typeof cloudinary?.createUploadWidget);
@@ -645,14 +651,8 @@
               renderImage(result.info, true);
               showToast('Photo uploaded successfully!');
               
-              // Track successful upload analytics
-              if (typeof gtag !== 'undefined') {
-                gtag('event', 'photo_uploaded', {
-                  event_category: 'Gallery',
-                  event_label: 'upload_success',
-                  custom_parameter_1: 'photo_upload'
-                });
-              }
+                           // Track successful upload analytics
+             console.log('Photo uploaded successfully');
             }
           });
           
