@@ -2,316 +2,289 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="description" content="Share and view photos from James & Oliver's wedding celebration">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Contribute to James & Oliver's honeymoon fund and help create lasting memories">
   <meta name="theme-color" content="#F9F7F3">
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
 
   
   <!-- Security Headers -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://widget.cloudinary.com https://res.cloudinary.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://res.cloudinary.com https://www.google-analytics.com;">
+      <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.paypal.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-src https://www.paypal.com;">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
   <meta http-equiv="X-XSS-Protection" content="1; mode=block">
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
   <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
   
-  <title>James & Oliver – Gallery</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap"
-    rel="stylesheet"
-  />
-  <link rel="icon" href="../assets/images/favicon.png" type="image/png" />
+  <title>Celebrate From Afar – James & Oliver</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="../assets/images/favicon.png" />
   
-  <!-- Google Analytics - Replace GA_MEASUREMENT_ID with your actual ID -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'GA_MEASUREMENT_ID', {
-      page_title: 'Photo Gallery',
-      custom_map: {
-        'custom_parameter_1': 'photo_upload',
-        'custom_parameter_2': 'gallery_view'
-      }
-    });
-  </script>
-
-  <!-- LightGallery CSS -->
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/css/lightgallery-bundle.min.css"
-  />
 
   <style>
     :root {
-      --bg: #F9F7F3;
-      --text: #3D4739;
-      --accent: #C9486A;
-      --green: #9DA79D;
+      --bg-default: #F9F7F3;
       --bg-alt: #FFFFFF;
+      --clr-text: #3D4739;
+      --clr-accent: #C9486A;
+      --clr-green: #9DA79D;
+      --clr-deep-green: #778053;
     }
-    
-    body.dark-mode {
-      --bg: #1e1e1e;
-      --text: #f0f0f0;
-      --accent: #ff7f50;
-      --green: #6b8e23;
-      --bg-alt: #2a2a2a;
-    }
-    
+
     * { box-sizing: border-box; }
     
     body {
       margin: 0;
+      padding: 0;
+      background: var(--bg-default);
       font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      transition: background 0.3s, color 0.3s;
+      color: var(--clr-text);
+      line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    nav {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      padding: 20px;
+      background: var(--bg-alt);
+      border-bottom: 1px solid #e0e0e0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      transition: background-color 0.3s ease;
+    }
+
+    nav a {
+      font-family: 'Playfair Display', serif;
+      color: #555;
+      text-decoration: none;
+      padding: 6px 8px;
+      transition: color 0.2s ease;
+    }
+
+    nav a:hover {
+      color: var(--clr-accent);
     }
 
     /* Focus styles for accessibility */
     button:focus,
     input:focus,
     a:focus {
-      outline: 2px solid var(--accent);
+      outline: 2px solid var(--clr-accent);
       outline-offset: 2px;
     }
 
-    /* LightGallery toolbar styling */
-    .lg-toolbar {
-      top: auto !important;
-      bottom: 0 !important;
-      width: 100% !important;
-      background: rgba(0,0,0,0.6) !important;
-      justify-content: center !important;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-    .lg-outer:hover .lg-toolbar,
-    .lg-toolbar:hover {
-      opacity: 1 !important;
-    }
-    .lg-icon {
-      color: #fff !important;
-    }
-
-    nav {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 20px;
-      padding: 20px;
-      position: sticky;
-      top: 0;
-      background: white;
-      border-bottom: 1px solid #ddd;
-      z-index: 100;
-    }
-    body.dark-mode nav {
-      background: #2a2a2a;
-      border-color: #444;
-    }
-    nav a {
-      font-family: 'Playfair Display', serif;
-      text-decoration: none;
-      color: #555;
-      font-size: 1.1em;
-    }
-    body.dark-mode nav a {
-      color: #ccc;
-    }
-    nav a:hover {
-      color: var(--accent);
-    }
-    #theme-toggle {
-      margin-left: auto;
-      background: none;
-      border: none;
-      font-size: 1.3em;
-      cursor: pointer;
-    }
-
-    h1, h2, h3 {
-      font-family: 'Playfair Display', serif;
+    header {
       text-align: center;
-    }
-    .upload-section,
-    .gallery-section {
-      max-width: 1000px;
-      margin: auto;
       padding: 40px 20px;
     }
-    .upload-box {
-      text-align: center;
-      background: white;
-      padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      transition: background 0.3s, box-shadow 0.3s;
-    }
-    body.dark-mode .upload-box {
-      background: #2a2a2a;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    }
-    .upload-box p {
-      margin: 10px 0 20px;
-      color: #555;
-    }
-    body.dark-mode .upload-box p {
-      color: #aaa;
-    }
-    #upload-btn {
-      background: var(--accent);
-      color: white;
-      border: none;
-      padding: 12px 24px;
-      font-size: 1em;
-      border-radius: 8px;
-      cursor: pointer;
+
+    header img {
+      max-height: 100px;
+      margin-bottom: 20px;
     }
 
-    #gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 16px;
-      margin-top: 20px;
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2em;
+      margin: 0;
+      color: #778053;
     }
-    #gallery-grid div {
-      position: relative;
+
+    .section {
+      max-width: 700px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+      padding: 40px 30px;
+      margin-bottom: 60px;
     }
-    #gallery-grid img {
-      width: 100%;
-      border-radius: 8px;
-      transition: transform 0.3s ease;
-      display: block;
-    }
-    #gallery-grid img:hover {
-      transform: scale(1.03);
-    }
-    .skeleton {
-      filter: blur(5px);
-      background: #ddd;
-    }
-    .download-btn {
-      position: absolute;
-      bottom: 6px;
-      right: 6px;
-      background: rgba(0,0,0,0.6);
+
+    .gift-button {
+      background-color: var(--clr-green);
       color: #fff;
+      font-family: 'Inter', sans-serif;
       border: none;
-      padding: 4px 6px;
-      font-size: 0.9em;
-      border-radius: 4px;
+      padding: 14px 26px;
+      font-size: 1rem;
       cursor: pointer;
+      border-radius: 6px;
+      transition: background-color 0.2s ease;
     }
-    .toast {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(0,0,0,0.7);
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: 4px;
-      opacity: 0;
-      transition: opacity 0.5s;
-      pointer-events: none;
+
+    .gift-button:hover {
+      background-color: var(--clr-accent);
     }
 
     footer {
       text-align: center;
       padding: 40px;
-      background: var(--text);
-      color: var(--bg);
-      font-size: 0.95em;
-      transition: background 0.3s, color 0.3s;
-    }
-    body.dark-mode footer {
-      background: var(--text);
-      color: var(--bg);
-    }
-    footer a {
-      color: #fff;
-      text-decoration: underline;
+      font-size: 0.9em;
+      color: #aaa;
     }
 
-    /* Access gate overlay */
-    .access-gate {
-      position: fixed;
-      inset: 0;
-      background: rgba(249, 247, 243, 0.98);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
+    .divider {
+      text-align: center;
+      margin: 40px 0 20px;
     }
-    .access-gate[hidden] { display: none; }
-    .gate-card {
-      background: #fff;
-      border: 1px solid #e0e0e0;
-      border-radius: 12px;
-      padding: 24px;
-      width: min(480px, 92vw);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+
+    .divider img {
+      max-width: 60%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .divider.mirrored img {
+      transform: scaleY(-1);
+    }
+
+    /* Gift options styling */
+    .gift-options {
+      margin: 30px 0;
+    }
+    
+    .gift-options h3 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: var(--clr-deep-green);
+      font-family: 'Playfair Display', serif;
+    }
+    
+    .amount-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .amount-option {
+      background: white;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .amount-option:hover {
+      border-color: var(--clr-green);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .amount-option.selected {
+      border-color: var(--clr-accent);
+      background: rgba(185, 55, 91, 0.05);
+    }
+    
+    .amount-option .amount {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--clr-text);
+      display: block;
+    }
+    
+    .amount-option .description {
+      font-size: 0.875rem;
+      color: #666;
+      margin-top: 5px;
+      display: block;
+    }
+    
+    .amount-option.custom {
+      border-style: dashed;
+      cursor: pointer;
+    }
+    
+    .amount-option.custom:hover {
+      border-color: var(--clr-green);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    .amount-option.custom.selected {
+      border-color: var(--clr-accent);
+      background: rgba(185, 55, 91, 0.05);
+    }
+    
+    .custom-input {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+    
+    /* Footer styling */
+    .site-footer {
+      background: var(--bg-alt);
+      border-top: 1px solid #e0e0e0;
+      padding: 20px;
+      margin-top: 40px;
       text-align: center;
     }
-    .gate-title {
-      font-family: 'Playfair Display', serif;
-      color: #778053;
-      margin: 0 0 12px;
-    }
-    .gate-input-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 8px;
-      justify-content: center;
-    }
-    .gate-input {
-      flex: 1;
-      max-width: 260px;
-      padding: 10px 12px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-    .gate-button {
-      background: #C9486A;
-      color: #fff;
-      border: none;
-      padding: 10px 14px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    .gate-button:focus { outline: 2px solid #C9486A; outline-offset: 2px; }
-    .gate-error {
-      color: #b00020;
-      font-size: 0.95rem;
-      margin-top: 10px;
-    }
-    .gate-help {
-      font-size: 0.9rem;
-      color: #666;
-      margin-top: 12px;
-    }
-    body.gate-active { overflow: hidden; }
     
-    /* Ensure Cloudinary widget can work properly */
-    .cloudinary-widget,
-    .cloudinary-widget * {
-      overflow: visible !important;
+    .footer-content {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .footer-content p {
+      margin: 0 0 10px;
+      color: #666;
+      font-size: 0.9em;
+    }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    
+    .footer-links a {
+      color: var(--clr-accent);
+      text-decoration: none;
+      font-size: 0.9em;
+      transition: color 0.2s ease;
+    }
+    
+    .footer-links a:hover {
+      color: var(--clr-deep-green);
+    }
+    
+    /* Responsive flourishes */
+    @media (max-width: 768px) {
+      .divider img {
+        max-width: 80%;
+      }
+      
+      .amount-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+      
+      .amount-option {
+        min-height: 70px;
+        padding: 12px;
+      }
+      
+      .footer-links {
+        flex-direction: column;
+        gap: 10px;
+      }
     }
   </style>
-
-  <!-- LightGallery core + autoplay plugin -->
-  <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/autoplay/lg-autoplay.umd.min.js"></script>
-  <script>const lgAutoplay = window.lgAutoplay;</script>
-
-  <!-- Cloudinary Upload Widget -->
-  <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
 </head>
 <body>
 
@@ -330,58 +303,99 @@
 
   <nav>
     <a href="index.html">Invitation</a>
-    <a href="#upload">Upload</a>
-    <a href="#gallery">Gallery</a>
+    <a href="photos.html">Photos</a>
     <a href="gifts.html">Gifts</a>
-    <button id="theme-toggle">🌙</button>
   </nav>
 
-  <section id="upload" class="upload-section">
-    <div class="upload-box">
-      <h2>Share Your Favourite Moments</h2>
-      <p>Upload your photos from the evening — we’d love to see your memories.</p>
-      <button id="upload-btn">Upload Your Photo</button>
-    </div>
-  </section>
+  <header>
+            <img src="../assets/images/monograms/JO_Circle.png" alt="Monogram" loading="lazy" />
+    <h1>A Thought, If You’re Wondering</h1>
+  </header>
 
-  <section id="gallery" class="gallery-section">
-    <h2>Gallery</h2>
-    <p style="text-align:center;color:#555;">
-      A growing collection of shared moments and highlights.
+  <div class="section">
+  <p>After 16 years together — and 7 years engaged — it's safe to say there's nothing traditional about this celebration. So, we're skipping the traditional gift list too.</p>
+  <p>If you were thinking of giving something, we'd be truly grateful for a contribution to our honeymoon fund. It'll help us plan a few days of sunshine, rest, and a very overdue toast.</p>
+
+
+    <div class="divider">
+      <img src="../assets/images/dividers/wave.png" alt="Wave Divider" loading="lazy" />
+    </div>
+    
+    <!-- Gift contribution section with suggested amounts -->
+    <div class="gift-options">
+      <h3>Suggested Contribution Amounts</h3>
+      <div class="amount-grid">
+        <button class="amount-option" data-amount="100" onclick="selectAmount(100)">
+          <span class="amount">£100</span>
+          <span class="description">A lovely dinner</span>
+        </button>
+        <button class="amount-option selected" data-amount="200" onclick="selectAmount(200)">
+          <span class="amount">£200</span>
+          <span class="description">A special experience</span>
+        </button>
+        <button class="amount-option" data-amount="300" onclick="selectAmount(300)">
+          <span class="amount">£300</span>
+          <span class="description">A memorable adventure</span>
+        </button>
+        <div class="amount-option custom" id="custom-option">
+          <div class="custom-content" id="custom-content">
+            <span class="amount">Custom</span>
+            <span class="description">Your choice</span>
+          </div>
+          <div class="custom-input" id="custom-input" style="display: none;">
+            <input type="number" id="custom-amount-input" min="1" max="1000" placeholder="£" style="width: 100px; text-align: center; border: none; background: transparent; font-size: 1.2rem; font-weight: 600; color: var(--clr-text); outline: none;">
+          </div>
+        </div>
+        <div id="custom-hint" style="display: none; text-align: center; margin-top: 8px; font-size: 0.875rem; color: #666;">
+          Press Enter to confirm
+        </div>
+        </div>
+      </div>
+      
+
+    </div>
+    
+    <div style="text-align: center; margin-top: 30px;">
+      <button id="gift-submit" class="gift-button" onclick="submitGift()">Give a Honeymoon Gift</button>
+    </div>
+<div class="divider mirrored">
+  <img src="../assets/images/dividers/wave.png" alt="Wave Divider" loading="lazy" />
+</div>
+
+    <p style="margin-top: 20px; font-style: italic; color: #888; text-align: center;">
+      After donating, you’ll return to this page. 
+      <br>We’ll be in touch with a personal thank-you soon 💛
     </p>
-    <div id="gallery-grid">
-      <!-- Cloudinary images + download overlays go here -->
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-content">
+      <p>With love, James & Oliver</p>
+      <div class="footer-links">
+        <a href="privacy.html" aria-label="View privacy policy">Privacy Policy</a>
+      </div>
     </div>
-  </section>
-
-  <footer>
-    Want to add more? Upload as many as you like, or email us at 
-    <a href="mailto:invite@jamesandoliver.com">invite@jamesandoliver.com</a>.
   </footer>
-
-  <div id="toast" class="toast"></div>
-
+  
   <script>
-    // your Cloudinary & LightGallery config
-    const CLOUD_NAME    = 'dh8f8hnhe';
-    const UPLOAD_PRESET = 'guest_upload';
-    const TAG_NAME      = 'gallery';
+    // Lightweight access gate using the same code as the main invitation page
+    (function() {
+      const style = document.createElement('style');
+      style.textContent = `
+        .access-gate { position: fixed; inset: 0; background: rgba(249,247,243,0.98); display: flex; align-items: center; justify-content: center; z-index: 10000; }
+        .access-gate[hidden] { display: none; }
+        .gate-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 24px; width: min(480px, 92vw); box-shadow: 0 8px 24px rgba(0,0,0,0.08); text-align: center; }
+        .gate-title { font-family: 'Playfair Display', serif; color: #778053; margin: 0 0 12px; }
+        .gate-input-row { display: flex; gap: 8px; margin-top: 8px; justify-content: center; }
+        .gate-input { flex: 1; max-width: 260px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
+        .gate-button { background: #C9486A; color: #fff; border: none; padding: 10px 14px; border-radius: 8px; cursor: pointer; font-size: 1rem; }
+        .gate-button:focus { outline: 2px solid #C9486A; outline-offset: 2px; }
+        .gate-error { color: #b00020; font-size: 0.95rem; margin-top: 10px; }
+        .gate-help { font-size: 0.9rem; color: #666; margin-top: 12px; }
+        body.gate-active { overflow: hidden; }
+      `;
+      document.head.appendChild(style);
 
-    // Ensure DOM is ready and Cloudinary is loaded
-    function initializePage() {
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initializePage);
-        return;
-      }
-      
-      if (typeof cloudinary === 'undefined') {
-        console.log('Waiting for Cloudinary to load...');
-        setTimeout(initializePage, 100);
-        return;
-      }
-      
-      console.log('Initializing photo upload page...');
-      // Lightweight access gate using the same code as the main invitation page
       const gate = document.getElementById('access-gate');
       const input = document.getElementById('gate-input');
       const submit = document.getElementById('gate-submit');
@@ -440,255 +454,115 @@
           if (e.key === 'Enter') { e.preventDefault(); validate(); }
         });
       }
+    })();
 
-      // theme toggle
-      const toggle = document.getElementById('theme-toggle');
-      const applyTheme = dark => {
-        document.body.classList.toggle('dark-mode', dark);
-        localStorage.setItem('darkMode', dark);
-        toggle.textContent = dark ? '☀️' : '🌙';
-      };
-      toggle.addEventListener('click', () => applyTheme(!document.body.classList.contains('dark-mode')));
-      applyTheme(localStorage.getItem('darkMode') === 'true');
-
-      // LightGallery init
-      const galleryEl = document.getElementById('gallery-grid');
-      let lg = null;
+    // Gift amount selection functionality
+    let selectedAmount = 200;
+    
+    function selectAmount(amount) {
+      selectedAmount = amount;
       
-      function initLightGallery() {
-        if (lg) {
-          lg.destroy();
-        }
-        
-        lg = lightGallery(galleryEl, {
-          selector: 'div > a',
-          plugins: [lgAutoplay],
-          controls: true,
-          autoplay: false,
-          autoplayControls: true,
-          speed: 500,
-          pause: 5000,
-          download: false,
-          counter: true,
-          showThumbByDefault: false
-        });
-      }
-      
-      // Initialize gallery
-      initLightGallery();
-
-      // helper UI
-      const seen = new Set();
-      const toast = document.getElementById('toast');
-      function showToast(msg) {
-        toast.textContent = msg;
-        toast.style.opacity = 1;
-        setTimeout(() => toast.style.opacity = 0, 2000);
-      }
-
-      function renderImage(res, prepend = false) {
-        const url = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/v${res.version}/${res.public_id}.${res.format}`;
-        const wrapper = document.createElement('div');
-        wrapper.style.position = 'relative';
-
-        // LightGallery anchor
-        const link = document.createElement('a');
-        link.href = url;
-        const img = document.createElement('img');
-        img.src     = url;
-        img.alt     = 'Shared memory';
-        img.loading = 'lazy';
-        img.classList.add('skeleton');
-        img.onload  = () => {
-          img.classList.remove('skeleton');
-          // Track image load analytics
-          if (typeof gtag !== 'undefined') {
-            gtag('event', 'image_loaded', {
-              event_category: 'Gallery',
-              event_label: 'photo_viewed'
-            });
-          }
-        };
-        link.appendChild(img);
-        wrapper.appendChild(link);
-
-        // download overlay
-        const dl = document.createElement('button');
-        dl.className = 'download-btn';
-        dl.textContent = '⤓';
-        dl.title = 'Download original';
-        dl.addEventListener('click', e => {
-          e.stopPropagation();
-          const a = document.createElement('a');
-          a.href     = url;
-          a.download = `${res.public_id}.${res.format}`;
-          document.body.appendChild(a);
-          a.click();
-          a.remove();
-          showToast('Download started');
-        });
-        wrapper.appendChild(dl);
-
-        if (prepend) galleryEl.prepend(wrapper);
-        else         galleryEl.appendChild(wrapper);
-
-        // Refresh gallery after adding new images
-        setTimeout(() => {
-          if (lg) {
-            lg.refresh();
-          }
-        }, 100);
-      }
-
-      // initial load
-      fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
-        .then(r => r.json())
-        .then(data => {
-          data.resources
-            .sort((a,b) => b.version - a.version)
-            .forEach(res => {
-              seen.add(res.asset_id);
-              renderImage(res);
-            });
-          // Refresh gallery after initial load
-          setTimeout(() => {
-            if (lg) {
-              lg.refresh();
-            }
-          }, 200);
-        })
-        .catch(console.error);
-
-      // live polling
-      setInterval(() => {
-        fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${TAG_NAME}.json`)
-          .then(r => r.json())
-          .then(data => {
-            let added = false;
-            data.resources
-              .sort((a,b) => b.version - a.version)
-              .forEach(res => {
-                if (!seen.has(res.asset_id)) {
-                  seen.add(res.asset_id);
-                  renderImage(res, true);
-                  added = true;
-                }
-              });
-            if (added) {
-              setTimeout(() => {
-                if (lg) {
-                  lg.refresh();
-                }
-              }, 100);
-            }
-          })
-          .catch(console.error);
-      }, 30000);
-
-      // custom in-page Cloudinary upload widget
-      if (typeof cloudinary === 'undefined') {
-        console.error('Cloudinary widget not loaded!');
-        showToast('Upload widget not available. Please refresh the page.');
-        return;
-      }
-      
-      const widget = cloudinary.createUploadWidget({
-        cloudName: CLOUD_NAME,
-        uploadPreset: UPLOAD_PRESET,
-        tags: [TAG_NAME],
-        sources: ['local', 'camera'],
-        showAdvancedOptions: false,
-        multiple: true,
-        cropping: false,
-        showPoweredBy: false,
-        styles: {
-          palette: {
-            window:        "#F9F7F3",
-            windowBorder:  "#e0e0e0",
-            tabIcon:       "#778053",
-            menuIcons:     "#3D4739",
-            textDark:      "#3D4739",
-            textLight:     "#ffffff",
-            link:          "#C9486A",
-            action:        "#C9486A",
-            inactiveTabIcon:"#9DA79D",
-            error:         "#F44336",
-            inProgress:    "#3D4739"
-          },
-          fonts: {
-            default: null,
-            "'Inter', sans-serif": {
-              url:    "https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap",
-              active: true
-            }
-          }
-        }
-      }, (err, result) => {
-        if (!err && result.event === 'success') {
-          seen.add(result.info.asset_id);
-          renderImage(result.info, true);
-          showToast('Photo uploaded successfully!');
-          
-          // Track successful upload analytics
-          if (typeof gtag !== 'undefined') {
-            gtag('event', 'photo_uploaded', {
-              event_category: 'Gallery',
-              event_label: 'upload_success',
-              custom_parameter_1: 'photo_upload'
-            });
-          }
-        } else if (err) {
-          console.error('Upload error:', err);
-          showToast('Upload failed. Please try again.');
-          
-          // Track upload error analytics
-          if (typeof gtag !== 'undefined') {
-            gtag('event', 'upload_error', {
-              event_category: 'Gallery',
-              event_label: 'upload_failed'
-            });
-          }
-        }
-        
-        // Ensure gate-active class is restored after widget closes
-        if (localStorage.getItem('accessGranted') !== 'true') {
-          document.body.classList.add('gate-active');
-        }
+      // Update UI
+      document.querySelectorAll('.amount-option').forEach(option => {
+        option.classList.remove('selected');
       });
-
-      // Ensure upload button works properly
-      const uploadBtn = document.getElementById('upload-btn');
-      if (uploadBtn) {
-        uploadBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          console.log('Upload button clicked, opening widget...');
-          
-          // Remove gate-active class temporarily to allow widget to open
-          const wasGateActive = document.body.classList.contains('gate-active');
-          if (wasGateActive) {
-            document.body.classList.remove('gate-active');
-          }
-          
-          try {
-            widget.open();
-          } catch (error) {
-            console.error('Error opening widget:', error);
-            showToast('Upload widget failed to open. Please try again.');
-          } finally {
-            // Restore gate-active class if it was active
-            if (wasGateActive) {
-              document.body.classList.add('gate-active');
-            }
-          }
-        }, false);
-      } else {
-        console.error('Upload button not found!');
+      
+      const selectedOption = document.querySelector(`[data-amount="${amount}"]`);
+      if (selectedOption) {
+        selectedOption.classList.add('selected');
+      }
+      
+      // Update selected amount (form element removed for PayPal.me)
+      
+      // Hide custom amount input
+      document.getElementById('custom-content').style.display = 'flex';
+      document.getElementById('custom-input').style.display = 'none';
+      document.getElementById('custom-hint').style.display = 'none';
+      document.getElementById('custom-option').classList.remove('selected');
+      
+      // Track selection
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'gift_amount_selected', {
+          event_category: 'gift',
+          event_label: `amount_${amount}`,
+          value: amount
+        });
       }
     }
     
-    // Start initialization
-    initializePage();
+    function showCustomAmount() {
+      // Update UI
+      document.querySelectorAll('.amount-option').forEach(option => {
+        option.classList.remove('selected');
+      });
+      
+      // Select the custom option
+      document.getElementById('custom-option').classList.add('selected');
+      
+      // Show custom input inside the button
+      document.getElementById('custom-content').style.display = 'none';
+      document.getElementById('custom-input').style.display = 'flex';
+      document.getElementById('custom-hint').style.display = 'block';
+      document.getElementById('custom-amount-input').focus();
+      
+      // Track custom selection
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'gift_custom_amount', {
+          event_category: 'gift',
+          event_label: 'custom_amount'
+        });
+      }
+    }
+    
+    // Add click handler for custom option
+    document.getElementById('custom-option').addEventListener('click', function() {
+      showCustomAmount();
+    });
+    
+    // Handle custom amount input
+    document.getElementById('custom-amount-input').addEventListener('input', function(e) {
+      const amount = parseInt(e.target.value);
+      if (amount > 0) {
+        selectedAmount = amount;
+      }
+    });
+    
+    // Handle Enter key press in custom input
+    document.getElementById('custom-amount-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const amount = parseInt(e.target.value);
+        if (amount > 0) {
+          selectedAmount = amount;
+          // Optionally auto-submit or just confirm the selection
+          e.target.blur(); // Remove focus
+        }
+      }
+    });
+    
+    // Submit gift function for PayPal.me
+    function submitGift() {
+      const url = selectedAmount > 0 ? `https://paypal.me/ollyjeffers/${selectedAmount}` : 'https://paypal.me/ollyjeffers';
+      
+      // Track gift submission
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'gift_submitted', {
+          event_category: 'gift',
+          event_label: 'gift_submitted',
+          value: selectedAmount
+        });
+      }
+      
+      // Open PayPal.me in new tab
+      window.open(url, '_blank');
+    }
+    
+    // Track page view
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'page_view', {
+        page_title: 'Gift Registry',
+        page_location: window.location.href
+      });
+    }
   </script>
 </body>
 </html>
