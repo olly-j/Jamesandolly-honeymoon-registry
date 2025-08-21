@@ -608,12 +608,12 @@
     });
   </script>
 
-  <!-- Upload button handler - OUTSIDE DOMContentLoaded like test file -->
+  <!-- Upload button handler - SINGLE ATTACHMENT ONLY -->
   <script>
-    console.log('Setting up upload button handler...');
-    
-    // Wait for DOM to be ready, then set up button
-    function setupUploadButton() {
+    // Wait for DOM to be ready, then set up button ONCE
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Setting up upload button handler...');
+      
       const uploadBtn = document.getElementById('upload-btn');
       console.log('Upload button element:', uploadBtn);
       
@@ -622,8 +622,11 @@
         return;
       }
       
-      uploadBtn.addEventListener('click', function() {
-        alert('Button clicked!'); // Simple test to see if click is registered
+      // Remove any existing event listeners to prevent duplication
+      const newBtn = uploadBtn.cloneNode(true);
+      uploadBtn.parentNode.replaceChild(newBtn, uploadBtn);
+      
+      newBtn.addEventListener('click', function() {
         console.log('Upload button clicked');
         console.log('cloudinary object:', typeof cloudinary);
         console.log('cloudinary.createUploadWidget:', typeof cloudinary?.createUploadWidget);
@@ -670,11 +673,7 @@
       });
       
       console.log('Upload button handler set up successfully');
-    }
-    
-    // Try to set up immediately, then again after DOM is ready
-    setupUploadButton();
-    document.addEventListener('DOMContentLoaded', setupUploadButton);
+    });
   </script>
 </body>
 </html>
