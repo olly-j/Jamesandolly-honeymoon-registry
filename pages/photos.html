@@ -604,7 +604,16 @@
           .catch(console.error);
       }, 30000);
 
-      // Cloudinary upload widget - EXACT SAME PATTERN AS WORKING TEST
+
+    });
+  </script>
+
+  <!-- Upload button handler - OUTSIDE DOMContentLoaded like test file -->
+  <script>
+    console.log('Setting up upload button handler...');
+    
+    // Wait for DOM to be ready, then set up button
+    function setupUploadButton() {
       const uploadBtn = document.getElementById('upload-btn');
       console.log('Upload button element:', uploadBtn);
       
@@ -630,19 +639,12 @@
           return;
         }
         
-        // Check if createUploadWidget function exists
-        if (typeof cloudinary.createUploadWidget !== 'function') {
-          console.error('createUploadWidget function not available');
-          showToast('Upload widget not properly loaded. Please refresh the page.');
-          return;
-        }
-        
         // Create widget on-demand (same as working test)
         try {
           const widget = cloudinary.createUploadWidget({
-            cloudName: CLOUD_NAME,
-            uploadPreset: UPLOAD_PRESET,
-            tags: [TAG_NAME],
+            cloudName: 'dh8f8hnhe',
+            uploadPreset: 'guest_upload',
+            tags: ['gallery'],
             sources: ['local', 'camera'],
             multiple: true,
             showAdvancedOptions: false,
@@ -651,14 +653,10 @@
           }, (error, result) => {
             if (error) {
               console.error('Upload error:', error);
-              showToast('Upload failed. Please try again.');
+              alert('Upload failed. Please try again.');
             } else if (result.event === 'success') {
-              seen.add(result.info.asset_id);
-              renderImage(result.info, true);
-              showToast('Photo uploaded successfully!');
-              
-                           // Track successful upload analytics
-             console.log('Photo uploaded successfully');
+              alert('Photo uploaded successfully!');
+              location.reload(); // Simple reload to show new image
             }
           });
           
@@ -667,10 +665,16 @@
           
         } catch (error) {
           console.error('Failed to create widget:', error);
-          showToast('Upload widget failed to initialize. Please try again.');
+          alert('Upload widget failed to initialize. Please try again.');
         }
       });
-    });
+      
+      console.log('Upload button handler set up successfully');
+    }
+    
+    // Try to set up immediately, then again after DOM is ready
+    setupUploadButton();
+    document.addEventListener('DOMContentLoaded', setupUploadButton);
   </script>
 </body>
 </html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Photos Minimal Test</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    .upload-box { text-align: center; padding: 30px; border: 1px solid #ccc; margin: 20px 0; }
+    #upload-btn { background: #C9486A; color: white; border: none; padding: 12px 24px; font-size: 1em; border-radius: 8px; cursor: pointer; }
+  </style>
+  
+  <!-- Cloudinary Upload Widget -->
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
+</head>
+<body>
+  <h1>Photos Minimal Test</h1>
+  
+  <div class="upload-box">
+    <h2>Share Your Favourite Moments</h2>
+    <p>Upload your photos from the evening — we'd love to see your memories.</p>
+    <button id="upload-btn">Upload Your Photo</button>
+  </div>
+
+  <script>
+    console.log('Setting up upload button handler...');
+    
+    function setupUploadButton() {
+      const uploadBtn = document.getElementById('upload-btn');
+      console.log('Upload button element:', uploadBtn);
+      
+      if (!uploadBtn) {
+        console.error('Upload button not found!');
+        return;
+      }
+      
+      uploadBtn.addEventListener('click', function() {
+        alert('Button clicked!');
+        console.log('Upload button clicked');
+        console.log('cloudinary object:', typeof cloudinary);
+        console.log('cloudinary.createUploadWidget:', typeof cloudinary?.createUploadWidget);
+        
+        if (typeof cloudinary === 'undefined') {
+          alert('Cloudinary script not loaded!');
+          return;
+        }
+        
+        if (typeof cloudinary.createUploadWidget !== 'function') {
+          alert('Cloudinary createUploadWidget function not available!');
+          return;
+        }
+        
+        try {
+          const widget = cloudinary.createUploadWidget({
+            cloudName: 'dh8f8hnhe',
+            uploadPreset: 'guest_upload',
+            tags: ['gallery'],
+            sources: ['local', 'camera'],
+            multiple: true,
+            showAdvancedOptions: false,
+            cropping: false,
+            showPoweredBy: false
+          }, (error, result) => {
+            if (error) {
+              console.error('Upload error:', error);
+              alert('Upload failed. Please try again.');
+            } else if (result.event === 'success') {
+              alert('Photo uploaded successfully!');
+              location.reload();
+            }
+          });
+          
+          console.log('Widget created successfully, opening...');
+          widget.open();
+          
+        } catch (error) {
+          console.error('Failed to create widget:', error);
+          alert('Upload widget failed to initialize. Please try again.');
+        }
+      });
+      
+      console.log('Upload button handler set up successfully');
+    }
+    
+    setupUploadButton();
+    document.addEventListener('DOMContentLoaded', setupUploadButton);
+  </script>
+</body>
+</html>
