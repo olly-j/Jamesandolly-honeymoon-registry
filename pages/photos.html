@@ -332,6 +332,9 @@
     body.gate-active { overflow: hidden; }
   </style>
 
+  <!-- Cloudinary Upload Widget - in head like test file -->
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
+
   <!-- LightGallery core + autoplay plugin -->
   <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.umd.min.js" onerror="console.error('LightGallery core script failed to load')"></script>
   <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/autoplay/lg-autoplay.umd.min.js" onerror="console.error('LightGallery autoplay plugin failed to load')"></script>
@@ -387,34 +390,7 @@
 
   <div id="toast" class="toast"></div>
 
-  <!-- Cloudinary Upload Widget - moved to end of body like test file -->
-  <script>
-    // Load Cloudinary script dynamically
-    function loadCloudinaryScript() {
-      return new Promise((resolve, reject) => {
-        if (typeof cloudinary !== 'undefined') {
-          console.log('Cloudinary already loaded');
-          resolve();
-          return;
-        }
-        
-        const script = document.createElement('script');
-        script.src = 'https://widget.cloudinary.com/v2.0/global/all.js';
-        script.onload = () => {
-          console.log('Cloudinary script loaded successfully');
-          resolve();
-        };
-        script.onerror = () => {
-          console.error('Cloudinary script failed to load');
-          reject(new Error('Failed to load Cloudinary script'));
-        };
-        document.head.appendChild(script);
-      });
-    }
-    
-    // Load Cloudinary immediately
-    loadCloudinaryScript().catch(console.error);
-  </script>
+
 
   <script>
     // your Cloudinary & LightGallery config
@@ -637,27 +613,13 @@
         return;
       }
       
-      uploadBtn.addEventListener('click', async function() {
+      uploadBtn.addEventListener('click', function() {
         alert('Button clicked!'); // Simple test to see if click is registered
         console.log('Upload button clicked');
-        
-        // Try to load Cloudinary if not already loaded
-        if (typeof cloudinary === 'undefined') {
-          console.log('Cloudinary not loaded, attempting to load...');
-          try {
-            await loadCloudinaryScript();
-            console.log('Cloudinary loaded successfully');
-          } catch (error) {
-            console.error('Failed to load Cloudinary:', error);
-            alert('Failed to load Cloudinary script. Please refresh the page.');
-            return;
-          }
-        }
-        
         console.log('cloudinary object:', typeof cloudinary);
         console.log('cloudinary.createUploadWidget:', typeof cloudinary?.createUploadWidget);
         
-        // Show detailed Cloudinary status
+        // Check if Cloudinary is loaded
         if (typeof cloudinary === 'undefined') {
           alert('Cloudinary script not loaded!');
           return;
