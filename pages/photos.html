@@ -337,8 +337,7 @@
   <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/autoplay/lg-autoplay.umd.min.js" onerror="console.error('LightGallery autoplay plugin failed to load')"></script>
   <script>const lgAutoplay = window.lgAutoplay;</script>
 
-  <!-- Cloudinary Upload Widget -->
-  <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
+
 </head>
 <body>
 
@@ -387,6 +386,9 @@
   </footer>
 
   <div id="toast" class="toast"></div>
+
+  <!-- Cloudinary Upload Widget - moved to end of body like test file -->
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js" onload="console.log('Cloudinary script loaded successfully')" onerror="console.error('Cloudinary script failed to load')"></script>
 
   <script>
     // your Cloudinary & LightGallery config
@@ -605,6 +607,10 @@
 
       // Cloudinary upload widget - EXACT SAME PATTERN AS WORKING TEST
       document.getElementById('upload-btn').addEventListener('click', function() {
+        console.log('Upload button clicked');
+        console.log('cloudinary object:', typeof cloudinary);
+        console.log('cloudinary.createUploadWidget:', typeof cloudinary?.createUploadWidget);
+        
         // Check if Cloudinary is loaded
         if (typeof cloudinary === 'undefined') {
           console.error('Cloudinary script not loaded');
