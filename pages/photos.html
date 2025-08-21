@@ -603,58 +603,59 @@
           .catch(console.error);
       }, 30000);
 
-      // Simplified Cloudinary upload widget - following the working test pattern
-      let widget = null;
-      
-      // Create widget after a short delay to ensure everything is loaded
-      setTimeout(() => {
-        if (typeof cloudinary !== 'undefined' && typeof cloudinary.createUploadWidget === 'function') {
-          try {
-            widget = cloudinary.createUploadWidget({
-              cloudName: CLOUD_NAME,
-              uploadPreset: UPLOAD_PRESET,
-              tags: [TAG_NAME],
-              sources: ['local', 'camera'],
-              multiple: true,
-              showAdvancedOptions: false,
-              cropping: false,
-              showPoweredBy: false
-            }, (error, result) => {
-              if (error) {
-                console.error('Upload error:', error);
-                showToast('Upload failed. Please try again.');
-              } else if (result.event === 'success') {
-                seen.add(result.info.asset_id);
-                renderImage(result.info, true);
-                showToast('Photo uploaded successfully!');
-                
-                // Track successful upload analytics
-                if (typeof gtag !== 'undefined') {
-                  gtag('event', 'photo_uploaded', {
-                    event_category: 'Gallery',
-                    event_label: 'upload_success',
-                    custom_parameter_1: 'photo_upload'
-                  });
-                }
-              }
-            });
-            
-            console.log('Cloudinary widget created successfully');
-          } catch (error) {
-            console.error('Failed to create Cloudinary widget:', error);
-          }
-        } else {
-          console.error('Cloudinary not available for widget creation');
+      // Cloudinary upload widget - EXACT SAME PATTERN AS WORKING TEST
+      document.getElementById('upload-btn').addEventListener('click', function() {
+        // Check if Cloudinary is loaded
+        if (typeof cloudinary === 'undefined') {
+          console.error('Cloudinary script not loaded');
+          showToast('Upload functionality not available. Please refresh the page.');
+          return;
         }
-      }, 500);
-
-      // Simple upload button handler
-      document.getElementById('upload-btn').addEventListener('click', () => {
-        if (widget) {
+        
+        // Check if createUploadWidget function exists
+        if (typeof cloudinary.createUploadWidget !== 'function') {
+          console.error('createUploadWidget function not available');
+          showToast('Upload widget not properly loaded. Please refresh the page.');
+          return;
+        }
+        
+        // Create widget on-demand (same as working test)
+        try {
+          const widget = cloudinary.createUploadWidget({
+            cloudName: CLOUD_NAME,
+            uploadPreset: UPLOAD_PRESET,
+            tags: [TAG_NAME],
+            sources: ['local', 'camera'],
+            multiple: true,
+            showAdvancedOptions: false,
+            cropping: false,
+            showPoweredBy: false
+          }, (error, result) => {
+            if (error) {
+              console.error('Upload error:', error);
+              showToast('Upload failed. Please try again.');
+            } else if (result.event === 'success') {
+              seen.add(result.info.asset_id);
+              renderImage(result.info, true);
+              showToast('Photo uploaded successfully!');
+              
+              // Track successful upload analytics
+              if (typeof gtag !== 'undefined') {
+                gtag('event', 'photo_uploaded', {
+                  event_category: 'Gallery',
+                  event_label: 'upload_success',
+                  custom_parameter_1: 'photo_upload'
+                });
+              }
+            }
+          });
+          
+          console.log('Widget created successfully, opening...');
           widget.open();
-        } else {
-          console.error('Widget not initialized');
-          showToast('Upload widget not available. Please refresh the page.');
+          
+        } catch (error) {
+          console.error('Failed to create widget:', error);
+          showToast('Upload widget failed to initialize. Please try again.');
         }
       });
     });
