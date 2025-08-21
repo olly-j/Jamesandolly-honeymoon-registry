@@ -604,76 +604,51 @@
           .catch(console.error);
       }, 30000);
 
-
-    });
-  </script>
-
-  <!-- Upload button handler - SINGLE ATTACHMENT ONLY -->
-  <script>
-    // Wait for DOM to be ready, then set up button ONCE
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('Setting up upload button handler...');
-      
-      const uploadBtn = document.getElementById('upload-btn');
-      console.log('Upload button element:', uploadBtn);
-      
-      if (!uploadBtn) {
-        console.error('Upload button not found!');
-        return;
-      }
-      
-      // Remove any existing event listeners to prevent duplication
-      const newBtn = uploadBtn.cloneNode(true);
-      uploadBtn.parentNode.replaceChild(newBtn, uploadBtn);
-      
-      newBtn.addEventListener('click', function() {
-        console.log('Upload button clicked');
-        console.log('cloudinary object:', typeof cloudinary);
-        console.log('cloudinary.createUploadWidget:', typeof cloudinary?.createUploadWidget);
-        
-        // Check if Cloudinary is loaded
-        if (typeof cloudinary === 'undefined') {
-          alert('Cloudinary script not loaded!');
-          return;
-        }
-        
-        if (typeof cloudinary.createUploadWidget !== 'function') {
-          alert('Cloudinary createUploadWidget function not available!');
-          return;
-        }
-        
-        // Create widget on-demand (same as working test)
-        try {
-          const widget = cloudinary.createUploadWidget({
-            cloudName: 'dh8f8hnhe',
-            uploadPreset: 'guest_upload',
-            tags: ['gallery'],
-            sources: ['local', 'camera'],
-            multiple: true,
-            showAdvancedOptions: false,
-            cropping: false,
-            showPoweredBy: false
-          }, (error, result) => {
-            if (error) {
-              console.error('Upload error:', error);
-              alert('Upload failed. Please try again.');
-            } else if (result.event === 'success') {
-              alert('Photo uploaded successfully!');
-              location.reload(); // Simple reload to show new image
+      // custom in-page Cloudinary upload widget - EXACT SAME AS WORKING VERSION
+      const widget = cloudinary.createUploadWidget({
+        cloudName: CLOUD_NAME,
+        uploadPreset: UPLOAD_PRESET,
+        tags: [TAG_NAME],
+        sources: ['local', 'camera'],
+        showAdvancedOptions: false,
+        multiple: true,
+        cropping: false,
+        showPoweredBy: false,
+        styles: {
+          palette: {
+            window:        "#F9F7F3",
+            windowBorder:  "#e0e0e0",
+            tabIcon:       "#778053",
+            menuIcons:     "#3D4739",
+            textDark:      "#3D4739",
+            textLight:     "#ffffff",
+            link:          "#C9486A",
+            action:        "#C9486A",
+            inactiveTabIcon:"#9DA79D",
+            error:         "#F44336",
+            inProgress:    "#3D4739"
+          },
+          fonts: {
+            default: null,
+            "'Inter', sans-serif": {
+              url:    "https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap",
+              active: true
             }
-          });
-          
-          console.log('Widget created successfully, opening...');
-          widget.open();
-          
-        } catch (error) {
-          console.error('Failed to create widget:', error);
-          alert('Upload widget failed to initialize. Please try again.');
+          }
+        }
+      }, (err, result) => {
+        if (!err && result.event === 'success') {
+          seen.add(result.info.asset_id);
+          renderImage(result.info, true);
+          showToast('Photo uploaded successfully!');
         }
       });
-      
-      console.log('Upload button handler set up successfully');
+
+      document.getElementById('upload-btn')
+              .addEventListener('click', () => widget.open(), false);
     });
   </script>
+
+
 </body>
 </html>
