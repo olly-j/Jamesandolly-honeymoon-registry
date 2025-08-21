@@ -332,8 +332,8 @@
     body.gate-active { overflow: hidden; }
   </style>
 
-  <!-- Cloudinary Upload Widget - in head like test file -->
-  <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
+  <!-- Cloudinary Upload Widget - CORRECT URL from official docs -->
+  <script src="https://upload-widget.cloudinary.com/latest/global/all.js" type="text/javascript"></script>
 
   <!-- LightGallery core + autoplay plugin -->
   <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.umd.min.js" onerror="console.error('LightGallery core script failed to load')"></script>
@@ -604,48 +604,28 @@
           .catch(console.error);
       }, 30000);
 
-      // custom in-page Cloudinary upload widget - EXACT SAME AS WORKING VERSION
-      const widget = cloudinary.createUploadWidget({
-        cloudName: CLOUD_NAME,
+      // Cloudinary upload widget - EXACT PATTERN FROM OFFICIAL DOCS
+      var myWidget = cloudinary.createUploadWidget({
+        cloudName: CLOUD_NAME, 
         uploadPreset: UPLOAD_PRESET,
         tags: [TAG_NAME],
         sources: ['local', 'camera'],
-        showAdvancedOptions: false,
         multiple: true,
+        showAdvancedOptions: false,
         cropping: false,
-        showPoweredBy: false,
-        styles: {
-          palette: {
-            window:        "#F9F7F3",
-            windowBorder:  "#e0e0e0",
-            tabIcon:       "#778053",
-            menuIcons:     "#3D4739",
-            textDark:      "#3D4739",
-            textLight:     "#ffffff",
-            link:          "#C9486A",
-            action:        "#C9486A",
-            inactiveTabIcon:"#9DA79D",
-            error:         "#F44336",
-            inProgress:    "#3D4739"
-          },
-          fonts: {
-            default: null,
-            "'Inter', sans-serif": {
-              url:    "https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap",
-              active: true
-            }
-          }
-        }
-      }, (err, result) => {
-        if (!err && result.event === 'success') {
+        showPoweredBy: false
+      }, (error, result) => { 
+        if (!error && result && result.event === "success") { 
+          console.log('Done! Here is the image info: ', result.info);
           seen.add(result.info.asset_id);
           renderImage(result.info, true);
           showToast('Photo uploaded successfully!');
         }
       });
 
-      document.getElementById('upload-btn')
-              .addEventListener('click', () => widget.open(), false);
+      document.getElementById("upload-btn").addEventListener("click", function(){
+        myWidget.open();
+      }, false);
     });
   </script>
 
