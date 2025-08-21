@@ -404,92 +404,7 @@
 
   <div id="toast" class="toast"></div>
 
-  <!-- Diagnostic Harness for Cloudinary Widget Debugging -->
-  <script>
-    // Monitor if Cloudinary attempts to inject iframes
-    const originalAppend = document.body.appendChild;
-    document.body.appendChild = function(el) {
-      console.log('🧪 Attempting to append element:', el);
-      if (el.tagName === 'IFRAME') {
-        console.log('✅ Cloudinary is trying to inject an iframe.');
-      }
-      return originalAppend.call(this, el);
-    };
 
-    // Monitor DOM mutations for iframe injection
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach(m => {
-        m.addedNodes.forEach(n => {
-          if (n.tagName === 'IFRAME') {
-            console.log('👁️ Widget iframe injected:', n);
-          }
-        });
-      });
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-    
-    // Environment diagnostics
-    console.log('🔍 Diagnostic harness loaded - monitoring for Cloudinary iframe injection');
-    console.log('🌐 Browser:', navigator.userAgent);
-    console.log('🔒 Privacy mode:', navigator.webdriver);
-    console.log('📱 Mobile:', /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-    console.log('🔧 Document ready state:', document.readyState);
-    console.log('🌍 Origin:', window.location.origin);
-    console.log('🔗 Protocol:', window.location.protocol);
-    
-    // Check for browser extensions or privacy features
-    if (window.chrome && window.chrome.webstore) {
-      console.log('🔧 Chrome extensions may be active');
-    }
-    
-    // Test iframe creation capability
-    setTimeout(() => {
-      try {
-        const testIframe = document.createElement('iframe');
-        testIframe.src = 'about:blank';
-        testIframe.style.display = 'none';
-        document.body.appendChild(testIframe);
-        console.log('✅ Iframe creation test passed');
-        testIframe.remove();
-      } catch (e) {
-        console.error('❌ Iframe creation test failed:', e);
-      }
-    }, 1000);
-    
-    // Network monitoring for Cloudinary requests
-    const originalFetch = window.fetch;
-    window.fetch = function(...args) {
-      const url = args[0];
-      if (typeof url === 'string' && url.includes('cloudinary')) {
-        console.log('🌐 Cloudinary network request:', url);
-      }
-      return originalFetch.apply(this, args);
-    };
-    
-    // Monitor for any console errors or warnings
-    const originalConsoleError = console.error;
-    const originalConsoleWarn = console.warn;
-    console.error = function(...args) {
-      console.log('🚨 Console error intercepted:', args);
-      originalConsoleError.apply(console, args);
-    };
-    console.warn = function(...args) {
-      console.log('⚠️ Console warning intercepted:', args);
-      originalConsoleWarn.apply(console, args);
-    };
-    
-    // Check for any global errors
-    window.addEventListener('error', (event) => {
-      console.log('🚨 Global error caught:', event.error);
-      console.log('🚨 Error source:', event.filename);
-      console.log('🚨 Error line:', event.lineno);
-    });
-    
-    // Check for unhandled promise rejections
-    window.addEventListener('unhandledrejection', (event) => {
-      console.log('🚨 Unhandled promise rejection:', event.reason);
-    });
-  </script>
 
 
   <script>
@@ -713,173 +628,22 @@
         return;
       }
       
-      // ULTIMATE DIAGNOSTIC HARNESS
-      console.log('🔍 ULTIMATE DIAGNOSTIC HARNESS ACTIVATED');
+
       
-      // 1. Function instrumentation
-      ['appendChild', 'insertBefore','removeChild','createElement'].forEach(fn => {
-        const orig = document[fn];
-        document[fn] = function() {
-          console.log(`🧪 document.${fn} called with`, arguments);
-          return orig.apply(this, arguments);
-        };
-      });
-      
-      // 2. Global function guard
-      const origWidget = cloudinary?.createUploadWidget;
-      cloudinary.createUploadWidget = function(...args) {
-        console.log('🧪 createUploadWidget called with', args);
-        return origWidget.apply(this, args);
-      };
-      
-      // 3. Catch internal exceptions
-      try {
-        // Trigger widget logic manually (if feasible)
-        // uploadBtn.click();
-      } catch (err) {
-        console.error('❗︎ Widget invocation error:', err);
-      }
-      
-      // 4. Visibility responder
-      const obs = new MutationObserver((mr) => {
-        mr.forEach(m => m.addedNodes.forEach(node => {
-          if (node.tagName === 'IFRAME' || node.matches?.('div.cloudinary')) {
-            console.log('👁️ Cloudinary DOM node added:', node);
-            node.style.zIndex = '2147483647';
-            node.style.position = 'fixed';
-          }
-        }));
-      });
-      obs.observe(document.body, { childList: true, subtree: true });
-      
-      // 5. Execution context capture
-      console.log('Current iframe context:', window.location.href, 'parent:', window.parent === window);
-      
-      // 6. Detect script overrides
-      console.log('🔍 Checking for script overrides...');
-      console.log('document.appendChild overridden:', document.appendChild.toString().includes('console.log'));
-      console.log('cloudinary.createUploadWidget overridden:', cloudinary.createUploadWidget.toString().includes('console.log'));
-      
-      // 7. Check for LightGallery interference
-      if (window.lightGallery) {
-        console.log('🔍 LightGallery detected, checking for interference...');
-        console.log('lightGallery function:', typeof window.lightGallery);
-        console.log('lightGallery prototype:', Object.getPrototypeOf(window.lightGallery));
-      }
-      
-      // 8. Monitor for element removal
-      const removalObserver = new MutationObserver((mutations) => {
-        mutations.forEach(mutation => {
-          mutation.removedNodes.forEach(node => {
-            if (node.tagName === 'IFRAME' || 
-                (node.classList && node.classList.contains('cloudinary')) ||
-                (node.id && node.id.includes('cloudinary'))) {
-              console.log('🚨 Cloudinary element removed:', node);
-              console.log('🚨 Removal stack:', new Error().stack);
-            }
-          });
-        });
-      });
-      removalObserver.observe(document.body, { childList: true, subtree: true });
-      
-      uploadBtn.addEventListener('click', function() {
-        console.log('Upload button clicked');
-        console.log('cloudinary object:', typeof cloudinary);
-        console.log('cloudinary.createUploadWidget:', typeof cloudinary?.createUploadWidget);
-        
-        // Check for potential script conflicts
-        console.log('🔍 Checking for script conflicts...');
-        console.log('lightGallery global:', typeof lightGallery);
-        console.log('lgAutoplay global:', typeof lgAutoplay);
-        console.log('document.body.appendChild overridden:', document.body.appendChild !== originalAppend);
-        
-        if (typeof cloudinary === 'undefined') {
-          showToast('Cloudinary script not loaded. Please refresh the page.');
-          return;
-        }
-        
-        if (typeof cloudinary.createUploadWidget !== 'function') {
-          showToast('Upload widget not available. Please refresh the page.');
-          return;
-        }
-        
-        // Test if Cloudinary can create elements
-        console.log('🧪 Testing Cloudinary element creation...');
-        try {
-          const testDiv = document.createElement('div');
-          testDiv.id = 'cloudinary-test';
-          testDiv.textContent = 'Cloudinary test element';
-          document.body.appendChild(testDiv);
-          console.log('✅ Basic element creation works');
-          testDiv.remove();
-        } catch (e) {
-          console.error('❌ Element creation blocked:', e);
-        }
-        
-        // Set up MutationObserver to detect widget iframe creation
-        const observer = new MutationObserver((mutations) => {
-          mutations.forEach((mutation) => {
-            mutation.addedNodes.forEach((node) => {
-              if (node.nodeType === Node.ELEMENT_NODE) {
-                // Check for Cloudinary widget iframes
-                if (node.tagName === 'IFRAME' || 
-                    (node.classList && node.classList.contains('cloudinary-widget')) ||
-                    (node.id && node.id.includes('cloudinary')) ||
-                    (node.querySelector && node.querySelector('iframe'))) {
-                  console.log('Cloudinary widget iframe detected:', node);
-                  // Ensure it's visible and not suppressed
-                  if (node.style) {
-                    node.style.zIndex = '99999';
-                    node.style.position = 'fixed';
-                    node.style.display = 'block';
-                    node.style.visibility = 'visible';
-                  }
-                }
-              }
-            });
-          });
-        });
-        
-        // Start observing DOM changes
-        observer.observe(document.body, {
-          childList: true,
-          subtree: true,
-          attributes: true,
-          attributeFilter: ['style', 'class']
-        });
-        
-        // Create widget on-demand (same as working test)
-        try {
-          console.log('🧪 Creating Cloudinary widget...');
-          
-          // Create a dedicated container for the widget
-          const widgetContainer = document.createElement('div');
-          widgetContainer.id = 'cloudinary-widget-container';
-          widgetContainer.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 999999;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          `;
-          
-          // Temporarily disable LightGallery to prevent interference
-          const originalLightGallery = window.lightGallery;
-          if (window.lightGallery) {
-            window.lightGallery = null;
-            console.log('🧪 Temporarily disabled LightGallery');
+              uploadBtn.addEventListener('click', function() {
+          if (typeof cloudinary === 'undefined') {
+            showToast('Cloudinary script not loaded. Please refresh the page.');
+            return;
           }
           
-          // Wrap widget creation in comprehensive error catching
-          let widget;
+          if (typeof cloudinary.createUploadWidget !== 'function') {
+            showToast('Upload widget not available. Please refresh the page.');
+            return;
+          }
+          
+          // Create widget on-demand
           try {
-            console.log('🧪 About to call cloudinary.createUploadWidget...');
-            widget = cloudinary.createUploadWidget({
+            const widget = cloudinary.createUploadWidget({
               cloudName: CLOUD_NAME,
               uploadPreset: UPLOAD_PRESET,
               tags: [TAG_NAME],
@@ -887,119 +651,25 @@
               multiple: true,
               showAdvancedOptions: false,
               cropping: false,
-              showPoweredBy: false,
-              // Force widget to use our container
-              container: widgetContainer
+              showPoweredBy: false
             }, (error, result) => {
-              console.log('🧪 Widget callback triggered:', { error, result });
               if (error) {
                 console.error('Upload error:', error);
                 showToast('Upload failed. Please try again.');
-                observer.disconnect();
               } else if (result.event === 'success') {
                 seen.add(result.info.asset_id);
                 renderImage(result.info, true);
                 showToast('Photo uploaded successfully!');
-                console.log('Photo uploaded successfully');
-                observer.disconnect();
-              }
-              
-              // Re-enable LightGallery
-              if (originalLightGallery) {
-                window.lightGallery = originalLightGallery;
-                console.log('🧪 Re-enabled LightGallery');
               }
             });
-            console.log('🧪 Widget created successfully:', widget);
-          } catch (widgetError) {
-            console.error('🚨 Error creating widget:', widgetError);
-            console.error('🚨 Widget error stack:', widgetError.stack);
-            throw widgetError;
+            
+            widget.open();
+            
+          } catch (error) {
+            console.error('Failed to create widget:', error);
+            showToast('Upload widget failed to initialize. Please try again.');
           }
-          
-          console.log('Widget created successfully, opening...');
-          console.log('🧪 Widget object:', widget);
-          console.log('🧪 Widget.open method:', typeof widget.open);
-          
-          // Add container to DOM before opening widget
-          try {
-            document.body.appendChild(widgetContainer);
-            console.log('🧪 Widget container added to DOM');
-          } catch (containerError) {
-            console.error('🚨 Error adding container to DOM:', containerError);
-          }
-          
-          // Force iframe creation and visibility
-          setTimeout(() => {
-            try {
-              console.log('🧪 About to call widget.open()...');
-              widget.open();
-              console.log('🧪 widget.open() called successfully');
-              
-              // Ensure any created iframes are visible
-              setTimeout(() => {
-                try {
-                  const iframes = widgetContainer.querySelectorAll('iframe');
-                  console.log('🧪 Widget container iframes:', iframes.length);
-                  iframes.forEach((iframe, i) => {
-                    console.log(`🧪 Iframe ${i}:`, iframe.src, iframe.style.display, iframe.style.visibility);
-                    iframe.style.cssText = `
-                      position: fixed !important;
-                      top: 50% !important;
-                      left: 50% !important;
-                      transform: translate(-50%, -50%) !important;
-                      z-index: 999999 !important;
-                      display: block !important;
-                      visibility: visible !important;
-                      opacity: 1 !important;
-                    `;
-                  });
-                  
-                  // Check for any hidden elements
-                  const allElements = widgetContainer.querySelectorAll('*');
-                  console.log('🧪 Total elements in widget container:', allElements.length);
-                  allElements.forEach((el, i) => {
-                    const style = window.getComputedStyle(el);
-                    if (style.display === 'none' || style.visibility === 'hidden' || style.opacity === '0') {
-                      console.log(`🧪 Hidden element ${i}:`, el.tagName, el.className, {
-                        display: style.display,
-                        visibility: style.visibility,
-                        opacity: style.opacity
-                      });
-                    }
-                  });
-                } catch (iframeError) {
-                  console.error('🚨 Error checking iframes:', iframeError);
-                }
-              }, 100);
-            } catch (openError) {
-              console.error('🚨 Error calling widget.open():', openError);
-              console.error('🚨 Open error stack:', openError.stack);
-            }
-          }, 50);
-          
-          // Stop observing after 5 seconds to prevent memory leaks
-          setTimeout(() => {
-            console.log('🧪 Widget observation timeout - checking for iframes...');
-            const iframes = document.querySelectorAll('iframe');
-            console.log('🧪 Total iframes in DOM:', iframes.length);
-            iframes.forEach((iframe, i) => {
-              console.log(`🧪 Iframe ${i}:`, iframe.src, iframe.style.display, iframe.style.visibility);
-            });
-            observer.disconnect();
-            removalObserver.disconnect();
-            obs.disconnect();
-          }, 5000);
-          
-        } catch (error) {
-          console.error('Failed to create widget:', error);
-          console.error('🚨 Full error stack:', error.stack);
-          showToast('Upload widget failed to initialize. Please try again.');
-          observer.disconnect();
-          removalObserver.disconnect();
-          obs.disconnect();
-        }
-      });
+        });
     });
   </script>
 </body>
