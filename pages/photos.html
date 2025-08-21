@@ -383,6 +383,7 @@
       }
       
       console.log('Initializing photo upload page...');
+      
       // Lightweight access gate using the same code as the main invitation page
       const gate = document.getElementById('access-gate');
       const input = document.getElementById('gate-input');
@@ -687,7 +688,10 @@
       } else {
         console.error('Upload button not found!');
       }
-    });
+    }
+    
+    // Start initialization
+    initializePage();
   </script>
 </body>
 </html>
