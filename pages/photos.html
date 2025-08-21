@@ -9,7 +9,7 @@
 
   
   <!-- Security Headers -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://widget.cloudinary.com https://res.cloudinary.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://res.cloudinary.com https://www.google-analytics.com;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://widget.cloudinary.com https://res.cloudinary.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://res.cloudinary.com https://www.google-analytics.com; frame-src 'self' https://widget.cloudinary.com https://upload-widget.cloudinary.com;">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="X-Frame-Options" content="DENY">
   <meta http-equiv="X-XSS-Protection" content="1; mode=block">
@@ -42,6 +42,7 @@
   <link
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/css/lightgallery-bundle.min.css"
+    onerror="console.warn('LightGallery CSS failed to load from CDN')"
   />
 
   <style>
@@ -95,6 +96,38 @@
     }
     .lg-icon {
       color: #fff !important;
+    }
+    
+    /* Fallback icons for LightGallery if CSS fails to load */
+    .lg-close::before {
+      content: "✕" !important;
+      font-family: Arial, sans-serif !important;
+      font-size: 24px !important;
+      line-height: 1 !important;
+    }
+    .lg-prev::before {
+      content: "‹" !important;
+      font-family: Arial, sans-serif !important;
+      font-size: 32px !important;
+      line-height: 1 !important;
+    }
+    .lg-next::before {
+      content: "›" !important;
+      font-family: Arial, sans-serif !important;
+      font-size: 32px !important;
+      line-height: 1 !important;
+    }
+    .lg-play::before {
+      content: "▶" !important;
+      font-family: Arial, sans-serif !important;
+      font-size: 20px !important;
+      line-height: 1 !important;
+    }
+    .lg-pause::before {
+      content: "⏸" !important;
+      font-family: Arial, sans-serif !important;
+      font-size: 20px !important;
+      line-height: 1 !important;
     }
 
     nav {
@@ -300,12 +333,12 @@
   </style>
 
   <!-- LightGallery core + autoplay plugin -->
-  <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.umd.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/autoplay/lg-autoplay.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/lightgallery.umd.min.js" onerror="console.error('LightGallery core script failed to load')"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.1/plugins/autoplay/lg-autoplay.umd.min.js" onerror="console.error('LightGallery autoplay plugin failed to load')"></script>
   <script>const lgAutoplay = window.lgAutoplay;</script>
 
   <!-- Cloudinary Upload Widget -->
-  <script src="https://widget.cloudinary.com/v2.0/global/all.js"></script>
+  <script src="https://widget.cloudinary.com/v2.0/global/all.js" onerror="console.error('Cloudinary widget script failed to load')"></script>
 </head>
 <body>
 
@@ -437,26 +470,40 @@
       let lg = null;
       
       function initLightGallery() {
-        if (lg) {
-          lg.destroy();
+        try {
+          if (lg) {
+            lg.destroy();
+          }
+          
+          // Check if lightGallery is available
+          if (typeof lightGallery === 'undefined') {
+            console.error('LightGallery not loaded');
+            return;
+          }
+          
+          lg = lightGallery(galleryEl, {
+            selector: 'div > a',
+            plugins: [lgAutoplay],
+            controls: true,
+            autoplay: false,
+            autoplayControls: true,
+            speed: 500,
+            pause: 5000,
+            download: false,
+            counter: true,
+            showThumbByDefault: false
+          });
+          
+          console.log('LightGallery initialized successfully');
+        } catch (error) {
+          console.error('Failed to initialize LightGallery:', error);
         }
-        
-        lg = lightGallery(galleryEl, {
-          selector: 'div > a',
-          plugins: [lgAutoplay],
-          controls: true,
-          autoplay: false,
-          autoplayControls: true,
-          speed: 500,
-          pause: 5000,
-          download: false,
-          counter: true,
-          showThumbByDefault: false
-        });
       }
       
-      // Initialize gallery
-      initLightGallery();
+      // Initialize gallery after a short delay to ensure CSS is loaded
+      setTimeout(() => {
+        initLightGallery();
+      }, 100);
 
       // helper UI
       const seen = new Set();
@@ -567,67 +614,89 @@
       }, 30000);
 
       // custom in-page Cloudinary upload widget
-      const widget = cloudinary.createUploadWidget({
-        cloudName: CLOUD_NAME,
-        uploadPreset: UPLOAD_PRESET,
-        tags: [TAG_NAME],
-        sources: ['local', 'camera'],
-        showAdvancedOptions: false,
-        multiple: true,
-        cropping: false,
-        showPoweredBy: false,
-        styles: {
-          palette: {
-            window:        "#F9F7F3",
-            windowBorder:  "#e0e0e0",
-            tabIcon:       "#778053",
-            menuIcons:     "#3D4739",
-            textDark:      "#3D4739",
-            textLight:     "#ffffff",
-            link:          "#C9486A",
-            action:        "#C9486A",
-            inactiveTabIcon:"#9DA79D",
-            error:         "#F44336",
-            inProgress:    "#3D4739"
-          },
-          fonts: {
-            default: null,
-            "'Inter', sans-serif": {
-              url:    "https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap",
-              active: true
+      let widget = null;
+      
+      // Check if Cloudinary is loaded
+      if (typeof cloudinary === 'undefined') {
+        console.error('Cloudinary widget script not loaded');
+        showToast('Upload functionality not available. Please refresh the page.');
+      } else {
+        try {
+          widget = cloudinary.createUploadWidget({
+          cloudName: CLOUD_NAME,
+          uploadPreset: UPLOAD_PRESET,
+          tags: [TAG_NAME],
+          sources: ['local', 'camera'],
+          showAdvancedOptions: false,
+          multiple: true,
+          cropping: false,
+          showPoweredBy: false,
+          styles: {
+            palette: {
+              window:        "#F9F7F3",
+              windowBorder:  "#e0e0e0",
+              tabIcon:       "#778053",
+              menuIcons:     "#3D4739",
+              textDark:      "#3D4739",
+              textLight:     "#ffffff",
+              link:          "#C9486A",
+              action:        "#C9486A",
+              inactiveTabIcon:"#9DA79D",
+              error:         "#F44336",
+              inProgress:    "#3D4739"
+            },
+            fonts: {
+              default: null,
+              "'Inter', sans-serif": {
+                url:    "https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap",
+                active: true
+              }
             }
           }
-        }
-      }, (err, result) => {
-        if (!err && result.event === 'success') {
-          seen.add(result.info.asset_id);
-          renderImage(result.info, true);
-          showToast('Photo uploaded successfully!');
-          
-          // Track successful upload analytics
-          if (typeof gtag !== 'undefined') {
-            gtag('event', 'photo_uploaded', {
-              event_category: 'Gallery',
-              event_label: 'upload_success',
-              custom_parameter_1: 'photo_upload'
-            });
+        }, (err, result) => {
+          if (!err && result.event === 'success') {
+            seen.add(result.info.asset_id);
+            renderImage(result.info, true);
+            showToast('Photo uploaded successfully!');
+            
+            // Track successful upload analytics
+            if (typeof gtag !== 'undefined') {
+              gtag('event', 'photo_uploaded', {
+                event_category: 'Gallery',
+                event_label: 'upload_success',
+                custom_parameter_1: 'photo_upload'
+              });
+            }
+          } else if (err) {
+            console.error('Upload error:', err);
+            showToast('Upload failed. Please try again.');
+            
+            // Track upload error analytics
+            if (typeof gtag !== 'undefined') {
+              gtag('event', 'upload_error', {
+                event_category: 'Gallery',
+                event_label: 'upload_failed'
+              });
+            }
           }
-        } else if (err) {
-          console.error('Upload error:', err);
-          showToast('Upload failed. Please try again.');
-          
-          // Track upload error analytics
-          if (typeof gtag !== 'undefined') {
-            gtag('event', 'upload_error', {
-              event_category: 'Gallery',
-              event_label: 'upload_failed'
-            });
-          }
-        }
-      });
+                 });
+         
+         console.log('Cloudinary widget created successfully');
+       } catch (error) {
+         console.error('Failed to create Cloudinary widget:', error);
+         showToast('Upload widget failed to initialize. Please refresh the page.');
+       }
+       }
 
       document.getElementById('upload-btn')
-              .addEventListener('click', () => widget.open(), false);
+              .addEventListener('click', () => {
+                if (widget) {
+                  widget.open();
+                } else {
+                  console.error('Widget not initialized');
+                  showToast('Upload widget not available. Please refresh the page.');
+                }
+              }, false);
     });
   </script>
 </body>
