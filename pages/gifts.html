@@ -288,6 +288,19 @@
 </head>
 <body>
 
+  <!-- Access Gate Overlay (shown only if not previously granted) -->
+  <div id="access-gate" class="access-gate" role="dialog" aria-modal="true" aria-labelledby="gate-title" hidden>
+    <div class="gate-card">
+      <h2 id="gate-title" class="gate-title">Enter access code</h2>
+      <div class="gate-input-row">
+        <input id="gate-input" class="gate-input" type="password" inputmode="text" autocomplete="off" placeholder="Access code" aria-label="Enter access code" />
+        <button id="gate-submit" class="gate-button">Enter</button>
+      </div>
+      <p id="gate-error" class="gate-error" aria-live="polite" hidden>Incorrect code, please try again.</p>
+      <p class="gate-help">Already opened the invitation? Use the same code.</p>
+    </div>
+  </div>
+
   <nav>
     <a href="index.html">Invitation</a>
     <a href="photos.html">Photos</a>
@@ -365,6 +378,84 @@
   </footer>
   
   <script>
+    // Lightweight access gate using the same code as the main invitation page
+    (function() {
+      const style = document.createElement('style');
+      style.textContent = `
+        .access-gate { position: fixed; inset: 0; background: rgba(249,247,243,0.98); display: flex; align-items: center; justify-content: center; z-index: 10000; }
+        .access-gate[hidden] { display: none; }
+        .gate-card { background: #fff; border: 1px solid #e0e0e0; border-radius: 12px; padding: 24px; width: min(480px, 92vw); box-shadow: 0 8px 24px rgba(0,0,0,0.08); text-align: center; }
+        .gate-title { font-family: 'Playfair Display', serif; color: #778053; margin: 0 0 12px; }
+        .gate-input-row { display: flex; gap: 8px; margin-top: 8px; justify-content: center; }
+        .gate-input { flex: 1; max-width: 260px; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
+        .gate-button { background: #C9486A; color: #fff; border: none; padding: 10px 14px; border-radius: 8px; cursor: pointer; font-size: 1rem; }
+        .gate-button:focus { outline: 2px solid #C9486A; outline-offset: 2px; }
+        .gate-error { color: #b00020; font-size: 0.95rem; margin-top: 10px; }
+        .gate-help { font-size: 0.9rem; color: #666; margin-top: 12px; }
+        body.gate-active { overflow: hidden; }
+      `;
+      document.head.appendChild(style);
+
+      const gate = document.getElementById('access-gate');
+      const input = document.getElementById('gate-input');
+      const submit = document.getElementById('gate-submit');
+      const errorEl = document.getElementById('gate-error');
+
+      function showGate() {
+        if (gate) {
+          gate.hidden = false;
+          document.body.classList.add('gate-active');
+          setTimeout(() => { input && input.focus(); }, 0);
+        }
+      }
+
+      function hideGate() {
+        if (gate) {
+          gate.hidden = true;
+          document.body.classList.remove('gate-active');
+        }
+      }
+
+      function validate() {
+        const code = (input?.value || '').trim().toLowerCase();
+        const encodedPassword = btoa('celebratejando').split('').reverse().join('');
+        const userInput = btoa(code).split('').reverse().join('');
+        if (userInput === encodedPassword) {
+          try { localStorage.setItem('accessGranted', 'true'); } catch (_) {}
+          hideGate();
+          return true;
+        } else {
+          if (errorEl) errorEl.hidden = false;
+          if (input) {
+            input.value = '';
+            input.focus();
+          }
+          return false;
+        }
+      }
+
+      // If access not yet granted, show gate and wire events
+      try {
+        if (localStorage.getItem('accessGranted') !== 'true') {
+          showGate();
+          submit?.addEventListener('click', validate);
+          input?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              validate();
+            }
+          });
+        }
+      } catch (_) {
+        // If localStorage unavailable, still show gate
+        showGate();
+        submit?.addEventListener('click', validate);
+        input?.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') { e.preventDefault(); validate(); }
+        });
+      }
+    })();
+
     // Gift amount selection functionality
     let selectedAmount = 200;
     
