@@ -1,7 +1,8 @@
 // Service Worker for James & Oliver's Wedding Site
-const CACHE_NAME = 'james-oliver-wedding-v3';
-const STATIC_CACHE = 'static-v3';
-const DYNAMIC_CACHE = 'dynamic-v3';
+const CACHE_VERSION = 'v4';
+const CACHE_NAME = `james-oliver-wedding-${CACHE_VERSION}`;
+const STATIC_CACHE = `static-${CACHE_VERSION}`;
+const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
 
 const urlsToCache = [
   '/',
@@ -82,8 +83,34 @@ self.addEventListener('fetch', event => {
           });
         })
     );
+  } else if (request.mode === 'navigate') {
+    // For HTML navigation requests, use network-first strategy
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          // Only cache successful responses
+          if (response.status === 200) {
+            const responseClone = response.clone();
+            caches.open(DYNAMIC_CACHE).then(cache => {
+              cache.put(request, responseClone);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          // Fallback to cache if network fails
+          return caches.match(request)
+            .then(cachedResponse => {
+              if (cachedResponse) {
+                return cachedResponse;
+              }
+              // Return offline page if no cached version
+              return caches.match('/pages/index.html');
+            });
+        })
+    );
   } else {
-    // For HTML and other resources, use cache-first with network fallback
+    // For other resources, use cache-first with network fallback
     event.respondWith(
       caches.match(request)
         .then(response => {
@@ -101,7 +128,7 @@ self.addEventListener('fetch', event => {
             .catch(() => {
               // Return offline page for navigation requests
               if (request.mode === 'navigate') {
-                return caches.match('/index.html');
+                return caches.match('/pages/index.html');
               }
             });
         })
