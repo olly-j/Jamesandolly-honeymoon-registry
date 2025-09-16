@@ -2856,7 +2856,7 @@
     
     .rsvp-card .radios {
       display: flex;
-      gap: 20px;
+      gap: 8px;
       margin-top: 6px;
       flex-direction: column;
     }
@@ -2873,7 +2873,7 @@
       gap: 8px;
       cursor: pointer;
       padding: 8px 0;
-      margin-bottom: 8px;
+      margin-bottom: 0;
     }
     
     .radios .radio-label:last-child {
@@ -4113,10 +4113,10 @@
           <img src="../assets/images/flourishes/glass-cheers.png" alt="Champagne glasses cheers icon for wedding RSVP section"
        class="floating" style="max-width:100px; opacity:1;" loading="lazy">
 </div>
-  <h2>RSVP</h2>
+  <h2>RSVP & Celebrate With Us</h2>
   <p class="rsvp-intro">
-    We're keeping our celebration intimate and personal — this invitation is exclusively for you..<br>
-    Please RSVP by: <strong>14 October 2025</strong>
+    We're so excited to celebrate together! This invitation is just for you, and we'd love to know if you can join us.<br>
+    Please RSVP by <strong>14 October 2025</strong>.
   </p>
 
   <form 
@@ -4137,7 +4137,7 @@
     
     <!-- name -->
     <div class="field" data-validate>
-      <label for="rsvp-name">Name <span aria-label="required">*</span></label>
+      <label for="rsvp-name">Your Name <span aria-label="required">*</span></label>
       <input 
         id="rsvp-name" 
         name="name" 
@@ -4156,17 +4156,17 @@
     <!-- attend -->
     <div class="field" data-validate>
       <fieldset>
-        <legend>Will you attend? <span aria-label="required">*</span></legend>
+        <legend>Can you join us? <span aria-label="required">*</span></legend>
         <div class="radios" role="radiogroup" aria-describedby="attend-error">
           <label class="radio-label">
             <input type="radio" name="attend" value="Yes" required aria-describedby="attend-error">
             <span class="radio-custom"></span>
-            Yes, I'll be there!
+            Yes! I'll be there to celebrate 🎉
           </label>
           <label class="radio-label">
             <input type="radio" name="attend" value="No" aria-describedby="attend-error">
             <span class="radio-custom"></span>
-            Sadly, I can't make it
+            Sorry, I can't make it
           </label>
         </div>
         <div id="attend-error" class="error-message" role="alert" aria-live="polite"></div>
@@ -4174,12 +4174,12 @@
     </div>
     <!-- dietary -->
     <div class="field">
-      <label for="rsvp-diet">Dietary Needs</label>
+      <label for="rsvp-diet">Dietary & Drink Preferences</label>
       <input 
         id="rsvp-diet" 
         name="diet" 
         type="text" 
-        placeholder="e.g. vegetarian, gluten-free"
+        placeholder="Vegetarian, nut allergy, non-alcoholic drinks"
         maxlength="200"
         aria-describedby="diet-error"
       >
@@ -4187,12 +4187,12 @@
     </div>
     <!-- access -->
     <div class="field">
-      <label for="rsvp-access">Accessibility or Mobility Notes</label>
+      <label for="rsvp-access">Anything Else We Should Know?</label>
       <input 
         id="rsvp-access" 
         name="access" 
         type="text" 
-        placeholder="Let us know any requirements"
+        placeholder="Wheelchair access, mobility support, or other requests"
         maxlength="200"
         aria-describedby="access-error"
       >
@@ -4204,7 +4204,7 @@
     <!-- <input type="hidden" name="_redirect" value="thank-you.html"> -->
     
     <button type="submit" class="btn-rsvp" aria-describedby="submit-error">
-      <span class="btn-text">Submit RSVP</span>
+      <span class="btn-text">Send My RSVP</span>
       <span class="btn-loading" style="display:none;">Sending...</span>
     </button>
     <div id="submit-error" class="error-message" role="alert" aria-live="polite"></div>
