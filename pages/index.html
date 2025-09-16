@@ -1688,27 +1688,88 @@
       }
     }
     
-    /* Celebration trigger button */
+    /* Enhanced Celebration trigger button */
     .celebration-trigger {
       position: fixed;
       bottom: 20px;
       left: 20px;
       width: 60px;
       height: 60px;
-      background: var(--clr-accent);
+      background: linear-gradient(135deg, var(--clr-accent) 0%, #B8375B 100%);
       border: none;
       border-radius: 50%;
       color: white;
       font-size: 24px;
       cursor: pointer;
       z-index: 100;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-      transition: all 0.3s ease;
+      box-shadow: 
+        0 4px 20px rgba(160, 45, 74, 0.4),
+        0 0 0 0 rgba(160, 45, 74, 0.4);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      animation: celebration-pulse 3s ease-in-out infinite;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.2);
     }
     
     .celebration-trigger:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 25px rgba(0,0,0,0.4);
+      transform: scale(1.15) rotate(5deg);
+      box-shadow: 
+        0 8px 30px rgba(160, 45, 74, 0.6),
+        0 0 0 10px rgba(160, 45, 74, 0.1),
+        0 0 0 20px rgba(160, 45, 74, 0.05);
+      background: linear-gradient(135deg, #B8375B 0%, var(--clr-accent) 100%);
+      animation: celebration-hover 0.6s ease-out;
+    }
+    
+    .celebration-trigger:active {
+      transform: scale(0.95);
+      transition: transform 0.1s;
+    }
+    
+    @keyframes celebration-pulse {
+      0%, 100% {
+        box-shadow: 
+          0 4px 20px rgba(160, 45, 74, 0.4),
+          0 0 0 0 rgba(160, 45, 74, 0.4);
+      }
+      50% {
+        box-shadow: 
+          0 4px 20px rgba(160, 45, 74, 0.4),
+          0 0 0 8px rgba(160, 45, 74, 0.2);
+      }
+    }
+    
+    @keyframes celebration-hover {
+      0% { transform: scale(1.15) rotate(5deg); }
+      25% { transform: scale(1.2) rotate(-3deg); }
+      50% { transform: scale(1.18) rotate(2deg); }
+      75% { transform: scale(1.16) rotate(-1deg); }
+      100% { transform: scale(1.15) rotate(0deg); }
+    }
+    
+    /* Add sparkle effect around button */
+    .celebration-trigger::before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      background: conic-gradient(from 0deg, transparent, rgba(255, 215, 0, 0.4), transparent, rgba(255, 105, 180, 0.4), transparent);
+      border-radius: 50%;
+      animation: sparkle-rotate 4s linear infinite;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .celebration-trigger:hover::before {
+      opacity: 1;
+    }
+    
+    @keyframes sparkle-rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
 
     /* Romantic gradient text effect */
@@ -6762,45 +6823,407 @@ Submitted via website fallback method.
     celebrationBtn.addEventListener('click', showCelebrationEffect);
   }
   
-  // Initialize Advanced Features
-  initCelebrationEffects();
+  // Initialize Advanced Features with performance checks
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCelebrationEffects);
+  } else {
+    initCelebrationEffects();
+  }
   
   function showCelebrationEffect() {
-    // Create confetti
-    const confetti = document.createElement('div');
-    confetti.className = 'confetti';
-    document.body.appendChild(confetti);
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     
-    // Generate confetti pieces
-    for (let i = 0; i < 50; i++) {
-      const piece = document.createElement('div');
-      piece.className = 'confetti-piece';
-      piece.style.left = Math.random() * 100 + '%';
-      piece.style.animationDelay = Math.random() * 3 + 's';
-      piece.style.background = ['var(--clr-accent)', 'var(--clr-green)', '#FFD700', '#FF69B4'][Math.floor(Math.random() * 4)];
-      confetti.appendChild(piece);
+    if (prefersReducedMotion) {
+      // Gentle celebration for users who prefer reduced motion
+      createSimpleCelebration();
+    } else {
+      // Full high-tech HTML5 celebration with multiple effects
+      createCanvasConfetti();
+      createCameraShake();
+      createSoundEffects();
+      create3DFireworks();
+      createRippleEffect();
+      createParticleExplosion();
     }
     
-    // Create hearts
-    for (let i = 0; i < 10; i++) {
-      setTimeout(() => {
-        const heart = document.createElement('div');
-        heart.className = 'heart-celebration';
-        heart.innerHTML = '💖';
-        heart.style.left = Math.random() * 100 + '%';
-        heart.style.top = Math.random() * 100 + '%';
-        heart.style.fontSize = (Math.random() * 20 + 20) + 'px';
-        document.body.appendChild(heart);
-        
-        setTimeout(() => heart.remove(), 2000);
-      }, i * 200);
+    // Haptic feedback on supported devices
+    if ('vibrate' in navigator) {
+      navigator.vibrate([100, 50, 100]);
     }
-    
-    // Remove confetti after animation
-    setTimeout(() => confetti.remove(), 3000);
     
     // Track interaction
-    analytics.trackInteraction('celebration_effect', 'triggered');
+    analytics.trackInteraction('celebration_effect_advanced', 'triggered');
+  }
+  
+  function createSimpleCelebration() {
+    // Accessible alternative for users who prefer reduced motion
+    const celebration = document.createElement('div');
+    celebration.style.position = 'fixed';
+    celebration.style.top = '50%';
+    celebration.style.left = '50%';
+    celebration.style.transform = 'translate(-50%, -50%)';
+    celebration.style.fontSize = '4rem';
+    celebration.style.zIndex = '10000';
+    celebration.style.pointerEvents = 'none';
+    celebration.textContent = '🎉✨';
+    celebration.setAttribute('aria-live', 'polite');
+    celebration.setAttribute('aria-label', 'Celebration activated');
+    
+    document.body.appendChild(celebration);
+    
+    // Gentle fade in and out
+    celebration.animate([
+      { opacity: 0, transform: 'translate(-50%, -50%) scale(0.5)' },
+      { opacity: 1, transform: 'translate(-50%, -50%) scale(1)' },
+      { opacity: 0, transform: 'translate(-50%, -50%) scale(1.2)' }
+    ], {
+      duration: 2000,
+      easing: 'ease-in-out'
+    }).onfinish = () => celebration.remove();
+  }
+
+  // Advanced HTML5 Celebration Functions
+  
+  function createCanvasConfetti() {
+    const canvas = document.createElement('canvas');
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100vw';
+    canvas.style.height = '100vh';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '9999';
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+    
+    const ctx = canvas.getContext('2d');
+    const particles = [];
+    const colors = ['#A02D4A', '#778053', '#FFD700', '#FF69B4', '#9DA79D', '#E6E1D9'];
+    
+    // Create particles with physics
+    for (let i = 0; i < 200; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: -20,
+        vx: (Math.random() - 0.5) * 10,
+        vy: Math.random() * 5 + 2,
+        rotation: Math.random() * 360,
+        rotationSpeed: (Math.random() - 0.5) * 10,
+        size: Math.random() * 8 + 3,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        shape: Math.floor(Math.random() * 3), // 0: square, 1: circle, 2: triangle
+        gravity: 0.3,
+        drag: 0.99,
+        life: 1.0,
+        decay: Math.random() * 0.02 + 0.005
+      });
+    }
+    
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particles.forEach((particle, index) => {
+        // Physics
+        particle.vy += particle.gravity;
+        particle.vx *= particle.drag;
+        particle.vy *= particle.drag;
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        particle.rotation += particle.rotationSpeed;
+        particle.life -= particle.decay;
+        
+        // Draw particle
+        ctx.save();
+        ctx.globalAlpha = particle.life;
+        ctx.translate(particle.x, particle.y);
+        ctx.rotate(particle.rotation * Math.PI / 180);
+        ctx.fillStyle = particle.color;
+        
+        if (particle.shape === 0) {
+          // Square
+          ctx.fillRect(-particle.size/2, -particle.size/2, particle.size, particle.size);
+        } else if (particle.shape === 1) {
+          // Circle
+          ctx.beginPath();
+          ctx.arc(0, 0, particle.size/2, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          // Triangle
+          ctx.beginPath();
+          ctx.moveTo(0, -particle.size/2);
+          ctx.lineTo(-particle.size/2, particle.size/2);
+          ctx.lineTo(particle.size/2, particle.size/2);
+          ctx.closePath();
+          ctx.fill();
+        }
+        
+        ctx.restore();
+        
+        // Remove dead particles
+        if (particle.life <= 0 || particle.y > canvas.height + 50) {
+          particles.splice(index, 1);
+        }
+      });
+      
+      if (particles.length > 0) {
+        requestAnimationFrame(animate);
+      } else {
+        document.body.removeChild(canvas);
+      }
+    }
+    
+    animate();
+  }
+  
+  function createCameraShake() {
+    const duration = 800;
+    const intensity = 5;
+    const startTime = Date.now();
+    
+    function shake() {
+      const elapsed = Date.now() - startTime;
+      const progress = elapsed / duration;
+      
+      if (progress < 1) {
+        const currentIntensity = intensity * (1 - progress);
+        const x = (Math.random() - 0.5) * currentIntensity;
+        const y = (Math.random() - 0.5) * currentIntensity;
+        
+        document.body.style.transform = `translate(${x}px, ${y}px)`;
+        requestAnimationFrame(shake);
+      } else {
+        document.body.style.transform = '';
+      }
+    }
+    
+    shake();
+  }
+  
+  function createSoundEffects() {
+    // Web Audio API celebration sounds
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      
+      // Create celebration sound using oscillators
+      function playTone(frequency, duration, type = 'sine') {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+        oscillator.type = type;
+        
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+        
+        oscillator.start(audioContext.currentTime);
+        oscillator.stop(audioContext.currentTime + duration);
+      }
+      
+      // Play celebratory chord progression
+      const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+      notes.forEach((freq, i) => {
+        setTimeout(() => playTone(freq, 0.5), i * 100);
+      });
+      
+      // Add sparkle sounds
+      setTimeout(() => {
+        for (let i = 0; i < 8; i++) {
+          setTimeout(() => {
+            playTone(1000 + Math.random() * 1000, 0.1, 'square');
+          }, i * 50);
+        }
+      }, 300);
+      
+    } catch (error) {
+      console.log('Web Audio API not supported');
+    }
+  }
+  
+  function create3DFireworks() {
+    const container = document.createElement('div');
+    container.style.position = 'fixed';
+    container.style.top = '0';
+    container.style.left = '0';
+    container.style.width = '100vw';
+    container.style.height = '100vh';
+    container.style.pointerEvents = 'none';
+    container.style.zIndex = '9998';
+    container.style.perspective = '1000px';
+    document.body.appendChild(container);
+    
+    // Create multiple 3D firework bursts
+    for (let burst = 0; burst < 3; burst++) {
+      setTimeout(() => {
+        const centerX = Math.random() * window.innerWidth;
+        const centerY = Math.random() * (window.innerHeight * 0.6) + window.innerHeight * 0.2;
+        
+        // Create burst particles
+        for (let i = 0; i < 30; i++) {
+          const particle = document.createElement('div');
+          particle.style.position = 'absolute';
+          particle.style.left = centerX + 'px';
+          particle.style.top = centerY + 'px';
+          particle.style.width = '6px';
+          particle.style.height = '6px';
+          particle.style.background = `hsl(${Math.random() * 360}, 100%, 60%)`;
+          particle.style.borderRadius = '50%';
+          particle.style.boxShadow = `0 0 10px ${particle.style.background}`;
+          
+          const angle = (i / 30) * Math.PI * 2;
+          const velocity = 100 + Math.random() * 150;
+          const vx = Math.cos(angle) * velocity;
+          const vy = Math.sin(angle) * velocity;
+          const vz = (Math.random() - 0.5) * 200;
+          
+          container.appendChild(particle);
+          
+          // 3D animation
+          particle.animate([
+            {
+              transform: `translate3d(0px, 0px, 0px) scale(1)`,
+              opacity: 1
+            },
+            {
+              transform: `translate3d(${vx}px, ${vy}px, ${vz}px) scale(0)`,
+              opacity: 0
+            }
+          ], {
+            duration: 2000,
+            easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+          }).onfinish = () => particle.remove();
+        }
+      }, burst * 400);
+    }
+    
+    setTimeout(() => {
+      if (container.parentNode) {
+        container.remove();
+      }
+    }, 3000);
+  }
+  
+  function createRippleEffect() {
+    const ripple = document.createElement('div');
+    ripple.style.position = 'fixed';
+    ripple.style.bottom = '50px';
+    ripple.style.left = '50px';
+    ripple.style.width = '0px';
+    ripple.style.height = '0px';
+    ripple.style.borderRadius = '50%';
+    ripple.style.background = 'radial-gradient(circle, rgba(160, 45, 74, 0.3) 0%, rgba(160, 45, 74, 0) 70%)';
+    ripple.style.pointerEvents = 'none';
+    ripple.style.zIndex = '9997';
+    ripple.style.transformOrigin = 'center';
+    document.body.appendChild(ripple);
+    
+    // Animate ripple expansion
+    ripple.animate([
+      {
+        width: '0px',
+        height: '0px',
+        opacity: 1
+      },
+      {
+        width: '800px',
+        height: '800px',
+        opacity: 0,
+        transform: 'translate(-400px, -400px)'
+      }
+    ], {
+      duration: 1200,
+      easing: 'ease-out'
+    }).onfinish = () => ripple.remove();
+  }
+  
+  function createParticleExplosion() {
+    // Create WebGL-powered particle explosion (fallback to Canvas if WebGL unavailable)
+    const canvas = document.createElement('canvas');
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100vw';
+    canvas.style.height = '100vh';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '9996';
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+    
+    const ctx = canvas.getContext('2d');
+    const explosions = [];
+    
+    // Create multiple explosion points
+    for (let e = 0; e < 5; e++) {
+      setTimeout(() => {
+        const explosion = {
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          particles: []
+        };
+        
+        // Create explosion particles
+        for (let i = 0; i < 50; i++) {
+          explosion.particles.push({
+            x: explosion.x,
+            y: explosion.y,
+            vx: (Math.random() - 0.5) * 20,
+            vy: (Math.random() - 0.5) * 20,
+            life: 1.0,
+            decay: Math.random() * 0.03 + 0.01,
+            size: Math.random() * 4 + 2,
+            color: `hsl(${Math.random() * 60 + 340}, 100%, ${Math.random() * 30 + 60}%)`
+          });
+        }
+        
+        explosions.push(explosion);
+      }, e * 200);
+    }
+    
+    function animateExplosions() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      explosions.forEach((explosion, explosionIndex) => {
+        explosion.particles.forEach((particle, particleIndex) => {
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+          particle.vx *= 0.98;
+          particle.vy *= 0.98;
+          particle.life -= particle.decay;
+          
+          ctx.save();
+          ctx.globalAlpha = particle.life;
+          ctx.fillStyle = particle.color;
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = particle.color;
+          ctx.beginPath();
+          ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+          
+          if (particle.life <= 0) {
+            explosion.particles.splice(particleIndex, 1);
+          }
+        });
+        
+        if (explosion.particles.length === 0) {
+          explosions.splice(explosionIndex, 1);
+        }
+      });
+      
+      if (explosions.length > 0) {
+        requestAnimationFrame(animateExplosions);
+      } else {
+        document.body.removeChild(canvas);
+      }
+    }
+    
+    // Start animation after first explosion is created
+    setTimeout(animateExplosions, 100);
   }
   
   // Global function for A2HS dismiss (needed for onclick attribute)
