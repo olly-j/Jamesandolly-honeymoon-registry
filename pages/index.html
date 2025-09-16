@@ -1025,6 +1025,7 @@
       textarea {
         font-size: 16px !important;
         -webkit-appearance: none;
+        appearance: none;
         border-radius: 0;
       }
       
@@ -1168,6 +1169,7 @@
           /* iOS-specific button and form improvements */
     button, input[type="submit"], input[type="button"] {
       -webkit-appearance: none;
+      appearance: none;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
       min-height: 44px;
@@ -1177,6 +1179,7 @@
     /* Enhanced iOS button styles */
     .btn-gift, form button, .tab-button, .gate-modal button {
       -webkit-appearance: none;
+      appearance: none;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
       min-height: 44px;
@@ -2149,6 +2152,7 @@
       transition: all var(--duration-fast) var(--ease-smooth);
       /* iOS-specific improvements */
       -webkit-appearance: none;
+      appearance: none;
       -webkit-tap-highlight-color: transparent;
       min-height: 44px; /* iOS minimum touch target */
     }
@@ -6741,8 +6745,10 @@ Submitted via website fallback method.
     }
   }
 }); // Close the DOMContentLoaded function
+</script>
 
-  // Advanced Features Implementation
+<script>
+// Advanced Features Implementation
   
   // Celebration Effects
   function initCelebrationEffects() {
