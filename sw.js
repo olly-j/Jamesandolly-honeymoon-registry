@@ -1,8 +1,9 @@
 // Service Worker for James & Oliver's Wedding Site
-const CACHE_VERSION = 'v4';
+const CACHE_VERSION = 'v5';
 const CACHE_NAME = `james-oliver-wedding-${CACHE_VERSION}`;
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const DYNAMIC_CACHE = `dynamic-${CACHE_VERSION}`;
+const VERSION_CHECK_INTERVAL = 5 * 60 * 1000; // 5 minutes
 
 const urlsToCache = [
   '/',
@@ -32,14 +33,51 @@ const urlsToCache = [
   'https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js'
 ];
 
-// Install event - cache resources
+// Install event - cache resources and skip waiting
 self.addEventListener('install', event => {
+  console.log('Service Worker installing...');
   event.waitUntil(
     caches.open(STATIC_CACHE)
       .then(cache => {
         console.log('Opened static cache');
         return cache.addAll(urlsToCache);
       })
+      .then(() => {
+        // Skip waiting to activate immediately
+        return self.skipWaiting();
+      })
+  );
+});
+
+// Activate event - clean up old caches and claim clients
+self.addEventListener('activate', event => {
+  console.log('Service Worker activating...');
+  event.waitUntil(
+    Promise.all([
+      // Clean up old caches
+      caches.keys().then(cacheNames => {
+        return Promise.all(
+          cacheNames.map(cacheName => {
+            if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
+              console.log('Deleting old cache:', cacheName);
+              return caches.delete(cacheName);
+            }
+          })
+        );
+      }),
+      // Claim all clients immediately
+      self.clients.claim()
+    ]).then(() => {
+      // Notify all clients that SW is ready
+      return self.clients.matchAll().then(clients => {
+        clients.forEach(client => {
+          client.postMessage({
+            type: 'SW_ACTIVATED',
+            version: CACHE_VERSION
+          });
+        });
+      });
+    })
   );
 });
 
@@ -136,18 +174,28 @@ self.addEventListener('fetch', event => {
   }
 });
 
-// Activate event - clean up old caches
-self.addEventListener('activate', event => {
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
-            console.log('Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
-  );
+// Message event - handle version checks and updates
+self.addEventListener('message', event => {
+  if (event.data && event.data.type === 'CHECK_VERSION') {
+    checkForUpdates().then(hasUpdate => {
+      event.ports[0].postMessage({ hasUpdate });
+    });
+  }
 });
+
+// Check for updates by fetching version.json
+async function checkForUpdates() {
+  try {
+    const response = await fetch('/version.json?t=' + Date.now(), {
+      cache: 'no-cache'
+    });
+    if (response.ok) {
+      const versionData = await response.json();
+      const currentVersion = CACHE_VERSION;
+      return versionData.version !== currentVersion;
+    }
+  } catch (error) {
+    console.log('Version check failed:', error);
+  }
+  return false;
+}

@@ -1,34 +1,57 @@
-# Cache Control Headers for James & Oliver's Wedding Site
-# This file ensures proper caching behavior across all browsers and CDNs
+# Enhanced Cache Control Headers for James & Oliver's Wedding Site
+# Ensures visitors always get the latest version while optimizing performance
 
-# Disable caching for HTML files to ensure fresh content
+# HTML files - Always fresh (no cache)
 <FilesMatch "\.(html|htm)$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
     Header set Pragma "no-cache"
     Header set Expires "0"
+    Header set ETag ""
+    Header unset Last-Modified
 </FilesMatch>
 
-# Cache static assets with version-based invalidation
-<FilesMatch "\.(css|js)$">
+# Content-hashed assets - Long cache (immutable)
+<FilesMatch "\.([a-f0-9]{8})\.(css|js|png|jpg|jpeg|gif|webp|svg|woff|woff2|ttf|eot)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
+    Header set ETag ""
+    Header unset Last-Modified
+</FilesMatch>
+
+# Non-hashed CSS/JS - Short cache
+<FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=3600, must-revalidate"
     Header set ETag ""
 </FilesMatch>
 
-# Cache images with moderate expiration
+# Non-hashed images - Moderate cache
 <FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|ico)$">
-    Header set Cache-Control "public, max-age=86400"
+    Header set Cache-Control "public, max-age=86400, must-revalidate"
+    Header set ETag ""
 </FilesMatch>
 
-# Cache fonts with long expiration
+# Fonts - Long cache
 <FilesMatch "\.(woff|woff2|ttf|eot)$">
     Header set Cache-Control "public, max-age=31536000, immutable"
+    Header set ETag ""
+    Header unset Last-Modified
 </FilesMatch>
 
-# Cache manifest and service worker with no-cache
+# Version files and manifests - No cache
 <FilesMatch "\.(json|webmanifest)$">
     Header set Cache-Control "no-cache, no-store, must-revalidate"
     Header set Pragma "no-cache"
     Header set Expires "0"
+    Header set ETag ""
+    Header unset Last-Modified
+</FilesMatch>
+
+# Service Worker - No cache
+<FilesMatch "sw\.js$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+    Header set ETag ""
+    Header unset Last-Modified
 </FilesMatch>
 
 # Enable compression for better performance

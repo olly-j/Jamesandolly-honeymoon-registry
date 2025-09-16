@@ -1,0 +1,84 @@
+# Netlify Headers Configuration for James & Oliver's Wedding Site
+# Place this file in your site root as _headers
+
+# HTML files - Always fresh
+/*.html
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+
+# Content-hashed assets - Long cache (immutable)
+/assets/*.[a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9].*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Non-hashed CSS/JS - Short cache
+/*.css
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/*.js
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# Non-hashed images - Moderate cache
+/*.jpg
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/*.jpeg
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/*.png
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/*.gif
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/*.webp
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/*.svg
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/*.ico
+  Cache-Control: public, max-age=86400, must-revalidate
+
+# Fonts - Long cache
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/*.ttf
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+/*.eot
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
+# Version files and manifests - No cache
+/version.json
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+/manifest.json
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+# Service Worker - No cache
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Pragma: no-cache
+  Expires: 0
+
+# Security headers for all files
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
