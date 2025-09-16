@@ -1798,7 +1798,7 @@
       }
       100% { 
         opacity: 0; 
-        transform: scale(1.1); 
+      transform: scale(1.1);
       }
     }
     
@@ -5753,27 +5753,27 @@ Submitted via website fallback method.
     
 
     // Intersection Observer for nav highlighting
-    const navLinks = document.querySelectorAll('.site-nav a[href^="#"]');
-    const sections = Array.from(navLinks)
-      .map(link => document.querySelector(link.getAttribute('href')))
-      .filter(Boolean);
+      const navLinks = document.querySelectorAll('.site-nav a[href^="#"]');
+      const sections = Array.from(navLinks)
+        .map(link => document.querySelector(link.getAttribute('href')))
+        .filter(Boolean);
 
-    if (sections.length > 0) {
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          const id = entry.target.id;
-          const navLink = document.querySelector(`.site-nav a[href="#${id}"]`);
-          if (entry.isIntersecting && navLink) {
-            navLinks.forEach(link => link.classList.remove('active'));
-            navLink.classList.add('active');
-          }
-        });
-      }, {
+      if (sections.length > 0) {
+        const observer = new IntersectionObserver(entries => {
+          entries.forEach(entry => {
+            const id = entry.target.id;
+            const navLink = document.querySelector(`.site-nav a[href="#${id}"]`);
+            if (entry.isIntersecting && navLink) {
+              navLinks.forEach(link => link.classList.remove('active'));
+              navLink.classList.add('active');
+            }
+          });
+        }, {
         threshold: 0.6,
         rootMargin: '-10% 0px -10% 0px'
-      });
+        });
 
-      sections.forEach(section => observer.observe(section));
+        sections.forEach(section => observer.observe(section));
     }
   });
 
@@ -6884,11 +6884,15 @@ Submitted via website fallback method.
 </script>
 
 <script>
-// Advanced Features Implementation
+  // Advanced Features Implementation
   
   // Celebration Effects with Easter Egg
   let celebrationClickCount = 0;
   let easterEggTriggered = false;
+  
+  // Global Audio Context Management
+  let audioContext = null;
+  let audioInitialized = false;
   
   function initCelebrationEffects() {
     // Add celebration trigger button
@@ -6898,8 +6902,40 @@ Submitted via website fallback method.
     celebrationBtn.setAttribute('aria-label', 'Trigger celebration effects');
     document.body.appendChild(celebrationBtn);
     
+    // Add audio status indicator for debugging
+    const audioStatus = document.createElement('div');
+    audioStatus.id = 'audio-status';
+    audioStatus.style.position = 'fixed';
+    audioStatus.style.top = '10px';
+    audioStatus.style.right = '10px';
+    audioStatus.style.background = 'rgba(0,0,0,0.7)';
+    audioStatus.style.color = 'white';
+    audioStatus.style.padding = '5px 10px';
+    audioStatus.style.borderRadius = '5px';
+    audioStatus.style.fontSize = '12px';
+    audioStatus.style.zIndex = '10000';
+    audioStatus.style.display = 'none';
+    audioStatus.textContent = '🔇 Audio: Not Ready';
+    document.body.appendChild(audioStatus);
+    
+    // Show audio status for 3 seconds on page load
+    setTimeout(() => {
+      audioStatus.style.display = 'block';
+      setTimeout(() => {
+        audioStatus.style.display = 'none';
+      }, 3000);
+    }, 1000);
+    
     celebrationBtn.addEventListener('click', () => {
       celebrationClickCount++;
+      
+      // Show audio status when button is clicked
+      audioStatus.style.display = 'block';
+      audioStatus.textContent = audioInitialized ? '🎵 Audio: Ready' : '🔇 Audio: Initializing...';
+      setTimeout(() => {
+        audioStatus.style.display = 'none';
+      }, 2000);
+      
       showCelebrationEffect();
       
       // Check for easter egg trigger
@@ -6928,10 +6964,25 @@ Submitted via website fallback method.
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initCelebrationEffects);
   } else {
-    initCelebrationEffects();
+  initCelebrationEffects();
   }
   
+  // Initialize audio context on any user interaction (fallback)
+  function enableAudioOnInteraction() {
+    if (!audioInitialized) {
+      initializeAudioContext();
+    }
+  }
+  
+  // Add event listeners for early audio context initialization
+  ['click', 'touchstart', 'keydown'].forEach(eventType => {
+    document.addEventListener(eventType, enableAudioOnInteraction, { once: true });
+  });
+  
   function showCelebrationEffect() {
+    // Initialize audio context on first user interaction
+    initializeAudioContext();
+    
     // Check for reduced motion preference
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     
@@ -6955,6 +7006,39 @@ Submitted via website fallback method.
     
     // Track interaction
     analytics.trackInteraction('celebration_effect_advanced', 'triggered');
+  }
+  
+  function initializeAudioContext() {
+    if (!audioInitialized) {
+      try {
+        // Create audio context
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        console.log('Audio context created, state:', audioContext.state);
+        
+        // Resume audio context if suspended (required by browser autoplay policy)
+        if (audioContext.state === 'suspended') {
+          console.log('Audio context suspended, attempting to resume...');
+          audioContext.resume().then(() => {
+            console.log('✅ Audio context resumed successfully');
+            audioInitialized = true;
+          }).catch(error => {
+            console.error('❌ Failed to resume audio context:', error);
+          });
+        } else {
+          audioInitialized = true;
+          console.log('✅ Audio context initialized successfully, state:', audioContext.state);
+        }
+      } catch (error) {
+        console.error('❌ Web Audio API not supported or failed to initialize:', error);
+        
+        // Show user-friendly message in development
+        if (window.location.hostname === 'localhost' || window.location.hostname.includes('127.0.0.1')) {
+          alert('Audio initialization failed. Check console for details.');
+        }
+      }
+    } else {
+      console.log('Audio context already initialized');
+    }
   }
   
   function createSimpleCelebration() {
@@ -7105,7 +7189,16 @@ Submitted via website fallback method.
   function createSoundEffects() {
     // Enhanced Web Audio API celebration sounds
     try {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      // Use the global audio context
+      if (!audioContext || !audioInitialized) {
+        console.log('🔇 Audio context not ready, skipping sound effects');
+        console.log('audioContext:', audioContext);
+        console.log('audioInitialized:', audioInitialized);
+        return;
+      }
+      
+      console.log('🎵 Playing celebration sounds...');
+      console.log('Audio context state:', audioContext.state);
       
       // Create rich celebration sound with multiple layers
       function playTone(frequency, duration, type = 'sine', volume = 0.3, delay = 0) {
@@ -7315,7 +7408,7 @@ Submitted via website fallback method.
         };
         
         // Create explosion particles
-        for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 50; i++) {
           explosion.particles.push({
             x: explosion.x,
             y: explosion.y,
@@ -7470,7 +7563,11 @@ Submitted via website fallback method.
   function playWeddingMarch() {
     // Play a celebratory wedding march using Web Audio API
     try {
-      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      // Use the global audio context
+      if (!audioContext || !audioInitialized) {
+        console.log('Audio context not ready, skipping wedding march');
+        return;
+      }
       
       // Wedding march melody (simplified "Here Comes the Bride")
       const melody = [
