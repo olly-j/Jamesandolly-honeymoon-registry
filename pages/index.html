@@ -1771,6 +1771,69 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+    
+    /* Easter Egg Animations */
+    @keyframes easterEggFadeIn {
+      0% { 
+        opacity: 0; 
+        transform: scale(0.8); 
+        backdrop-filter: blur(0px);
+      }
+      100% { 
+        opacity: 1; 
+        transform: scale(1); 
+        backdrop-filter: blur(10px);
+      }
+    }
+    
+    @keyframes easterEggFadeOut {
+      0% { 
+        opacity: 1; 
+        transform: scale(1); 
+      }
+      100% { 
+        opacity: 0; 
+        transform: scale(1.1); 
+      }
+    }
+    
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-20px);
+      }
+      60% {
+        transform: translateY(-10px);
+      }
+    }
+    
+    @keyframes heartFall {
+      0% {
+        transform: translateY(-50px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+    
+    @keyframes floatMessage {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5) rotateY(-90deg);
+      }
+      50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1) rotateY(0deg);
+      }
+      100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8) rotateY(90deg);
+      }
+    }
 
     /* Romantic gradient text effect */
     .romantic-text {
@@ -6811,7 +6874,10 @@ Submitted via website fallback method.
 <script>
 // Advanced Features Implementation
   
-  // Celebration Effects
+  // Celebration Effects with Easter Egg
+  let celebrationClickCount = 0;
+  let easterEggTriggered = false;
+  
   function initCelebrationEffects() {
     // Add celebration trigger button
     const celebrationBtn = document.createElement('button');
@@ -6820,7 +6886,30 @@ Submitted via website fallback method.
     celebrationBtn.setAttribute('aria-label', 'Trigger celebration effects');
     document.body.appendChild(celebrationBtn);
     
-    celebrationBtn.addEventListener('click', showCelebrationEffect);
+    celebrationBtn.addEventListener('click', () => {
+      celebrationClickCount++;
+      showCelebrationEffect();
+      
+      // Check for easter egg trigger
+      if (celebrationClickCount === 10 && !easterEggTriggered) {
+        setTimeout(() => triggerEasterEgg(), 1000);
+        easterEggTriggered = true;
+      }
+      
+      // Update button emoji based on click count
+      updateButtonEmoji(celebrationBtn);
+    });
+  }
+  
+  function updateButtonEmoji(button) {
+    const emojis = ['🎉', '🎊', '✨', '🎆', '🌟', '💫', '🎇', '🔥', '💥', '🚀'];
+    if (celebrationClickCount < 10) {
+      button.innerHTML = emojis[celebrationClickCount - 1] || '🎉';
+    } else {
+      // After easter egg, cycle through special emojis
+      const specialEmojis = ['👑', '💎', '🏆', '🌈', '🦄'];
+      button.innerHTML = specialEmojis[(celebrationClickCount - 10) % specialEmojis.length];
+    }
   }
   
   // Initialize Advanced Features with performance checks
@@ -7002,42 +7091,89 @@ Submitted via website fallback method.
   }
   
   function createSoundEffects() {
-    // Web Audio API celebration sounds
+    // Enhanced Web Audio API celebration sounds
     try {
       const audioContext = new (window.AudioContext || window.webkitAudioContext)();
       
-      // Create celebration sound using oscillators
-      function playTone(frequency, duration, type = 'sine') {
-        const oscillator = audioContext.createOscillator();
-        const gainNode = audioContext.createGain();
-        
-        oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
-        
-        oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-        oscillator.type = type;
-        
-        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
-        
-        oscillator.start(audioContext.currentTime);
-        oscillator.stop(audioContext.currentTime + duration);
+      // Create rich celebration sound with multiple layers
+      function playTone(frequency, duration, type = 'sine', volume = 0.3, delay = 0) {
+        setTimeout(() => {
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+          const filterNode = audioContext.createBiquadFilter();
+          
+          // Create audio chain: oscillator -> filter -> gain -> destination
+          oscillator.connect(filterNode);
+          filterNode.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+          
+          oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+          oscillator.type = type;
+          
+          // Add filter sweep for richer sound
+          filterNode.type = 'lowpass';
+          filterNode.frequency.setValueAtTime(frequency * 2, audioContext.currentTime);
+          filterNode.frequency.exponentialRampToValueAtTime(frequency * 4, audioContext.currentTime + duration * 0.3);
+          
+          gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+          
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + duration);
+        }, delay);
       }
       
-      // Play celebratory chord progression
-      const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
-      notes.forEach((freq, i) => {
-        setTimeout(() => playTone(freq, 0.5), i * 100);
+      // Play rich celebratory chord progression with harmonics
+      const baseNotes = [261.63, 329.63, 392.00, 523.25]; // C4, E4, G4, C5
+      baseNotes.forEach((freq, i) => {
+        // Main note
+        playTone(freq, 0.8, 'sawtooth', 0.2, i * 120);
+        // Harmonic (octave)
+        playTone(freq * 2, 0.6, 'sine', 0.1, i * 120 + 50);
+        // Sub harmonic (fifth)
+        playTone(freq * 1.5, 0.7, 'triangle', 0.15, i * 120 + 80);
       });
       
-      // Add sparkle sounds
+      // Add realistic "pop" sound at the start
+      const noiseBuffer = audioContext.createBuffer(1, audioContext.sampleRate * 0.1, audioContext.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      for (let i = 0; i < noiseBuffer.length; i++) {
+        output[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / noiseBuffer.length, 2);
+      }
+      
+      const noiseSource = audioContext.createBufferSource();
+      const noiseGain = audioContext.createGain();
+      const noiseFilter = audioContext.createBiquadFilter();
+      
+      noiseSource.buffer = noiseBuffer;
+      noiseSource.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+      noiseGain.connect(audioContext.destination);
+      
+      noiseFilter.type = 'highpass';
+      noiseFilter.frequency.value = 1000;
+      noiseGain.gain.setValueAtTime(0.3, audioContext.currentTime);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+      
+      noiseSource.start(audioContext.currentTime);
+      
+      // Add magical sparkle sounds with reverb effect
       setTimeout(() => {
-        for (let i = 0; i < 8; i++) {
-          setTimeout(() => {
-            playTone(1000 + Math.random() * 1000, 0.1, 'square');
-          }, i * 50);
+        for (let i = 0; i < 12; i++) {
+          const freq = 800 + Math.random() * 1200;
+          playTone(freq, 0.2, 'sine', 0.1, i * 80);
+          // Add echo effect
+          playTone(freq * 0.8, 0.15, 'sine', 0.05, i * 80 + 100);
         }
-      }, 300);
+      }, 400);
+      
+      // Add final triumphant chord
+      setTimeout(() => {
+        const triumphantChord = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
+        triumphantChord.forEach((freq, i) => {
+          playTone(freq, 1.2, 'sawtooth', 0.15, i * 20);
+        });
+      }, 1200);
       
     } catch (error) {
       console.log('Web Audio API not supported');
@@ -7224,6 +7360,326 @@ Submitted via website fallback method.
     
     // Start animation after first explosion is created
     setTimeout(animateExplosions, 100);
+  }
+  
+  function triggerEasterEgg() {
+    // Epic easter egg: Full screen wedding celebration with personalized message
+    createEasterEggOverlay();
+    playWeddingMarch();
+    createHeartRain();
+    createFloatingMessage();
+    createGoldenConfetti();
+    
+    // Track this special moment
+    analytics.trackInteraction('easter_egg_triggered', 'celebration_master');
+  }
+  
+  function createEasterEggOverlay() {
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100vw';
+    overlay.style.height = '100vh';
+    overlay.style.background = 'linear-gradient(45deg, rgba(160, 45, 74, 0.9), rgba(119, 128, 83, 0.9))';
+    overlay.style.zIndex = '99999';
+    overlay.style.display = 'flex';
+    overlay.style.flexDirection = 'column';
+    overlay.style.alignItems = 'center';
+    overlay.style.justifyContent = 'center';
+    overlay.style.backdropFilter = 'blur(10px)';
+    overlay.style.animation = 'easterEggFadeIn 1s ease-out';
+    
+    const title = document.createElement('h1');
+    title.textContent = '🎊 CELEBRATION MASTER! 🎊';
+    title.style.fontSize = '3rem';
+    title.style.color = 'white';
+    title.style.textAlign = 'center';
+    title.style.fontFamily = "'Playfair Display', serif";
+    title.style.textShadow = '0 4px 20px rgba(0,0,0,0.5)';
+    title.style.animation = 'bounce 2s ease-in-out infinite';
+    
+    const message = document.createElement('p');
+    message.innerHTML = `
+      You've discovered our secret celebration!<br>
+      <strong>James & Oliver</strong> thank you for bringing such joy to our special day.<br>
+      You're clearly someone who knows how to party! 🥂
+    `;
+    message.style.fontSize = '1.5rem';
+    message.style.color = 'white';
+    message.style.textAlign = 'center';
+    message.style.lineHeight = '1.6';
+    message.style.maxWidth = '600px';
+    message.style.margin = '20px 0';
+    message.style.textShadow = '0 2px 10px rgba(0,0,0,0.5)';
+    
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = 'Continue the Celebration →';
+    closeBtn.style.padding = '15px 30px';
+    closeBtn.style.fontSize = '1.2rem';
+    closeBtn.style.background = 'rgba(255, 255, 255, 0.2)';
+    closeBtn.style.color = 'white';
+    closeBtn.style.border = '2px solid rgba(255, 255, 255, 0.5)';
+    closeBtn.style.borderRadius = '50px';
+    closeBtn.style.cursor = 'pointer';
+    closeBtn.style.backdropFilter = 'blur(10px)';
+    closeBtn.style.transition = 'all 0.3s ease';
+    closeBtn.style.marginTop = '20px';
+    
+    closeBtn.addEventListener('mouseover', () => {
+      closeBtn.style.background = 'rgba(255, 255, 255, 0.3)';
+      closeBtn.style.transform = 'scale(1.05)';
+    });
+    
+    closeBtn.addEventListener('mouseout', () => {
+      closeBtn.style.background = 'rgba(255, 255, 255, 0.2)';
+      closeBtn.style.transform = 'scale(1)';
+    });
+    
+    closeBtn.addEventListener('click', () => {
+      overlay.style.animation = 'easterEggFadeOut 0.8s ease-in';
+      setTimeout(() => overlay.remove(), 800);
+    });
+    
+    overlay.appendChild(title);
+    overlay.appendChild(message);
+    overlay.appendChild(closeBtn);
+    document.body.appendChild(overlay);
+    
+    // Auto-close after 10 seconds
+    setTimeout(() => {
+      if (overlay.parentNode) {
+        overlay.style.animation = 'easterEggFadeOut 0.8s ease-in';
+        setTimeout(() => overlay.remove(), 800);
+      }
+    }, 10000);
+  }
+  
+  function playWeddingMarch() {
+    // Play a celebratory wedding march using Web Audio API
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      
+      // Wedding march melody (simplified "Here Comes the Bride")
+      const melody = [
+        {note: 392.00, duration: 0.8}, // G4
+        {note: 329.63, duration: 0.4}, // E4
+        {note: 349.23, duration: 0.4}, // F4
+        {note: 392.00, duration: 0.8}, // G4
+        {note: 523.25, duration: 0.8}, // C5
+        {note: 493.88, duration: 0.4}, // B4
+        {note: 466.16, duration: 0.4}, // Bb4
+        {note: 440.00, duration: 1.2}, // A4
+      ];
+      
+      function playNote(frequency, duration, startTime, volume = 0.2) {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        const filterNode = audioContext.createBiquadFilter();
+        
+        oscillator.connect(filterNode);
+        filterNode.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.setValueAtTime(frequency, startTime);
+        oscillator.type = 'triangle';
+        
+        filterNode.type = 'lowpass';
+        filterNode.frequency.value = frequency * 2;
+        
+        gainNode.gain.setValueAtTime(0, startTime);
+        gainNode.gain.linearRampToValueAtTime(volume, startTime + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+        
+        oscillator.start(startTime);
+        oscillator.stop(startTime + duration);
+      }
+      
+      let currentTime = audioContext.currentTime + 0.5;
+      melody.forEach(({note, duration}) => {
+        playNote(note, duration, currentTime);
+        // Add harmony (third below)
+        playNote(note * 0.8, duration, currentTime, 0.1);
+        currentTime += duration;
+      });
+      
+    } catch (error) {
+      console.log('Wedding march audio not supported');
+    }
+  }
+  
+  function createHeartRain() {
+    const hearts = ['💖', '💕', '💗', '💝', '💘', '💞'];
+    
+    for (let i = 0; i < 30; i++) {
+      setTimeout(() => {
+        const heart = document.createElement('div');
+        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.position = 'fixed';
+        heart.style.top = '-50px';
+        heart.style.left = Math.random() * window.innerWidth + 'px';
+        heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
+        heart.style.zIndex = '100000';
+        heart.style.pointerEvents = 'none';
+        heart.style.animation = `heartFall ${3 + Math.random() * 2}s linear forwards`;
+        
+        document.body.appendChild(heart);
+        
+        setTimeout(() => heart.remove(), 6000);
+      }, i * 100);
+    }
+  }
+  
+  function createFloatingMessage() {
+    const messages = [
+      "🥂 Cheers to Love!",
+      "💒 Wedding Bliss",
+      "🎊 Party Time!",
+      "💍 Forever Together",
+      "🌟 Magic Moment"
+    ];
+    
+    messages.forEach((msg, i) => {
+      setTimeout(() => {
+        const msgElement = document.createElement('div');
+        msgElement.textContent = msg;
+        msgElement.style.position = 'fixed';
+        msgElement.style.left = '50%';
+        msgElement.style.top = '30%';
+        msgElement.style.transform = 'translate(-50%, -50%)';
+        msgElement.style.fontSize = '2rem';
+        msgElement.style.color = 'white';
+        msgElement.style.fontWeight = 'bold';
+        msgElement.style.textShadow = '0 4px 20px rgba(0,0,0,0.8)';
+        msgElement.style.zIndex = '100001';
+        msgElement.style.pointerEvents = 'none';
+        msgElement.style.animation = 'floatMessage 2s ease-in-out forwards';
+        
+        document.body.appendChild(msgElement);
+        
+        setTimeout(() => msgElement.remove(), 2000);
+      }, i * 1200);
+    });
+  }
+  
+  function createGoldenConfetti() {
+    const canvas = document.createElement('canvas');
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100vw';
+    canvas.style.height = '100vh';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '99998';
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    document.body.appendChild(canvas);
+    
+    const ctx = canvas.getContext('2d');
+    const particles = [];
+    const goldenColors = ['#FFD700', '#FFA500', '#FF8C00', '#FFE55C', '#FFDF00'];
+    
+    // Create golden confetti particles
+    for (let i = 0; i < 150; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: -20,
+        vx: (Math.random() - 0.5) * 8,
+        vy: Math.random() * 3 + 1,
+        rotation: Math.random() * 360,
+        rotationSpeed: (Math.random() - 0.5) * 8,
+        size: Math.random() * 12 + 6,
+        color: goldenColors[Math.floor(Math.random() * goldenColors.length)],
+        shape: Math.floor(Math.random() * 4), // 0: star, 1: circle, 2: diamond, 3: heart
+        gravity: 0.2,
+        drag: 0.98,
+        life: 1.0,
+        decay: Math.random() * 0.015 + 0.003
+      });
+    }
+    
+    function drawStar(ctx, x, y, size) {
+      const spikes = 5;
+      const step = Math.PI / spikes;
+      ctx.beginPath();
+      ctx.moveTo(x, y - size);
+      for (let i = 0; i < spikes * 2; i++) {
+        const radius = i % 2 === 0 ? size : size * 0.5;
+        const angle = i * step - Math.PI / 2;
+        ctx.lineTo(x + Math.cos(angle) * radius, y + Math.sin(angle) * radius);
+      }
+      ctx.closePath();
+    }
+    
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particles.forEach((particle, index) => {
+        // Physics
+        particle.vy += particle.gravity;
+        particle.vx *= particle.drag;
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        particle.rotation += particle.rotationSpeed;
+        particle.life -= particle.decay;
+        
+        // Draw particle with glow effect
+        ctx.save();
+        ctx.globalAlpha = particle.life;
+        ctx.translate(particle.x, particle.y);
+        ctx.rotate(particle.rotation * Math.PI / 180);
+        ctx.fillStyle = particle.color;
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = particle.color;
+        
+        if (particle.shape === 0) {
+          // Star
+          drawStar(ctx, 0, 0, particle.size);
+          ctx.fill();
+        } else if (particle.shape === 1) {
+          // Circle
+          ctx.beginPath();
+          ctx.arc(0, 0, particle.size/2, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (particle.shape === 2) {
+          // Diamond
+          ctx.beginPath();
+          ctx.moveTo(0, -particle.size/2);
+          ctx.lineTo(particle.size/2, 0);
+          ctx.lineTo(0, particle.size/2);
+          ctx.lineTo(-particle.size/2, 0);
+          ctx.closePath();
+          ctx.fill();
+        } else {
+          // Heart shape
+          const size = particle.size / 3;
+          ctx.beginPath();
+          ctx.moveTo(0, size);
+          ctx.bezierCurveTo(-size, 0, -size, -size/2, 0, -size/2);
+          ctx.bezierCurveTo(size, -size/2, size, 0, 0, size);
+          ctx.fill();
+        }
+        
+        ctx.restore();
+        
+        // Remove dead particles
+        if (particle.life <= 0 || particle.y > canvas.height + 100) {
+          particles.splice(index, 1);
+        }
+      });
+      
+      if (particles.length > 0) {
+        requestAnimationFrame(animate);
+      } else {
+        setTimeout(() => {
+          if (canvas.parentNode) {
+            document.body.removeChild(canvas);
+          }
+        }, 1000);
+      }
+    }
+    
+    animate();
   }
   
   // Global function for A2HS dismiss (needed for onclick attribute)
