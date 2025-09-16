@@ -3974,7 +3974,7 @@
 
 
     <p class="urgency-note">We're so excited to see everyone dressed up and celebrating together!</p>
-    <p class="rsvp-cta">Ready to celebrate with us? <a href="#rsvp">RSVP below</a> to let us know you're coming!</p>
+    <p class="rsvp-cta">Ready to celebrate with us? Check out the <a href="javascript:void(0);" onclick="scrollToNeedToKnow(); return false;">need-to-know</a> and <a href="javascript:void(0);" onclick="scrollToFAQ(); return false;">FAQ</a>, then <a href="#rsvp">RSVP below</a> to let us know you're coming!</p>
   </div>
 </section>
 
@@ -3984,8 +3984,8 @@
   
   <!-- Tab Navigation -->
   <div class="tab-navigation">
-    <button class="tab-button active" data-tab="need-to-know">Need to Know</button>
-    <button class="tab-button" data-tab="faq">FAQ</button>
+    <button class="tab-button active" data-tab="need-to-know">Need-to-Know</button>
+    <button class="tab-button" data-tab="faq" onclick="scrollToFAQ()">FAQ</button>
   </div>
   
   <!-- Need to Know Tab Content -->
@@ -4817,6 +4817,82 @@ Submitted via website fallback method.
     console.log('Countdown timer initialized successfully!');
   }
 
+  // Global function to scroll to FAQ section and activate FAQ tab
+  function scrollToFAQ() {
+    // Scroll to the info section
+    const infoSection = document.getElementById('info');
+    if (infoSection) {
+      infoSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+      
+      // Switch to FAQ tab after a short delay to allow scroll to complete
+      setTimeout(() => {
+        const faqButton = document.querySelector('[data-tab="faq"]');
+        const faqContent = document.getElementById('faq');
+        const needToKnowButton = document.querySelector('[data-tab="need-to-know"]');
+        const needToKnowContent = document.getElementById('need-to-know');
+        
+        if (faqButton && faqContent && needToKnowButton && needToKnowContent) {
+          // Remove active class from need-to-know
+          needToKnowButton.classList.remove('active');
+          needToKnowContent.classList.remove('active');
+          
+          // Add active class to FAQ
+          faqButton.classList.add('active');
+          faqContent.classList.add('active');
+          
+          // Track analytics
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'faq_tab_accessed', {
+              event_category: 'Navigation',
+              event_label: 'faq_tab_from_link'
+            });
+          }
+        }
+      }, 300);
+    }
+  }
+
+  // Global function to scroll to info section and activate need-to-know tab
+  function scrollToNeedToKnow() {
+    // Scroll to the info section
+    const infoSection = document.getElementById('info');
+    if (infoSection) {
+      infoSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+      
+      // Switch to need-to-know tab after a short delay to allow scroll to complete
+      setTimeout(() => {
+        const faqButton = document.querySelector('[data-tab="faq"]');
+        const faqContent = document.getElementById('faq');
+        const needToKnowButton = document.querySelector('[data-tab="need-to-know"]');
+        const needToKnowContent = document.getElementById('need-to-know');
+        
+        if (faqButton && faqContent && needToKnowButton && needToKnowContent) {
+          // Remove active class from FAQ
+          faqButton.classList.remove('active');
+          faqContent.classList.remove('active');
+          
+          // Add active class to need-to-know
+          needToKnowButton.classList.add('active');
+          needToKnowContent.classList.add('active');
+          
+          // Track analytics
+          if (typeof gtag !== 'undefined') {
+            gtag('event', 'need_to_know_tab_accessed', {
+              event_category: 'Navigation',
+              event_label: 'need_to_know_tab_from_link'
+            });
+          }
+        }
+      }, 300);
+    }
+  }
+
   // Enhanced JavaScript with better error handling and performance
   document.addEventListener('DOMContentLoaded', () => {
     // Cache DOM elements
@@ -5485,6 +5561,7 @@ Submitted via website fallback method.
 
     // Initialize tab navigation
     initTabNavigation();
+
 
     // Timeline Animation Setup
     function initTimelineAnimations() {
