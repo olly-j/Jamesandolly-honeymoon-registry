@@ -270,6 +270,7 @@
         border: 1px solid rgba(0, 0, 0, 0.1);
         white-space: nowrap;
         flex-shrink: 0;
+        box-sizing: border-box;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -325,6 +326,11 @@
         min-width: auto;
         margin: 0;
         flex-shrink: 0;
+        border-radius: 8px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
     
@@ -332,15 +338,25 @@
       font-family: 'Playfair Display', serif;
       color: #555;
       text-decoration: none;
-      background: none;
-      border: none;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(0, 0, 0, 0.1);
       cursor: pointer;
-      padding: 6px 8px;
-      transition: color 0.2s ease;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(10px);
+      box-sizing: border-box;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     
     .site-nav a:hover, .site-nav button:hover {
       color: var(--clr-accent);
+      background: rgba(184, 55, 91, 0.1);
+      border-color: var(--clr-accent);
+      transform: translateY(-1px);
     }
     
     .site-nav a.active {
@@ -2000,7 +2016,11 @@
         padding: 10px 12px;
         min-height: 44px;
         min-width: 44px;
-        border-radius: 10px;
+        border-radius: 8px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       
       .hero-content {
@@ -2425,6 +2445,7 @@
       margin: 4px;
       border-radius: 8px;
       transition: all 0.3s ease;
+      box-sizing: border-box;
     }
     
     /* Mobile-optimized form elements */
@@ -2683,6 +2704,8 @@
       max-width: 600px;
       text-align: center;
       backdrop-filter: blur(8px);
+      overflow: visible;
+      box-sizing: border-box;
     }
 
     .dress-code-textbox h2 {
@@ -2694,6 +2717,83 @@
     .dress-code-textbox p {
       color: #555;
       line-height: 1.5;
+    }
+
+    .dress-code-textbox .style-guide {
+      margin: 20px 0 20px 3px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-left: 3px solid var(--clr-accent);
+      box-sizing: border-box;
+    }
+
+    .dress-code-textbox .style-guide p {
+      margin: 8px 0;
+      font-size: 0.95em;
+    }
+
+    .dress-code-textbox .venue-note,
+    .dress-code-textbox .practical-tip,
+    .dress-code-textbox .inclusive-note {
+      margin: 12px 0;
+      font-size: 0.9em;
+      font-style: italic;
+    }
+
+    .dress-code-textbox .practical-tip {
+      color: var(--clr-deep-green);
+    }
+
+    .dress-code-textbox .urgency-note {
+      margin: 20px 0 12px;
+      font-weight: 600;
+      color: var(--clr-accent);
+    }
+
+    .dress-code-textbox .rsvp-cta {
+      margin: 12px 0 0;
+      font-weight: 600;
+    }
+
+    .dress-code-textbox .rsvp-cta a {
+      color: var(--clr-accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--clr-accent);
+      transition: all 0.2s ease;
+    }
+
+    .dress-code-textbox .rsvp-cta a:hover {
+      color: var(--clr-deep-green);
+      border-bottom-color: var(--clr-deep-green);
+    }
+
+    /* Responsive adjustments for dress code section */
+    @media (max-width: 768px) {
+      .dress-code-textbox {
+        padding: 20px;
+        margin: 0 16px;
+      }
+      
+      .dress-code-textbox .style-guide {
+        padding: 12px;
+        margin: 16px 0 16px 3px;
+        border-radius: 8px;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+      }
+      
+      .dress-code-textbox .style-guide p {
+        font-size: 0.9em;
+      }
+      
+      .dress-code-textbox .venue-note,
+      .dress-code-textbox .practical-tip,
+      .dress-code-textbox .inclusive-note {
+        font-size: 0.85em;
+      }
     }
 
     /* RSVP card */
@@ -3861,11 +3961,20 @@
 >
 
   <div class="dress-code-textbox">
-    <h2>Cocktail Attire</h2>
+    <h2>Dress to Celebrate</h2>
     <p>
-      Velvet jackets, polished boots, satin dresses or your favourite tailoring — dressed up in your own style.<br>
-      Be bold, stay comfortable, and remain true to yourself.
+      Think elegant evening wear that makes you feel confident and beautiful. Whether that's a velvet blazer, your favourite dress, or sharp tailoring — we want you to feel like the best version of yourself on our special night.
     </p>
+
+    <div class="style-guide">
+      <p><strong>Style Inspiration:</strong></p>
+      <p>For Her: Elegant dresses, jumpsuits, or separates that make you feel fabulous.<br>
+      For Him: Smart blazers, dress shirts, or your favourite suit.</p>
+    </div>
+
+
+    <p class="urgency-note">We're so excited to see everyone dressed up and celebrating together!</p>
+    <p class="rsvp-cta">Ready to celebrate with us? <a href="#rsvp">RSVP below</a> to let us know you're coming!</p>
   </div>
 </section>
 
